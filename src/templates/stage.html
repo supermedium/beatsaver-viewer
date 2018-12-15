@@ -1,0 +1,65 @@
+<a-entity
+  id="audioAnalyser"
+  bind__audioanalyser="beatDetectionThrottle: menuActive && 5000 || 1000"
+  audioanalyser="src: #introSong; fftSize: 64; enableBeatDetection: true; enableLevels: false; enableWaveform: false; beatDetectionThrottle: 5000; unique: true"
+  proxy-event="event: audioanalyserbeat; to: #logolight"></a-entity>
+
+<a-entity id="stage">
+  <a-entity
+    id="audioColumns"
+    audio-columns="analyser: #audioAnalyser; height: 28; mirror: 18; scale: 9; thickness: 0.6; separation: 0.55"
+    position="0 -19 5"></a-entity>
+
+  <a-entity id="stageObj" obj-model="obj: #stageNormalObj" materials="name: stageNormal"></a-entity>
+
+  <!-- Lasers left. -->
+  <a-entity id="leftStageLasers" bind__stage-lasers="enabled: isPlaying">
+    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-6 2.3 -41"></a-entity>
+    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-10 0 -40"></a-entity>
+    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-14 -3 -39"></a-entity>
+  </a-entity>
+
+  <!-- Lasers right. -->
+  <a-entity id="rightStageLasers" bind__stage-lasers="enabled: isPlaying">
+    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="6 4 -38"></a-entity>
+    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="10 2 -37"></a-entity>
+    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="14 -1.5 -36"></a-entity>
+  </a-entity>
+
+  <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
+
+  <a-entity
+    id="stageadditiveobj"
+    obj-model="obj: #stageAdditiveObj"
+    materials="name: stageAdditive"></a-entity>
+
+  <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
+
+  <a-entity
+    id="smoke"
+    animation__rotate="property: rotation; to: 0 360 0; easing: linear; loop: true; dur: 200000"
+    obj-model="obj: #smokeObj"
+    material="src: #atlasImg; shader: flat; transparent: true; depthWrite: false"
+    position="0 1.4 0"></a-entity>
+
+  <a-entity light="type: directional; intensity: 3" position="0 10 10"></a-entity>
+
+  <a-entity
+    id="floor"
+    data-saber-particles
+    geometry="primitive: plane; width: 3; height: 3"
+    rotation="-90 0 0"
+    material="shader: floorShader; normalMap: #floorNormalsImg; envMap: #floorEnvImg; hitLeft: -999 0 0; hitRight: -999 0 0"
+    raycastable-game
+    stepback></a-entity>
+
+  <a-entity
+    id="songProgressRing"
+    bind__song-progress-ring="enabled: isPlaying && challenge.isBeatsPreloaded"
+    bind__visible="isPlaying && challenge.isBeatsPreloaded"
+    geometry="primitive: plane; width: 0.1; height: 0.1"
+    material="shader: ring; progress: 0; transparent: true; radiusInner: 0.5; color: #ABABAB"
+    position="0 0.1 -1.5"
+    rotation="-45 0 0">
+  </a-entity>
+</a-entity>

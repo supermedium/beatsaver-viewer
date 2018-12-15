@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BeatSaver Viewer</title>
+    {% if DEBUG_AFRAME %}
+      <script src="http://{{ HOST }}:9000/dist/aframe-master.js"></script>
+    {% elif IS_PRODUCTION %}
+      <script src="vendor/aframe-master.min.js"></script>
+    {% else %}
+      <script src="vendor/aframe-master.js"></script>
+    {% endif %}
+    <script src="build/build.js"></script>
+  </head>
+  <body>
+    <a-scene
+      mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
+      bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
+      bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      challenge-setter
+      console-shortcuts
+      debug-beat-loader
+      debug-controller
+      debug-song-time
+      debug-state
+      hack
+      gpu-preloader
+      {% if DEBUG_INSPECTOR %}
+        inspector="url: http://localhost:3333/dist/aframe-inspector.js"
+      {% else %}
+        inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js"
+      {% endif %}
+      loading-screen="backgroundColor: #000;"
+      pool__beat-arrow-blue="mixin: arrowBlueBeat; size: 10; container: #beatContainer"
+      pool__beat-arrow-red="mixin: arrowRedBeat; size: 10; container: #beatContainer"
+      pool__beat-dot-blue="mixin: dotBlueBeat; size: 10; container: #beatContainer"
+      pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
+      pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
+      pool__wall="mixin: wall; size: 10; container: #beatContainer"
+      proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
+      search
+      stage-colors="color: blue"
+      stats-param
+      vr-mode-ui="enterVRButton: #vrButton"
+      tutorial-2d>
+
+      <a-assets timeout="10000">
+        {% include './assets.html' %}
+      </a-assets>
+
+      <a-entity id="beatObjTemplate" obj-model="obj: #beatObj" visible="false"></a-entity>
+      <a-entity id="arrowRedObjTemplate" obj-model="obj: #arrowredObj" visible="false"></a-entity>
+      <a-entity id="arrowBlueObjTemplate" obj-model="obj: #arrowblueObj" visible="false"></a-entity>
+      <a-entity id="dotRedObjTemplate" obj-model="obj: #dotredObj" visible="false"></a-entity>
+      <a-entity id="dotBlueObjTemplate" obj-model="obj: #dotblueObj" visible="false"></a-entity>
+      <a-entity id="mineObjTemplate" obj-model="obj: #mineObj" visible="false"></a-entity>
+      <a-entity id="cursorLaser" obj-model="obj: #laserObj" visible="false"></a-entity>
+
+      {% include './templates/stage.html' %}
+
+      <a-entity id="beatContainer" bind__pause="isPaused: !isPlaying" beat-hit-sound></a-entity>
+
+      {% include './templates/loading.html' %}
+
+      <a-entity
+        id="mineParticles"
+        particleplayer="src: #mineParticlesJSON; pscale: 0.5; interpolate: true; scale: 1.4; loop: false; on: explode; img: #sparkImg; count: 20%; animateScale: true; initialScale: 3 1 1; finalScale: 0.2 0.2 1"></a-entity>
+      <a-entity
+        id="sparkParticles"
+        particleplayer="src: #sparksJSON; color: #fcc; pscale: 0.5; on: explode; scale: 0.12; loop: false; img: #spark2Img; dur: 700; count: 50%; animateScale: true; initialScale: 3 0.5 1; finalScale: 0.1 0.5 1"></a-entity>
+
+      <a-mixin
+        id="cursorMesh"
+        material="shader: flat; transparent: true; src: #cursorMeshImg; depthTest: false"
+        ></a-mixin>
+
+      <!-- Player. -->
+      <a-entity id="cameraRig">
+        <a-entity id="camera" position="0 1.6 0.5" camera look-controls wasd-controls>
+          <a-entity
+            id="cameraCollider"
+            bind__aabb-collider="enabled: isPlaying"
+            aabb-collider="objects: [data-collidable-head]; interval: 50; collideNonVisible: false"
+            geometry="primitive: box; width: 0.10; height: 0.10; depth: 0.10"
+            proxy-event__wallhitstart="event: hitstart; to: a-scene; as: wallhitstart"
+            proxy-event__wallhitend="event: hitend; to: a-scene; as: wallhitend"
+            visible="false"></a-entity>
+        </a-entity>
+      </a-entity>
+
+      {% if not IS_PRODUCTION %}
+        <a-entity
+          id="mouseCursor"
+          bind__raycaster="enabled: !inVR"
+          mixin="raycaster"
+          cursor="rayOrigin: mouse"
+          raycaster="objects: [raycastable]"></a-entity>
+        <a-entity
+          id="mouseCursorMesh"
+          mixin="cursorMesh"
+          cursor-mesh="cursorEl: #mouseCursor"
+          bind__cursor-mesh="active: menuActive"></a-entity>
+      {% endif %}
+    </a-scene>
+
+    <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
+  </body>
+</html>

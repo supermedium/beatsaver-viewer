@@ -1,0 +1,36 @@
+module.exports = {
+  OFF: '#111',
+  RED: '#f00',
+  BLUE: '#00f',
+
+  UI_ACCENT: '#067197',
+  UI_ACCENT2: '#f00',
+
+  SKY_OFF: '#222',
+  SKY_BLUE: '#007AB8',
+  SKY_RED: '#B80000',
+
+  BG_OFF: '#222',
+  BG_BLUE: '#007AB8',
+  BG_BRIGHTBLUE: '#5FCCFF',
+  BG_RED: '#B80000',
+  BG_BRIGHTRED: '#FF4343',
+
+  NEON_OFF: '#000',
+  NEON_BLUE: '#00f',
+  NEON_BRIGHTBLUE: '#aaf',
+  NEON_RED: '#f00',
+  NEON_BRIGHTRED: '#faa',
+
+  TEXT_OFF: '#000',
+  TEXT_NORMAL: '#444',
+  TEXT_BOLD: '#888',
+
+  BEAT_RED: '#290404',
+  BEAT_BLUE: '#08083E',
+
+  MINE_RED: '#070304',
+  MINE_RED_EMISSION: '#090707',
+  MINE_BLUE: '#030407',
+  MINE_BLUE_EMISSION: '#070709',
+};
