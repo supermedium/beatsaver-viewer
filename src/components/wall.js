@@ -78,7 +78,6 @@ AFRAME.registerComponent('wall', {
   play: function () {
     this.el.object3D.visible = true;
     this.el.setAttribute('data-collidable-head', '');
-    this.el.setAttribute('raycastable-game', '');
   },
 
   tock: function (time, timeDelta) {
@@ -87,6 +86,7 @@ AFRAME.registerComponent('wall', {
     const position = this.el.object3D.position;
 
     // Move.
+    this.el.object3D.visible = true;
     if (position.z < (data.anticipationPosition - halfDepth)) {
       let newPositionZ = position.z + BEAT_WARMUP_SPEED * (timeDelta / 1000);
       // Warm up / warp in.
@@ -111,6 +111,5 @@ AFRAME.registerComponent('wall', {
     this.el.object3D.position.z = 9999;
     this.el.pause();
     this.el.removeAttribute('data-collidable-head');
-    this.el.removeAttribute('raycastable-game');
   }
 });

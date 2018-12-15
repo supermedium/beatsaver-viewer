@@ -87,17 +87,10 @@ AFRAME.registerComponent('beat-loader', {
   update: function (oldData) {
     const data = this.data;
 
-    // Start playing.
-    if (!oldData.challengeId && data.challengeId && this.beatData) {
-      this.processBeats();
-      return;
-    }
-
     if (!data.challengeId || !data.difficulty) { return; }
 
     // Prefetch beats.
-    if (data.challengeId !== oldData.challengeId ||
-        data.difficulty !== oldData.difficulty) {
+    if (data.challengeId !== oldData.challengeId || data.difficulty !== oldData.difficulty) {
       this.fetchBeats();
     }
   },
@@ -112,7 +105,6 @@ AFRAME.registerComponent('beat-loader', {
     if (this.xhr) { this.xhr.abort(); }
 
     // Load beats.
-    console.log(this.data.challengeId, this.data.difficulty);
     let url = utils.getS3FileUrl(this.data.challengeId,
                                  `${this.data.difficulty}.json`);
     const xhr = this.xhr = new XMLHttpRequest();
@@ -123,6 +115,7 @@ AFRAME.registerComponent('beat-loader', {
       this.beatData = JSON.parse(xhr.responseText);
       this.beatDataProcessed = false;
       this.xhr = null;
+      this.processBeats();
       this.el.sceneEl.emit('beatloaderfinish', null, false);
     });
     xhr.send();
