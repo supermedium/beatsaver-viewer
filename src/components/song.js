@@ -44,8 +44,6 @@ AFRAME.registerComponent('song', {
     this.audioAnalyser.gainNode.gain.value = BASE_VOLUME;
 
     this.el.addEventListener('gamemenurestart', this.onRestart.bind(this));
-    this.el.addEventListener('wallhitstart', this.onWallHitStart.bind(this));
-    this.el.addEventListener('wallhitend', this.onWallHitEnd.bind(this));
   },
 
   update: function (oldData) {
@@ -140,16 +138,6 @@ AFRAME.registerComponent('song', {
       this.el.sceneEl.emit('songloadfinish', null, false);
     }, ONCE);
     this.audioAnalyser.refreshSource();
-  },
-
-  onWallHitStart: function () {
-    const gain = this.audioAnalyser.gainNode.gain;
-    gain.linearRampToValueAtTime(0.2, this.context.currentTime + 0.1);
-  },
-
-  onWallHitEnd: function () {
-    const gain = this.audioAnalyser.gainNode.gain;
-    gain.linearRampToValueAtTime(BASE_VOLUME, this.context.currentTime + 0.1);
   },
 
   startAudio: function () {

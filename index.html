@@ -3,7 +3,7 @@
   <head>
     <title>BeatSaver Viewer</title>
     
-      <script src="vendor/aframe-master.js"></script>
+      <script src="vendor/aframe-master.min.js"></script>
     
     <script src="build/build.js"></script>
   </head>
@@ -357,18 +357,6 @@
         </a-entity>
       </a-entity>
 
-      
-        <a-entity
-          id="mouseCursor"
-          bind__raycaster="enabled: !inVR"
-          mixin="raycaster"
-          cursor="rayOrigin: mouse"
-          raycaster="objects: [raycastable]"></a-entity>
-        <a-entity
-          id="mouseCursorMesh"
-          mixin="cursorMesh"
-          cursor-mesh="cursorEl: #mouseCursor"
-          bind__cursor-mesh="active: menuActive"></a-entity>
       
     </a-scene>
 
