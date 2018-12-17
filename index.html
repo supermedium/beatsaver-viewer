@@ -348,11 +348,7 @@
         <a-entity id="camera" position="0 1.6 0.5" camera look-controls wasd-controls>
           <a-entity
             id="cameraCollider"
-            bind__aabb-collider="enabled: isPlaying"
-            aabb-collider="objects: [data-collidable-head]; interval: 50; collideNonVisible: false"
             geometry="primitive: box; width: 0.10; height: 0.10; depth: 0.10"
-            proxy-event__wallhitstart="event: hitstart; to: a-scene; as: wallhitstart"
-            proxy-event__wallhitend="event: hitend; to: a-scene; as: wallhitend"
             visible="false"></a-entity>
         </a-entity>
       </a-entity>
