@@ -8,15 +8,6 @@ AFRAME.registerComponent('pauser', {
 
   init: function () {
     this.pauseGame = this.pauseGame.bind(this);
-
-    this.el.sceneEl.addEventListener('controllerconnected', evt => {
-      if (evt.detail.name === 'vive-controls') {
-        this.el.addEventListener('menudown', this.pauseGame);
-      } else {
-        this.el.addEventListener('thumbstickdown', this.pauseGame);
-      }
-    });
-
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') { this.pauseGame(); }
     });

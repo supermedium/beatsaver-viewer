@@ -15,6 +15,7 @@
     <a-scene
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
+      bind__pauser="enabled: isPlaying"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded"
       challenge-setter
       console-shortcuts
@@ -36,7 +37,9 @@
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
       pool__wall="mixin: wall; size: 10; container: #beatContainer"
+      proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
+      proxy-event__resumegame="event: gamemenuresume; as: textglownormal; to: a-scene"
       search
       stage-colors="color: blue"
       stats-param
@@ -56,6 +59,7 @@
       <a-entity id="cursorLaser" obj-model="obj: #laserObj" visible="false"></a-entity>
 
       {% include './templates/stage.html' %}
+      {% include './templates/gameMenu.html' %}
 
       <a-entity id="beatContainer" bind__pause="isPaused: !isPlaying" beat-hit-sound></a-entity>
 
@@ -83,19 +87,17 @@
         </a-entity>
       </a-entity>
 
-      {% if not IS_PRODUCTION %}
-        <a-entity
-          id="mouseCursor"
-          bind__raycaster="enabled: !inVR"
-          mixin="raycaster"
-          cursor="rayOrigin: mouse"
-          raycaster="objects: [raycastable]"></a-entity>
-        <a-entity
-          id="mouseCursorMesh"
-          mixin="cursorMesh"
-          cursor-mesh="cursorEl: #mouseCursor"
-          bind__cursor-mesh="active: menuActive"></a-entity>
-      {% endif %}
+      <a-entity
+        id="mouseCursor"
+        bind__raycaster="enabled: !inVR"
+        mixin="raycaster"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: [raycastable]"></a-entity>
+      <a-entity
+        id="mouseCursorMesh"
+        mixin="cursorMesh"
+        cursor-mesh="cursorEl: #mouseCursor"
+        bind__cursor-mesh="active: menuActive"></a-entity>
     </a-scene>
 
     <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>

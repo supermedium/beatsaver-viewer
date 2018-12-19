@@ -11,6 +11,7 @@
     <a-scene
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
+      bind__pauser="enabled: isPlaying"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded"
       challenge-setter
       console-shortcuts
@@ -30,7 +31,9 @@
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
       pool__wall="mixin: wall; size: 10; container: #beatContainer"
+      proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
+      proxy-event__resumegame="event: gamemenuresume; as: textglownormal; to: a-scene"
       search
       stage-colors="color: blue"
       stats-param
@@ -277,6 +280,69 @@
   </a-entity>
 </a-entity>
 
+      <a-mixin
+  id="gameMenuButton"
+  mixin="bigMenuButton"
+  animation__mouseenter="property: components.slice9.material.color; type: color; from: #CCC; to: #FAFAFA; startEvents: mouseenter; pauseEvents: mouseleave; dur: 150"
+  animation__mouseleave="property: components.slice9.material.color; type: color; from: #FAFAFA; to: #CCC; startEvents: mouseleave; pauseEvents: mouseenter; dur: 150"
+  slice9="width: 1; height: 0.27;"></a-mixin>
+
+<a-mixin
+  id="gameMenuButtonText"
+  mixin="font"
+  position="0 -0.08 0.01"
+  text="align: center; wrapCount: 17; color: #FFF"></a-mixin>
+
+<!-- Titles. -->
+<a-entity id="inGameMenuTitles" position="0 1.7 -2.3">
+  <a-entity mixin="gameMenuButtonText" text="value: PAUSED; color: #FAFAFA; width: 4" bind__visible="isPaused"></a-entity>
+</a-entity>
+
+<a-entity
+  id="gameMenu"
+  bind__visible="isPaused"
+  position="0 1.1 -2"
+  play-sound="event: mouseenter; sound: #hoverSound; volume: 0.03"
+  play-sound__click="event: click; sound: #confirmSound; volume: 0.25">
+
+  <!-- Actions. -->
+  <a-entity
+    id="resumeButton"
+    mixin="gameMenuButton"
+    bind__visible-raycastable="isPaused"
+    position="0 0.35 0"
+    proxy-event="event: click; to: a-scene; as: gamemenuresume">
+    <a-entity mixin="gameMenuButtonText" text="value: RESUME"></a-entity>
+  </a-entity>
+
+  <a-entity
+    id="restartButton"
+    mixin="gameMenuButton"
+    bind__visible-raycastable="isPaused"
+    proxy-event="event: click; to: a-scene; as: gamemenurestart">
+    <a-entity mixin="gameMenuButtonText" text="value: RESTART SONG"></a-entity>
+  </a-entity>
+
+  <!-- Song info. -->
+  <a-entity id="gameMenuSongInfoContainer" position="0 -1.10421 0.15473" rotation="-20 0 0">
+    <a-entity id="gameMenuSongBackground" mixin="slice" slice9="width: 1.5; height: 0.2; padding: 0.04" position="0 0 -0.03"></a-entity>
+
+    <a-entity id="gameMenuSongImage"
+      bind__material="src: challenge.image"
+      geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
+      material="shader: flat"
+      position="-0.8003 0.00849 0"></a-entity>
+
+    <a-entity id="gameMenuSongInfo">
+      <a-entity id="gameMenuSongSubName" position="0 0.015 0"
+        mixin="font" text="wrapCount: 40; align: center; color: #f01978; width: 0" bind__text="value: challenge.songSubName"></a-entity>
+      <a-entity id="gameMenuSongName" position="0 -0.056 0"
+        mixin="font" text="align: center; color: #08bfa2; wrapCount: 30; baseline: top; lineHeight: 36; width: 1.2"
+        bind__text="value: challenge.songName"></a-entity>
+    </a-entity>
+  </a-entity>
+</a-entity>
+
 
       <a-entity id="beatContainer" bind__pause="isPaused: !isPlaying" beat-hit-sound></a-entity>
 
@@ -353,19 +419,17 @@
         </a-entity>
       </a-entity>
 
-      
-        <a-entity
-          id="mouseCursor"
-          bind__raycaster="enabled: !inVR"
-          mixin="raycaster"
-          cursor="rayOrigin: mouse"
-          raycaster="objects: [raycastable]"></a-entity>
-        <a-entity
-          id="mouseCursorMesh"
-          mixin="cursorMesh"
-          cursor-mesh="cursorEl: #mouseCursor"
-          bind__cursor-mesh="active: menuActive"></a-entity>
-      
+      <a-entity
+        id="mouseCursor"
+        bind__raycaster="enabled: !inVR"
+        mixin="raycaster"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: [raycastable]"></a-entity>
+      <a-entity
+        id="mouseCursorMesh"
+        mixin="cursorMesh"
+        cursor-mesh="cursorEl: #mouseCursor"
+        bind__cursor-mesh="active: menuActive"></a-entity>
     </a-scene>
 
     <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
