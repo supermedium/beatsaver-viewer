@@ -13,7 +13,7 @@
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
-      bind__song-controls="isPlaying: isPlaying"
+      bind__song-controls="isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
       challenge-setter
       console-shortcuts
       debug-beat-loader
@@ -452,6 +452,14 @@
   <a id="pause" href="#"><img id="pause" src="assets/img/pause.svg"></a>
   <div id="timeline">
     <div id="playhead"></div>
+  </div>
+
+  <div id="songInfoContainer">
+    <img id="songImage">
+    <div id="songInfo">
+      <p id="songName"></p>
+      <p id="songSubName"></p>
+    </div>
   </div>
 </div>
 
