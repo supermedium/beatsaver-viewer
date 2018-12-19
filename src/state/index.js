@@ -114,6 +114,15 @@ AFRAME.registerState({
       state.isSongLoading = true;
     },
 
+    challengesetfromzip: (state, payload) => {
+      state.challenge.id = payload.id;
+      state.challenge.difficulty = payload.difficulty;
+      state.challenge.image = payload.image
+      state.challenge.songName = payload.songName;
+      state.challenge.songSubName = payload.songSubName;
+      state.isSongLoading = true;
+    },
+
     songfetchfinish: state => {
       state.isSongFetching = false;
     },
