@@ -55,6 +55,10 @@ AFRAME.registerComponent('song-controls', {
       }, {once: true});
       this.song.audioAnalyser.refreshSource();
     });
+
+    document.getElementById('controlsPause').addEventListener('click', () => {
+      this.el.sceneEl.emit('pausegame', null, false);
+    });
   },
 
   tick: function () {
