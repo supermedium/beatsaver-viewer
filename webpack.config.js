@@ -93,13 +93,27 @@ module.exports = {
         loader: 'webpack-glsl-loader'
       },
       {
-        test: /\.css$/,
-        exclude: /(node_modules)/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
         test: /\.(png|jpg)/,
         loader: 'url-loader'
+      },
+      {
+        test: /\.styl$/,
+        exclude: /(node_modules)/,
+        loaders: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {url: false}
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: (loader) => [require('autoprefixer')()]
+            }
+          },
+          'stylus-loader'
+        ]
       }
     ]
   },
