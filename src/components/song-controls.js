@@ -2,6 +2,9 @@ AFRAME.registerComponent('song-controls', {
   dependencies: ['song'],
 
   schema: {
+    songName: {default: ''},
+    songSubName: {default: ''},
+    songImage: {default: ''},
     isPlaying: {default: false}
   },
 
@@ -12,11 +15,16 @@ AFRAME.registerComponent('song-controls', {
 
   update: function () {
     if (!this.controls) { return; }
+
     if (this.data.isPlaying) {
       this.controls.classList.add('isPlaying');
     } else {
       this.controls.classList.remove('isPlaying');
     }
+
+    document.getElementById('songImage').src = this.data.songImage;
+    document.getElementById('songName').innerHTML = this.data.songName;
+    document.getElementById('songSubName').innerHTML = this.data.songSubName;
   },
 
   play: function () {

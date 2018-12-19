@@ -3,7 +3,7 @@ html
 
 #controls
   align-items center
-  background rgba(200, 200, 200, 0.75)
+  background rgba(110, 110, 110, 0.9)
   border-radius 10px
   bottom 0
   display flex
@@ -14,7 +14,7 @@ html
   position fixed
   right 0
   transition opacity .5s
-  width 320px
+  width 400px
   z-index 99999999
 
   &.isPlaying
@@ -22,13 +22,13 @@ html
 
   #pause
     display flex
-    padding-right 10px
+    padding-right 5px
 
 	#timeline
-		background #333
+		background #111
 		border-radius 15px
 		height 20px
-		width 100%
+		width 160px
 
   #playhead
     background #FAFAFA
@@ -36,6 +36,27 @@ html
     height 18px
     margin-top 1px
     width 18px
+
+#songInfoContainer
+  align-items center
+  display flex
+  padding-left 20px
+
+  img
+    height 32px
+    width 32px
+
+  p
+    color #FAFAFA
+    font-family monospace
+    font-size 13px
+    margin 0
+    text-transform uppercase
+
+  #songInfo
+    display flex
+    flex-direction column
+    padding-left 15px
 
 #timeline
   cursor pointer

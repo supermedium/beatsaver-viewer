@@ -17,7 +17,7 @@
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
-      bind__song-controls="isPlaying: isPlaying"
+      bind__song-controls="isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
       challenge-setter
       console-shortcuts
       debug-beat-loader
