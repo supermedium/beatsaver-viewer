@@ -2,10 +2,18 @@ const utils = require('../utils');
 
 AFRAME.registerComponent('challenge-setter', {
   play: function () {
-    this.setChallenge(
-      AFRAME.utils.getUrlParameter('id'),
-      AFRAME.utils.getUrlParameter('difficulty')
-    );
+    // ID parameter.
+    const idParam = AFRAME.utils.getUrlParameter('id');
+    if (idParam) {
+      this.setChallenge(
+        idParam,
+        AFRAME.utils.getUrlParameter('difficulty')
+      );
+      return;
+    }
+
+    // No parameter. Just Beat It!
+    this.setChallenge(811, 'Expoert');
   },
 
   setChallenge: function (id, difficulty) {
@@ -13,7 +21,7 @@ AFRAME.registerComponent('challenge-setter', {
     xhr.open('GET', utils.getS3FileUrl(id, 'info.json'));
     xhr.addEventListener('load', () => {
       this.el.emit('challengeset', Object.assign(
-        {id: id, difficulty: difficulty},
+        {id: id, difficulty: difficulty || 'Normal'},
         JSON.parse(xhr.responseText)
       ));
     });
