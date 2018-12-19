@@ -4,6 +4,8 @@
 
 Web-based viewer for BeatSaver maps, built with [A-Frame] and JavaScript.
 
+**[CLICK TO VIEW](https://supermedium.com/beatsaver-viewer/?id=811&difficulty=Expert)**
+
 ![](https://user-images.githubusercontent.com/674727/50229336-f395ca00-035e-11e9-844c-a6bbb07fbf38.jpg)
 
 The viewer can be embedded on any webpage and works on desktop or mobile. It
