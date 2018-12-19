@@ -13,6 +13,7 @@
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song-controls="isPlaying: isPlaying"
       challenge-setter
       console-shortcuts
       debug-beat-loader
@@ -35,7 +36,6 @@
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
       proxy-event__resumegame="event: gamemenuresume; as: textglownormal; to: a-scene"
       search
-      song-controls
       stage-colors="color: blue"
       stats-param
       user-gesture

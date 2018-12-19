@@ -1,14 +1,29 @@
 AFRAME.registerComponent('song-controls', {
   dependencies: ['song'],
 
+  schema: {
+    isPlaying: {default: false}
+  },
+
   init: function () {
     this.song = this.el.components.song;
     this.tick = AFRAME.utils.throttleTick(this.tick.bind(this), 1000);
   },
 
+  update: function () {
+    if (!this.controls) { return; }
+    if (this.data.isPlaying) {
+      this.controls.classList.add('isPlaying');
+    } else {
+      this.controls.classList.remove('isPlaying');
+    }
+  },
+
   play: function () {
+    this.controls = document.getElementById('controls');
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
+
     const timelineWidth = timeline.offsetWidth - this.playhead.offsetWidth;
 
     // Seek.

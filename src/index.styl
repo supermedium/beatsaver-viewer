@@ -7,13 +7,18 @@ html
   border-radius 10px
   bottom 0
   display flex
+  opacity 0
   left 0
   margin 0 auto 20px auto
   padding 10px
   position fixed
   right 0
+  transition opacity .5s
   width 320px
   z-index 99999999
+
+  &.isPlaying
+    opacity 1
 
   #pause
     display flex
