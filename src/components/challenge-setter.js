@@ -38,7 +38,9 @@ AFRAME.registerComponent('challenge-setter', {
       let imageBlob;
       let songBlob;
       const event = {
-        beats: '',
+        oneats: '',
+        difficulty: difficulty,
+        id: id,
         image: '',
         info: '',
         song: ''
@@ -57,6 +59,7 @@ AFRAME.registerComponent('challenge-setter', {
         if (filename.endsWith(`song.ogg`)) {
           songBlob = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
+        document.getElementById('controls').style.opacity = 1;
       });
 
       this.el.emit('challengesetfromzip', event);

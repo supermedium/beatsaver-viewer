@@ -11,7 +11,6 @@ const DEBUG_CHALLENGE = {
   id: '31',
   image: 'assets/img/molerat.jpg',
   songName: 'Friday',
-  songLength: 100,
   songSubName: 'Rebecca Black'
 };
 
@@ -34,8 +33,6 @@ AFRAME.registerState({
       image: '',
       isLoading: false,
       isBeatsPreloaded: false,  // Whether we have passed the negative time.
-      numBeats: undefined,
-      songDuration: 0,
       songName: '',
       songSubName: ''
     },
@@ -118,8 +115,9 @@ AFRAME.registerState({
       state.challenge.id = payload.id;
       state.challenge.difficulty = payload.difficulty;
       state.challenge.image = payload.image
-      state.challenge.songName = payload.songName;
-      state.challenge.songSubName = payload.songSubName;
+      state.challenge.author = payload.info.author;
+      state.challenge.songName = payload.info.songName;
+      state.challenge.songSubName = payload.info.songSubName;
       state.isSongLoading = true;
     },
 
