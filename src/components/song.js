@@ -47,7 +47,7 @@ AFRAME.registerComponent('song', {
   },
 
   update: function (oldData) {
-    var data = this.data;
+    const data = this.data;
 
     // New challenge, play if we have loaded and were waiting for beats to preload.
     if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {

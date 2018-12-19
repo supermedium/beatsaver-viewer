@@ -37,6 +37,7 @@
       search
       stage-colors="color: blue"
       stats-param
+      user-gesture
       vr-mode-ui="enterVRButton: #vrButton"
       tutorial-2d>
 
@@ -348,17 +349,20 @@
 
       <a-entity
   id="loadingSongInfoContainer"
-  bind__animation__scale="enabled: isSongLoading"
-  bind__visible="isSongLoading"
+  bind__animation__scale="enabled: isSongLoading || !hasReceivedUserGesture"
+  bind__visible="isSongLoading || !hasReceivedUserGesture"
   animation__scale="property: scale; from: 1 1 1; to: 1.05 1.05 1.05; dir: alternate; loop: true; dur: 1200; easing: easeInOutCubic"
-  position="0 1.1 -2">
+  position="0 1.5 -1">
+
   <a-entity mixin="slice" slice9="opacity: 0.9; width: 0.77; height: 1; padding: 0.08" position="0 0 -0.03"></a-entity>
+
   <a-entity id="loadingSongImage"
     bind__material="src: challenge.image"
     geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
     material="shader: flat"
     position="0 0.24 0"></a-entity>
-<a-entity id="loadingSongInfo">
+
+  <a-entity id="loadingSongInfo">
     <a-entity position="0 -0.05 0" mixin="font"
       text="wrapCount: 40; align: center; color: #FF185B"
       bind__text="value: challenge.songSubName"></a-entity>
@@ -392,6 +396,16 @@
       material="shader: ring; color: #ABABAB; radiusInner: 0.2; radiusOuter: 0.4; transparent: true; progress: 0.2"
       position="0 -0.38 0.004"
       visible="false">
+    </a-entity>
+
+    <a-entity
+      id="loadingGestureButton"
+      mixin="bigMenuButton"
+      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture"
+      position="0 -0.31923 0.01"
+      proxy-event="event: click; to: a-scene; as: usergesturereceive"
+      slice9="width: 0.725">
+      <a-entity id="loadingGestureText" mixin="font" text="align: center; color: #FAFAFA; wrapCount: 40; value: CLICK ANYWHERE TO PLAY" position="0 -0.0329 0.001"></a-entity>
     </a-entity>
   </a-entity>
 </a-entity>

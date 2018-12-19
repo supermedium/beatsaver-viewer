@@ -39,7 +39,7 @@ AFRAME.registerState({
       songName: '',
       songSubName: ''
     },
-    controllerType: '',
+    hasReceivedUserGesture: false,
     inVR: false,
     isPaused: false,  // Playing, but paused. Not active during menu.
     isPlaying: false,  // Actively playing (slicing beats).
@@ -52,12 +52,12 @@ AFRAME.registerState({
       state.challenge.isLoading = false;
     },
 
-    beatloaderpreloadfinish: (state) => {
+    beatloaderpreloadfinish: state => {
       if (state.menuActive) { return; }  // Cancelled.
       state.challenge.isBeatsPreloaded = true;
     },
 
-    beatloaderstart: (state) => {
+    beatloaderstart: state => {
       state.challenge.isBeatsPreloaded = false;
       state.challenge.isLoading = true;
     },
@@ -77,25 +77,25 @@ AFRAME.registerState({
       state.isSongLoading = true;
     },
 
-    gamemenuresume: (state) => {
+    gamemenuresume: state => {
       state.isPaused = false;
     },
 
-    gamemenurestart: (state) => {
+    gamemenurestart: state => {
       state.challenge.isBeatsPreloaded = false;
       state.isPaused = false;
       state.isSongLoading = true;
     },
 
-    keyboardclose: (state) => {
+    keyboardclose: state => {
       state.isSearching = false;
     },
 
-    keyboardopen: (state) => {
+    keyboardopen: state => {
       state.isSearching = true;
     },
 
-    pausegame: (state) => {
+    pausegame: state => {
       if (!state.isPlaying) { return; }
       state.isPaused = true;
     },
@@ -114,7 +114,7 @@ AFRAME.registerState({
       state.isSongLoading = true;
     },
 
-    songfetchfinish: (state) => {
+    songfetchfinish: state => {
       state.isSongFetching = false;
     },
 
@@ -126,21 +126,25 @@ AFRAME.registerState({
       state.menuActive = true;
     },
 
-    songloadfinish: (state) => {
+    songloadfinish: state => {
       state.isSongFetching = false;
       state.isSongLoading = false;
     },
 
-    songloadstart: (state) => {
+    songloadstart: state => {
       state.isSongFetching = true;
       state.isSongLoading = true;
     },
 
-    'enter-vr': (state) => {
+    usergesturereceive: state => {
+      state.hasReceivedUserGesture = true;
+    },
+
+    'enter-vr': state => {
       state.inVR = true;
     },
 
-    'exit-vr': (state) => {
+    'exit-vr': state => {
       state.inVR = false;
     }
   },
@@ -148,10 +152,11 @@ AFRAME.registerState({
   /**
    * Post-process the state after each action.
    */
-  computeState: (state) => {
+  computeState: state => {
     state.isPlaying =
       !state.menuActive && !state.isPaused &&
-      !state.challenge.isLoading && !state.isSongLoading && !!state.challenge.id;
+      !state.challenge.isLoading && !state.isSongLoading && !!state.challenge.id &&
+      state.hasReceivedUserGesture;
 
     const anyMenuOpen = state.menuActive || state.isPaused ||
                         state.isSongLoading || state.isSongFetching;
