@@ -13,7 +13,7 @@ AFRAME.registerComponent('challenge-setter', {
     }
 
     // No parameter. Just Beat It!
-    this.setChallenge(811, 'Expoert');
+    this.setChallenge(811, 'Expert');
   },
 
   setChallenge: function (id, difficulty) {
