@@ -12,7 +12,7 @@
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
-      bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
       challenge-setter
       console-shortcuts
       debug-beat-loader
@@ -35,6 +35,7 @@
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
       proxy-event__resumegame="event: gamemenuresume; as: textglownormal; to: a-scene"
       search
+      song-controls
       stage-colors="color: blue"
       stats-param
       user-gesture
@@ -449,8 +450,9 @@
     <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
     <div id="controls">
   <a id="pause" href="#"><img id="pause" src="assets/img/pause.svg"></a>
-  <div id="timeline"></div>
-  <div id="playhead"></div>
+  <div id="timeline">
+    <div id="playhead"></div>
+  </div>
 </div>
 
 

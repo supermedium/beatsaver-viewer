@@ -164,6 +164,12 @@ AFRAME.registerComponent('beat-loader', {
       this.beatsTime = this.beatsPreloadTime;
     }
 
+    // Skip a frame to update prevBeats data.
+    if (this.isSeeking) {
+      this.isSeeking = false;
+      return;
+    }
+
     // Load in stuff scheduled between the last timestamp and current timestamp.
     // Beats.
     const beatsTime = this.beatsTime + skipDebug;
@@ -206,6 +212,16 @@ AFRAME.registerComponent('beat-loader', {
       // Continue preload.
       this.beatsPreloadTime += delta;
     }
+  },
+
+  seek: function () {
+    this.clearBeats(true);
+    this.beatsTime = (
+      this.el.components.song.getCurrentTime() +
+      this.data.beatAnticipationTime +
+      this.data.beatWarmupTime
+    ) * 1000;
+    this.isSeeking = true;
   },
 
   generateBeat: (function () {
@@ -319,9 +335,11 @@ AFRAME.registerComponent('beat-loader', {
   /**
    * Restart by returning all beats to pool.
    */
-  clearBeats: function () {
-    this.beatsPreloadTime = 0;
-    this.beatsTime = 0;
+  clearBeats: function (isSeeking) {
+    if (!isSeeking) {
+      this.beatsPreloadTime = 0;
+      this.beatsTime = 0;
+    }
     for (let i = 0; i < this.beatContainer.children.length; i++) {
       let child = this.beatContainer.children[i];
       if (child.components.beat) {

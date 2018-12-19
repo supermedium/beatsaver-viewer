@@ -28,6 +28,7 @@ AFRAME.registerComponent('song', {
   schema: {
     analyserEl: {type: 'selector', default: '#audioAnalyser'},
     challengeId: {default: ''},
+    hasReceivedUserGesture: {default: false},
     isBeatsPreloaded: {default: false},
     isPlaying: {default: false}
   },
@@ -140,11 +141,13 @@ AFRAME.registerComponent('song', {
     this.audioAnalyser.refreshSource();
   },
 
-  startAudio: function () {
+  startAudio: function (time) {
+    const playTime = time || skipDebug || 0;
+
     const gain = this.audioAnalyser.gainNode.gain;
     gain.setValueAtTime(BASE_VOLUME, this.context.currentTime);
-    this.songStartTime = this.context.currentTime;
-    this.source.start(0, skipDebug || 0);
+    this.songStartTime = this.context.currentTime - playTime;
+    this.source.start(0, playTime);
     this.isPlaying = true;
   },
 
