@@ -34,7 +34,8 @@ AFRAME.registerComponent('challenge-setter', {
 
   fetchZip: function (id, difficulty) {
     // Unzip.
-    const loader = new ZipLoader(`https://beatsaver.com/download/${id}`);
+    const [short] = id.split('-');
+    const loader = new ZipLoader(`https://beatsaver.com/storage/songs/${short}/${id}.zip`);
     loader.on('load', () => {
       let imageBlob;
       let songBlob;
