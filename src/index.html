@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>BeatSaver Viewer</title>
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
     {% if DEBUG_AFRAME %}
       <script src="http://{{ HOST }}:9000/dist/aframe-master.js"></script>
     {% elif IS_PRODUCTION %}
@@ -10,6 +12,7 @@
       <script src="vendor/aframe-master.js"></script>
     {% endif %}
     <script src="build/build.js"></script>
+
   </head>
   <body>
     <a-scene
