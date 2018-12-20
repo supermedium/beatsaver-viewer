@@ -5,7 +5,7 @@
 
 Web-based viewer for BeatSaver maps, built with [A-Frame] and JavaScript.
 
-**[CLICK TO VIEW][visit]
+**[CLICK TO VIEW][visit]**
 
 ![](https://user-images.githubusercontent.com/674727/50229336-f395ca00-035e-11e9-844c-a6bbb07fbf38.jpg)
 
