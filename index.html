@@ -12,7 +12,7 @@
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
-      bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song="audio: challenge.audio; challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
       bind__song-controls="isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
       challenge-setter
       console-shortcuts
@@ -330,7 +330,7 @@
     <a-entity id="gameMenuSongBackground" mixin="slice" slice9="width: 1.5; height: 0.2; padding: 0.04" position="0 0 -0.03"></a-entity>
 
     <a-entity id="gameMenuSongImage"
-      bind__material="src: challenge.image"
+      bind__blob-texture="src: challenge.image"
       geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
       material="shader: flat"
       position="-0.8003 0.00849 0"></a-entity>
@@ -358,10 +358,11 @@
   <a-entity mixin="slice" slice9="opacity: 0.9; width: 0.77; height: 1; padding: 0.08" position="0 0 -0.03"></a-entity>
 
   <a-entity id="loadingSongImage"
-    bind__material="src: challenge.image"
+    bind__blob-texture="src: challenge.image"
     geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
     material="shader: flat"
-    position="0 0.24 0"></a-entity>
+    position="0 0.24 0"
+    bind__visible="!!challenge.image"></a-entity>
 
   <a-entity id="loadingSongInfo">
     <a-entity position="0 -0.05 0" mixin="font"
@@ -402,10 +403,11 @@
     <a-entity
       id="loadingGestureButton"
       mixin="bigMenuButton"
-      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture"
+      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !!challenge.id"
       position="0 -0.31923 0.01"
       proxy-event="event: click; to: a-scene; as: usergesturereceive"
-      slice9="width: 0.725">
+      slice9="width: 0.725"
+      visible="false">
       <a-entity id="loadingGestureText" mixin="font" text="align: center; color: #FAFAFA; wrapCount: 40; value: CLICK ANYWHERE TO PLAY" position="0 -0.0329 0.001"></a-entity>
     </a-entity>
   </a-entity>
