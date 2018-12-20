@@ -1,4 +1,3 @@
-var audioContext = new window.AudioContext();
 var sourceCreatedCallback;
 
 const LAYER_BOTTOM = 'bottom';

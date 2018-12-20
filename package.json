@@ -12,7 +12,7 @@
   "dependencies": {
     "aframe-aabb-collider-component": "^3.1.0",
     "aframe-atlas-uvs-component": "^2.1.0",
-    "aframe-audioanalyser-component": "^5.2.1",
+    "aframe-audioanalyser-component": "^5.3.0",
     "aframe-event-decorators": "^1.0.2",
     "aframe-event-set-component": "^4.0.1",
     "aframe-geometry-merger-component": "^2.0.0-beta1",

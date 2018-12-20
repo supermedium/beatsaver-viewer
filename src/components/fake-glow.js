@@ -52,6 +52,7 @@ function createAlphaMap () {
 }
 
 function createGeometry (color) {
+  var i;
   colorHelper.set(color);
 
   const cylinders = [
@@ -69,7 +70,7 @@ function createGeometry (color) {
     );
 
     const colorArray = [];
-    for (let i = 0; i < cylinder.attributes.position.array.length; i += 3) {
+    for (i = 0; i < cylinder.attributes.position.array.length; i += 3) {
       colorArray[i] = colorHelper.r;
       colorArray[i + 1] = colorHelper.g;
       colorArray[i + 2] = colorHelper.b;
@@ -78,7 +79,7 @@ function createGeometry (color) {
 
     const alphaUvs = getGridUvs(0, i, 1, 4);
     const uvs = cylinder.attributes.uv.array;
-    for (let i = 0; i < uvs.length; i += 6) {
+    for (i = 0; i < uvs.length; i += 6) {
       uvs[i] = alphaUvs[0].x;
       uvs[i + 1] = alphaUvs[0].y;
 
