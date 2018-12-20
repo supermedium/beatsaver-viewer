@@ -42,7 +42,7 @@ AFRAME.registerComponent('challenge-setter', {
       const event = {
         audio: '',
         beats: '',
-        difficulty: '',
+        difficulty: difficulty,
         id: id,
         image: '',
         info: ''
@@ -57,12 +57,12 @@ AFRAME.registerComponent('challenge-setter', {
 
       // Default to hardest.
       const difficulties = event.info.difficultyLevels;
-      if (!difficulty) {
-        difficulty = difficulties.sort(d => d.rank)[0].difficulty;
+      if (!event.difficulty) {
+        event.difficulty = difficulties.sort(d => d.rank)[0].difficulty;
       }
 
       Object.keys(loader.files).forEach(filename => {
-        if (filename.endsWith(`${difficulty}.json`)) {
+        if (filename.endsWith(`${event.difficulty}.json`)) {
           event.beats = loader.extractAsJSON(filename);
         }
         if (filename.endsWith('jpg')) {
