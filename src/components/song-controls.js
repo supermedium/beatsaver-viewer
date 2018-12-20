@@ -67,7 +67,7 @@ AFRAME.registerComponent('song-controls', {
   },
 
   updatePlayhead: function () {
-    const progress = 100 * (this.song.getCurrentTime() / this.song.source.buffer.duration);
+    const progress = Math.max(0, Math.min(100, 100 * (this.song.getCurrentTime() / this.song.source.buffer.duration)));
     this.playhead.style.width = progress + '%';
   }
 });
