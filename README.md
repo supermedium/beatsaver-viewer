@@ -7,7 +7,7 @@ Web-based viewer for BeatSaver maps, built with [A-Frame] and JavaScript.
 
 **[CLICK TO VIEW][visit]**
 
-![](https://user-images.githubusercontent.com/674727/50229336-f395ca00-035e-11e9-844c-a6bbb07fbf38.jpg)
+![https://supermedium.com/beatsaver-viewer/?id=811-535&difficulty=Expert](https://raw.githubusercontent.com/supermedium/beatsaver-viewer/master/assets/img/sshot.jpg)
 
 The viewer works within a normal web browser and can be embedded on any
 webpage. It can also be previewed within VR headsets on browsers that support
