@@ -1,7 +1,11 @@
+/**
+ * Update the 2D UI. Handle pause and seek.
+ */
 AFRAME.registerComponent('song-controls', {
   dependencies: ['song'],
 
   schema: {
+    difficulty: {default: ''},
     songName: {default: ''},
     songSubName: {default: ''},
     songImage: {default: ''},
@@ -25,6 +29,7 @@ AFRAME.registerComponent('song-controls', {
     document.getElementById('songImage').src = this.data.songImage;
     document.getElementById('songName').innerHTML = this.data.songName;
     document.getElementById('songSubName').innerHTML = this.data.songSubName;
+    document.getElementById('controlsDifficulty').innerHTML = this.data.difficulty;
   },
 
   play: function () {

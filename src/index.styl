@@ -4,25 +4,32 @@ html
 #controls
   align-items center
   background rgba(180, 180, 180, 0.75)
-  border-radius 10px
+  border-radius 5px
   bottom 0
   display flex
-  opacity 0
   left 0
   margin 0 auto 20px auto
-  padding 10px
+  padding 5px 10px
   position fixed
   right 0
-  transition opacity .5s
-  width 400px
+  width 550px
   z-index 99999999
 
+  #logo
+    margin-right 10px
+    img
+      height 32px
+      width 32px
+
   &.isPlaying
-    opacity 1
+    #pause
+      opacity 1
 
   #pause
     display flex
-    padding-right 5px
+    opacity 0
+    padding-right 10px
+    transition opacity .5s
 
 	#timeline
 		background #111
@@ -58,6 +65,24 @@ html
     flex-direction column
     padding-left 15px
 
+  #controlsDifficulty
+    border 1px solid #111
+    border-radius 5px
+    cursor pointer
+    padding 5px 10px
+    position absolute
+    right 10px
+    text-align center
+    &:after
+      content '\25B2'
+      display inline-block
+      margin-left 5px
+
+#controlsDifficultyContainer
+  bottom 0
+  display none
+  position fixed
+
 #timeline
   cursor pointer
 
@@ -81,9 +106,3 @@ html
 
 #vrButtonhover
   background-position 0 -50.5px
-
-#logo
-  bottom 0
-  position fixed
-  left 0
-  z-index 99999999
