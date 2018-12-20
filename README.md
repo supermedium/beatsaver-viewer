@@ -30,12 +30,11 @@ I-Frame the viewer and pass a query parameter containing the song ID and
 difficulty:
 
 ```
-<iframe src="http://localhost:9999/?id=31&difficulty=Expert">
+<iframe src="http://localhost:9999/?id=811-535&difficulty=Expert">
 ```
 
 ## Roadmap
 
-- Fetch ZIP files directly from BeatSaver
 - Mobile support
 - Difficulty switcher
 - Custom saber viewer
