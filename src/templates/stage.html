@@ -35,6 +35,12 @@
 
   <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
 
+  <a-entity id="logo" bind__visible="!isPlaying" position="0 5.5 -6.5" rotation="90 0 0">
+    <a-entity id="logoBackObj" obj-model="obj: #logoBackObj" materials="name: logoadditive"></a-entity>
+    <a-entity id="logoBody" obj-model="obj: #logoObj" materials="name: logo"></a-entity>
+    <a-entity id="logoGlowObj" obj-model="obj: #logoGlowObj" materials="name: logoadditive"></a-entity>
+  </a-entity>
+
   <a-entity
     id="smoke"
     animation__rotate="property: rotation; to: 0 360 0; easing: linear; loop: true; dur: 200000"

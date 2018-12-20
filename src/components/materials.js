@@ -53,7 +53,6 @@ AFRAME.registerSystem('materials', {
       },
       vertexShader: flatShaders.vertexShader,
       fragmentShader: flatShaders.fragmentShader,
-      depthTest: false,
       fog: false,
       transparent: true
     });
