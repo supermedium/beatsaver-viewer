@@ -36,7 +36,8 @@ AFRAME.registerComponent('song-controls', {
 
     // Seek.
     timeline.addEventListener('click', event => {
-      const marginLeft = (event.clientX - timeline.getBoundingClientRect().left);
+      const marginLeft = (event.clientX - timeline.getBoundingClientRect().left -
+                          parseInt(window.getComputedStyle(this.playhead).width));
       const percent = marginLeft / timelineWidth;
 
       // Get new audio buffer source (needed every time audio is stopped).
