@@ -62,7 +62,7 @@ AFRAME.registerComponent('song', {
     }
 
     // New challenge, load audio and play when ready.
-    if (oldData.challengeId !== data.challengeId && data.challengeId) {
+    if (oldData.audio !== data.audio && data.audio) {
       this.el.sceneEl.emit('songloadstart', null, false);
       this.getAudio().then(source => {
         this.el.sceneEl.emit('songloadfinish', null, false);

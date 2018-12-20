@@ -90,6 +90,47 @@ AFRAME.registerComponent('beat-loader', {
     });
   },
 
+  update: function (oldData) {
+    const data = this.data;
+
+    if (!data.challengeId || !data.difficulty) { return; }
+
+    // Prefetch beats.
+    // TODO: Remove once bsaber ditches old ID.
+    if (data.challengeId !== oldData.challengeId ||
+        data.difficulty !== oldData.difficulty &&
+        data.challengeId.indexOf('-') === -1) {
+      this.fetchBeats();
+    }
+  },
+
+  /**
+   * XHR. Beat data is prefetched when user selects a menu challenge, and stored away
+   * to be processed later.
+   */
+  fetchBeats: function () {
+    var el = this.el;
+
+    if (this.xhr) { this.xhr.abort(); }
+
+    // Load beats.
+    let url = utils.getS3FileUrl(this.data.challengeId,
+                                 `${this.data.difficulty}.json`);
+    const xhr = this.xhr = new XMLHttpRequest();
+    el.emit('beatloaderstart');
+    console.log(`[beat-loader] Fetching ${url}...`);
+    xhr.open('GET', url);
+    xhr.addEventListener('load', () => {
+      this.beatData = JSON.parse(xhr.responseText);
+      this.beatDataProcessed = false;
+      this.processBeats();
+      this.xhr = null;
+      this.el.sceneEl.emit('beatloaderfinish', null, false);
+    });
+    xhr.send();
+  },
+
+
   /**
    * Load the beat data into the game.
    */

@@ -17,7 +17,7 @@ AFRAME.registerComponent('challenge-setter', {
     }
 
     // No parameter. Just Beat It!
-    this.setChallenge(811, 'Expert');
+    this.fetchZip('811-535', 'Expert');
   },
 
   setChallenge: function (id, difficulty) {
@@ -39,12 +39,12 @@ AFRAME.registerComponent('challenge-setter', {
       let imageBlob;
       let songBlob;
       const event = {
-        oneats: '',
+        audio: '',
+        beats: '',
         difficulty: '',
         id: id,
         image: '',
-        info: '',
-        song: ''
+        info: ''
       };
 
       // Process info first.
@@ -64,10 +64,10 @@ AFRAME.registerComponent('challenge-setter', {
         if (filename.endsWith(`${difficulty}.json`)) {
           event.beats = loader.extractAsJSON(filename);
         }
-        if (filename.endsWith(`cover.jpg`)) {
+        if (filename.endsWith('jpg')) {
           event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
         }
-        if (filename.endsWith(`song.ogg`)) {
+        if (filename.endsWith('ogg')) {
           event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
       });

@@ -99,11 +99,12 @@ AFRAME.registerState({
     },
 
     /**
+     * Old way, will be removed.
      * Start challenge.
-     * Transfer staged challenge to the active challenge.
      */
     challengeset: (state, payload) => {
       // Set challenge. `beat-loader` is listening.
+      state.challenge.audio = utils.getS3FileUrl(payload.id, 'song.ogg');
       state.challenge.id = payload.id;
       state.challenge.difficulty = payload.difficulty;
       state.challenge.image = utils.getS3FileUrl(payload.id, 'image.jpg');
