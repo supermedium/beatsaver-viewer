@@ -361,7 +361,8 @@
     bind__blob-texture="src: challenge.image"
     geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
     material="shader: flat"
-    position="0 0.24 0"></a-entity>
+    position="0 0.24 0"
+    bind__visible="!!challenge.image"></a-entity>
 
   <a-entity id="loadingSongInfo">
     <a-entity position="0 -0.05 0" mixin="font"
@@ -402,7 +403,7 @@
     <a-entity
       id="loadingGestureButton"
       mixin="bigMenuButton"
-      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture"
+      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !!challenge.id"
       position="0 -0.31923 0.01"
       proxy-event="event: click; to: a-scene; as: usergesturereceive"
       slice9="width: 0.725"
