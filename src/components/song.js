@@ -26,6 +26,7 @@ if (!!skipDebug) {
  */
 AFRAME.registerComponent('song', {
   schema: {
+    audio: {default: ''},
     analyserEl: {type: 'selector', default: '#audioAnalyser'},
     challengeId: {default: ''},
     hasReceivedUserGesture: {default: false},
@@ -89,7 +90,7 @@ AFRAME.registerComponent('song', {
         this.source = evt.detail;
         resolve(this.source);
       }, ONCE);
-      this.analyserSetter.src = utils.getS3FileUrl(data.challengeId, 'song.ogg');
+      this.analyserSetter.src = this.data.audio;
       data.analyserEl.setAttribute('audioanalyser', this.analyserSetter);
 
       // Already loaded.

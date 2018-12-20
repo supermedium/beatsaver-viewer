@@ -12,7 +12,7 @@
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
       bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
-      bind__song="challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song="audio: challenge.audio; challengeId: challenge.id; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
       bind__song-controls="isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
       challenge-setter
       console-shortcuts
@@ -330,7 +330,7 @@
     <a-entity id="gameMenuSongBackground" mixin="slice" slice9="width: 1.5; height: 0.2; padding: 0.04" position="0 0 -0.03"></a-entity>
 
     <a-entity id="gameMenuSongImage"
-      bind__material="src: challenge.image"
+      bind__blob-texture="src: challenge.image"
       geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
       material="shader: flat"
       position="-0.8003 0.00849 0"></a-entity>
@@ -358,7 +358,7 @@
   <a-entity mixin="slice" slice9="opacity: 0.9; width: 0.77; height: 1; padding: 0.08" position="0 0 -0.03"></a-entity>
 
   <a-entity id="loadingSongImage"
-    bind__material="src: challenge.image"
+    bind__blob-texture="src: challenge.image"
     geometry="primitive: plane; buffer: false; skipCache: true; height: 0.3; width: 0.3"
     material="shader: flat"
     position="0 0.24 0"></a-entity>

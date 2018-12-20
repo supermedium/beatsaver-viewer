@@ -27,6 +27,7 @@ const DEBUG_CHALLENGE = {
 AFRAME.registerState({
   initialState: {
     challenge: {  // Actively playing challenge.
+      audio: '',
       author: '',
       difficulty: '',
       id: '',
@@ -113,9 +114,10 @@ AFRAME.registerState({
 
     challengesetfromzip: (state, payload) => {
       state.challenge.id = payload.id;
+      state.challenge.audio = payload.audio;
+      state.challenge.author = payload.info.author;
       state.challenge.difficulty = payload.difficulty;
       state.challenge.image = payload.image
-      state.challenge.author = payload.info.author;
       state.challenge.songName = payload.info.songName;
       state.challenge.songSubName = payload.info.songSubName;
       state.isSongLoading = true;

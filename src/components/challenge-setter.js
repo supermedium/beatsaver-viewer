@@ -33,23 +33,34 @@ AFRAME.registerComponent('challenge-setter', {
   },
 
   fetchZip: function (id, difficulty) {
+    // Unzip.
     const loader = new ZipLoader(`https://beatsaver.com/download/${id}`);
     loader.on('load', () => {
       let imageBlob;
       let songBlob;
       const event = {
         oneats: '',
-        difficulty: difficulty,
+        difficulty: '',
         id: id,
         image: '',
         info: '',
         song: ''
       };
 
+      // Process info first.
       Object.keys(loader.files).forEach(filename => {
         if (filename.endsWith('info.json')) {
           event.info = loader.extractAsJSON(filename);
         }
+      });
+
+      // Default to hardest.
+      const difficulties = event.info.difficultyLevels;
+      if (!difficulty) {
+        difficulty = difficulties.sort(d => d.rank)[0].difficulty;
+      }
+
+      Object.keys(loader.files).forEach(filename => {
         if (filename.endsWith(`${difficulty}.json`)) {
           event.beats = loader.extractAsJSON(filename);
         }
@@ -57,9 +68,8 @@ AFRAME.registerComponent('challenge-setter', {
           event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
         }
         if (filename.endsWith(`song.ogg`)) {
-          songBlob = loader.extractAsBlobUrl(filename, 'audio/ogg');
+          event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
-        document.getElementById('controls').style.opacity = 1;
       });
 
       this.el.emit('challengesetfromzip', event);

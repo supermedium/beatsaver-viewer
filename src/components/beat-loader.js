@@ -82,43 +82,12 @@ AFRAME.registerComponent('beat-loader', {
     this.rightStageLasers = document.getElementById('rightStageLasers');
 
     this.el.addEventListener('cleargame', this.clearBeats.bind(this));
-  },
-
-  update: function (oldData) {
-    const data = this.data;
-
-    if (!data.challengeId || !data.difficulty) { return; }
-
-    // Prefetch beats.
-    if (data.challengeId !== oldData.challengeId || data.difficulty !== oldData.difficulty) {
-      this.fetchBeats();
-    }
-  },
-
-  /**
-   * XHR. Beat data is prefetched when user selects a menu challenge, and stored away
-   * to be processed later.
-   */
-  fetchBeats: function () {
-    var el = this.el;
-
-    if (this.xhr) { this.xhr.abort(); }
-
-    // Load beats.
-    let url = utils.getS3FileUrl(this.data.challengeId,
-                                 `${this.data.difficulty}.json`);
-    const xhr = this.xhr = new XMLHttpRequest();
-    el.emit('beatloaderstart');
-    console.log(`[beat-loader] Fetching ${url}...`);
-    xhr.open('GET', url);
-    xhr.addEventListener('load', () => {
-      this.beatData = JSON.parse(xhr.responseText);
-      this.beatDataProcessed = false;
-      this.xhr = null;
+    this.el.addEventListener('challengesetfromzip', evt => {
+      this.el.emit('beatloaderstart');
+      this.beatData = evt.detail.beats;
       this.processBeats();
       this.el.sceneEl.emit('beatloaderfinish', null, false);
     });
-    xhr.send();
   },
 
   /**
