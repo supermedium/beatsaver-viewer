@@ -32,12 +32,11 @@ AFRAME.registerComponent('song-controls', {
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
 
-    const timelineWidth = timeline.offsetWidth - this.playhead.offsetWidth;
+    const timelineWidth = timeline.offsetWidth;
 
     // Seek.
     timeline.addEventListener('click', event => {
-      const marginLeft = (event.clientX - timeline.getBoundingClientRect().left -
-                          parseInt(window.getComputedStyle(this.playhead).width));
+      const marginLeft = (event.clientX - timeline.getBoundingClientRect().left);
       const percent = marginLeft / timelineWidth;
 
       // Get new audio buffer source (needed every time audio is stopped).
@@ -69,6 +68,6 @@ AFRAME.registerComponent('song-controls', {
 
   updatePlayhead: function () {
     const progress = 100 * (this.song.getCurrentTime() / this.song.source.buffer.duration);
-    this.playhead.style.marginLeft = progress + '%';
+    this.playhead.style.width = progress + '%';
   }
 });

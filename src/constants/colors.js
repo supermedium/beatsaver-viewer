@@ -3,7 +3,7 @@ module.exports = {
   RED: '#ff3a7b',
   BLUE: '#08bfa2',
 
-  UI_ACCENT: '#08bfa2',
+  UI_ACCENT: '#fff',
   UI_ACCENT2: '#f01978',
 
   SKY_OFF: '#297547',

@@ -39,8 +39,8 @@ AFRAME.registerState({
     },
     hasReceivedUserGesture: false,
     inVR: false,
-    isPaused: false,  // Playing, but paused. Not active during menu.
-    isPlaying: false,  // Actively playing (slicing beats).
+    isPaused: false,  // Playing, but paused. 
+    isPlaying: false,  // Actively playing.
     isSongFetching: false,  // Fetching stage.
     isSongLoading: false  // Either fetching or decoding.
   },
