@@ -10,7 +10,7 @@ AFRAME.registerComponent('song-controls', {
 
   init: function () {
     this.song = this.el.components.song;
-    this.tick = AFRAME.utils.throttleTick(this.tick.bind(this), 1000);
+    this.tick = AFRAME.utils.throttleTick(this.tick.bind(this), 100);
   },
 
   update: function () {

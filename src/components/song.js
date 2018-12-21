@@ -63,10 +63,11 @@ AFRAME.registerComponent('song', {
 
     // New challenge, load audio and play when ready.
     if (oldData.audio !== data.audio && data.audio) {
-      this.el.sceneEl.emit('songloadstart', null, false);
+      this.el.sceneEl.emit('songprocessingstart', null, false);
       this.getAudio().then(source => {
-        this.el.sceneEl.emit('songloadfinish', null, false);
+        this.el.sceneEl.emit('songprocessingfinish', null, false);
       }).catch(console.error);
+
     }
 
     // Pause / stop.
@@ -92,17 +93,6 @@ AFRAME.registerComponent('song', {
       }, ONCE);
       this.analyserSetter.src = this.data.audio;
       data.analyserEl.setAttribute('audioanalyser', this.analyserSetter);
-
-      // Already loaded.
-      if (this.audioAnalyser.xhr.response) {
-        this.songLoadingIndicator.setAttribute('material', 'progress', 1);
-        this.el.sceneEl.emit('songfetchfinish', null, false);
-        return;
-      }
-
-      this.audioAnalyser.xhr.addEventListener('progress', evt => {
-        this.onFetchProgress(evt);
-      });
     });
   },
 
@@ -117,14 +107,6 @@ AFRAME.registerComponent('song', {
     this.isPlaying = false;
   },
 
-  onFetchProgress: function (evt) {
-    const progress = evt.loaded / evt.total;
-    this.songLoadingIndicator.setAttribute('material', 'progress', progress);
-    if (progress >= 1) {
-      this.el.sceneEl.emit('songfetchfinish', null, false);
-    }
-  },
-
   onRestart: function () {
     this.isPlaying = false;
 
@@ -137,7 +119,7 @@ AFRAME.registerComponent('song', {
 
     this.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
       this.source = evt.detail;
-      this.el.sceneEl.emit('songloadfinish', null, false);
+      this.el.sceneEl.emit('songprocessingfinish', null, false);
       this.startAudio();
     }, ONCE);
     this.audioAnalyser.refreshSource();

@@ -1,10 +1,6 @@
 /* global localStorage */
 var utils = require('../utils');
 
-const challengeDataStore = {};
-const SONG_NAME_TRUNCATE = 24;
-const SONG_SUB_NAME_TRUNCATE = 32;
-
 const DEBUG_CHALLENGE = {
   author: 'Superman',
   difficulty: 'Expert',
@@ -39,25 +35,29 @@ AFRAME.registerState({
     },
     hasReceivedUserGesture: false,
     inVR: false,
-    isPaused: false,  // Playing, but paused. 
+    isPaused: false,  // Playing, but paused.
     isPlaying: false,  // Actively playing.
-    isSongFetching: false,  // Fetching stage.
-    isSongLoading: false  // Either fetching or decoding.
+    isSongBufferProcessing: false,
   },
 
   handlers: {
-    beatloaderfinish: (state, payload) => {
-      state.challenge.isLoading = false;
-    },
-
     beatloaderpreloadfinish: state => {
-      if (state.menuActive) { return; }  // Cancelled.
       state.challenge.isBeatsPreloaded = true;
     },
 
-    beatloaderstart: state => {
-      state.challenge.isBeatsPreloaded = false;
+    challengeloadstart: state => {
       state.challenge.isLoading = true;
+    },
+
+    challengeloadend: (state, payload) => {
+      state.challenge.audio = payload.audio;
+      state.challenge.author = payload.info.author;
+      state.challenge.difficulty = payload.difficulty;
+      state.challenge.id = payload.id;
+      state.challenge.image = payload.image
+      state.challenge.isLoading = false;
+      state.challenge.songName = payload.info.songName;
+      state.challenge.songSubName = payload.info.songSubName;
     },
 
     controllerconnected: (state, payload) => {
@@ -70,9 +70,7 @@ AFRAME.registerState({
     debugloading: state => {
       DEBUG_CHALLENGE.id = '-1';
       Object.assign(state.challenge, DEBUG_CHALLENGE);
-      state.menuActive = false;
-      state.isSongFetching = true;
-      state.isSongLoading = true;
+      state.challenge.isLoading = true;
     },
 
     gamemenuresume: state => {
@@ -82,15 +80,7 @@ AFRAME.registerState({
     gamemenurestart: state => {
       state.challenge.isBeatsPreloaded = false;
       state.isPaused = false;
-      state.isSongLoading = true;
-    },
-
-    keyboardclose: state => {
-      state.isSearching = false;
-    },
-
-    keyboardopen: state => {
-      state.isSearching = true;
+      state.isSongBufferProcessing = true;
     },
 
     pausegame: state => {
@@ -98,52 +88,12 @@ AFRAME.registerState({
       state.isPaused = true;
     },
 
-    /**
-     * Old way, will be removed.
-     * Start challenge.
-     */
-    challengeset: (state, payload) => {
-      // Set challenge. `beat-loader` is listening.
-      state.challenge.audio = utils.getS3FileUrl(payload.id, 'song.ogg');
-      state.challenge.id = payload.id;
-      state.challenge.difficulty = payload.difficulty;
-      state.challenge.image = utils.getS3FileUrl(payload.id, 'image.jpg');
-      state.challenge.songName = payload.songName;
-      state.challenge.songSubName = payload.songSubName;
-      state.isSongLoading = true;
+    songprocessingfinish: state => {
+      state.isSongBufferProcessing = false;
     },
 
-    challengesetfromzip: (state, payload) => {
-      state.challenge.id = payload.id;
-      state.challenge.audio = payload.audio;
-      state.challenge.author = payload.info.author;
-      state.challenge.difficulty = payload.difficulty;
-      state.challenge.image = payload.image
-      state.challenge.songName = payload.info.songName;
-      state.challenge.songSubName = payload.info.songSubName;
-      state.isSongLoading = true;
-    },
-
-    songfetchfinish: state => {
-      state.isSongFetching = false;
-    },
-
-    songloadcancel: state => {
-      state.challenge.isBeatsPreloaded = false;
-      state.challenge.isLoading = false;
-      state.isSongLoading = false;
-      state.isSongFetching = false;
-      state.menuActive = true;
-    },
-
-    songloadfinish: state => {
-      state.isSongFetching = false;
-      state.isSongLoading = false;
-    },
-
-    songloadstart: state => {
-      state.isSongFetching = true;
-      state.isSongLoading = true;
+    songprocessingstart: state => {
+      state.isSongBufferProcessing = true;
     },
 
     usergesturereceive: state => {
@@ -164,26 +114,8 @@ AFRAME.registerState({
    */
   computeState: state => {
     state.isPlaying =
-      !state.menuActive && !state.isPaused &&
-      !state.challenge.isLoading && !state.isSongLoading && !!state.challenge.id &&
+      !state.isPaused && !state.isSongBufferProcessing &&
+      !state.challenge.isLoading && !!state.challenge.id &&
       state.hasReceivedUserGesture;
-
-    const anyMenuOpen = state.menuActive || state.isPaused ||
-                        state.isSongLoading || state.isSongFetching;
-
-    // Song is decoding if it is loading, but not fetching.
-    if (state.isSongLoading) {
-      state.loadingText = state.isSongFetching ? 'Downloading song...' : 'Processing song...';
-    } else {
-      state.loadingText = '';
-    }
   }
 });
-
-function truncate (str, length) {
-  if (!str) { return ''; }
-  if (str.length >= length) {
-    return str.substring(0, length - 3) + '...';
-  }
-  return str;
-}

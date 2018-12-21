@@ -1,18 +1,15 @@
 const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
-AFRAME.registerComponent('challenge-setter', {
+AFRAME.registerComponent('challenge-loader', {
   play: function () {
+    this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
+
     const idParam = AFRAME.utils.getUrlParameter('id');
     const difficultyParam = AFRAME.utils.getUrlParameter('difficulty');
 
     if (idParam) {
-      if (idParam.indexOf('-') !== -1) {
-        // Fetch ZIP file directly.
-        this.fetchZip(idParam, difficultyParam);
-      } else {
-        this.setChallenge(idParam, difficultyParam);
-      }
+      this.fetchZip(idParam, difficultyParam);
       return;
     }
 
@@ -20,22 +17,19 @@ AFRAME.registerComponent('challenge-setter', {
     this.fetchZip('811-535', 'Expert');
   },
 
-  setChallenge: function (id, difficulty) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', utils.getS3FileUrl(id, 'info.json'));
-    xhr.addEventListener('load', () => {
-      this.el.emit('challengeset', Object.assign(
-        {id: id, difficulty: difficulty || 'Normal'},
-        JSON.parse(xhr.responseText)
-      ));
-    });
-    xhr.send();
-  },
-
   fetchZip: function (id, difficulty) {
+    this.el.emit('challengeloadstart', null, false);
+
     // Unzip.
     const [short] = id.split('-');
     const loader = new ZipLoader(`https://beatsaver.com/storage/songs/${short}/${id}.zip`);
+
+    loader.on('progress', evt => {
+      this.loadingIndicator.object3D.visible = true;
+      this.loadingIndicator.setAttribute('material', 'progress',
+                                         evt.loaded / evt.total);
+    });
+
     loader.on('load', () => {
       let imageBlob;
       let songBlob;
@@ -73,7 +67,7 @@ AFRAME.registerComponent('challenge-setter', {
         }
       });
 
-      this.el.emit('challengesetfromzip', event);
+      this.el.emit('challengeloadend', event, false);
     });
     loader.load();
   }
