@@ -7,6 +7,7 @@ const BEAT_WARMUP_ROTATION_CHANGE = Math.PI / 5;
 const BEAT_WARMUP_ROTATION_OFFSET = 0.4;
 const BEAT_WARMUP_ROTATION_TIME = 750;
 const DESTROYED_SPEED = 1.0;
+const SWORD_OFFSET = 1.5;
 const ONCE = {once: true};
 
 const SCORE_POOL = {
@@ -170,7 +171,6 @@ AFRAME.registerComponent('beat', {
 
     if (this.destroyed) {
       this.tockDestroyed(timeDelta);
-      // Check to remove score entity from pool.
     } else {
       // Move.
       if (position.z < data.anticipationPosition) {
@@ -197,8 +197,9 @@ AFRAME.registerComponent('beat', {
       }
 
       // Check.
-      this.backToPool = position.z >= 2;
+      this.backToPool = position.z >= -1 * SWORD_OFFSET;
     }
+
     this.returnToPool();
   },
 
@@ -565,6 +566,12 @@ AFRAME.registerComponent('beat', {
   returnToPool: function (force) {
     if (!this.backToPool && !force) { return; }
     this.el.sceneEl.components[this.poolName].returnEntity(this.el);
+
+    // Play sound for viewer.
+    if (this.data.type !== 'mine') {
+      this.el.parentNode.components['beat-hit-sound'].playSound(
+        this.el, this.data.cutDirection);
+    }
   },
 
   /**

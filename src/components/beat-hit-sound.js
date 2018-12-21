@@ -3,7 +3,7 @@ var sourceCreatedCallback;
 const LAYER_BOTTOM = 'bottom';
 const LAYER_MIDDLE = 'middle';
 const LAYER_TOP = 'top';
-const VOLUME = 0.25;
+const VOLUME = 0.4;
 
 // Allows for modifying detune. PR has been sent to three.js.
 THREE.Audio.prototype.play = function () {
