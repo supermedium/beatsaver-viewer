@@ -138,6 +138,7 @@ AFRAME.registerComponent('song', {
     this.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
       this.source = evt.detail;
       this.el.sceneEl.emit('songloadfinish', null, false);
+      this.startAudio();
     }, ONCE);
     this.audioAnalyser.refreshSource();
   },
