@@ -1,3 +1,10 @@
+$darkred=#8c1248
+$red=#d11769
+$lightred=#ff3690
+$gray=#CCC
+$white=#FAFAFA
+$font=system-ui, BlinkMacSystemFont, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif
+
 html
   background #111
 
@@ -6,22 +13,32 @@ html
   background rgba(0, 0, 0, 0.75)
   border-radius 10px
   bottom 0
-  display flex
-  opacity 0
+  display none
+  font-family $font
   left 0
   margin 0 auto 40px auto
   padding 10px
   position fixed
   right 0
-  transition opacity .5s
-  width 400px
+  width 550px
   z-index 99999999
+
+  &.challengeLoaded
+    display flex
 
   #pause
     display flex
-    padding-right 5px
+    padding-right 10px
+    opacity 0
+    transition opacity .5s
     &:hover #pauseSymbol
-      fill #d11769
+      fill $red
+
+  #logo
+    margin-right 10px
+    img
+      height 32px
+      width 32px
 
 	#timeline
     height 12px
@@ -29,18 +46,18 @@ html
 
     &:hover #timelineLine
       height 6px
-      background #d11769
+      background $red
       margin-top 3px
 
   #timelineLine
     height 2px
-    background #8c1248
+    background $darkred
     border-radius 2px
     margin-top 5px
     transition background 0.2s, height 0.2s, margin-top 0.2s
 
   #playhead
-    background #fff
+    background $white
     position relative
     border-radius 2px 0 0 2px
     height 100%
@@ -56,21 +73,68 @@ html
     width 32px
 
   p
-    font-family system-ui, BlinkMacSystemFont, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif
     font-size 13px
     margin 0
     text-shadow 0 0 4px #000
-
   #songInfo
     display flex
     flex-direction column
     padding-left 15px
   #songName
-    color #CCC
+    color $gray
     font-weight bold
     font-size 16px
   #songSubName
-    color #ff3690
+    color $lightred
+
+  #controlsDifficulty
+    border 1px solid $gray
+    border-radius 5px
+    color $gray
+    cursor pointer
+    padding 5px 10px
+    position absolute
+    right 10px
+    text-align center
+    transition all .1s
+    p
+      font-family $font
+    &:after
+      content '\25B2'
+      display inline-block
+      font-size 11px
+      margin-left 5px
+    &:hover
+      border-color $white
+      color $white
+
+#controlsDifficultyOptions
+  background #020202
+  border-radius 5px
+  bottom 60px
+  color $white
+  display none
+  flex-direction column
+  font-family $font
+  font-size 13px
+  list-style none
+  margin 0
+  opacity 0
+  padding 0
+  position absolute
+  right 5px
+  transition all .2s
+  li
+    cursor pointer
+    padding 10px
+    transition all .1s
+    &:hover
+      color $red
+
+.difficultyOptionsActive
+  #controlsDifficultyOptions
+    display flex
+    opacity 1
 
 #timeline
   cursor pointer
@@ -87,32 +151,25 @@ html
   width 84px
   height 47px
 
-#vrButton.a-hidden
-  visibility hidden
+  &.a-hidden
+    visibility hidden
 
-#vrButton:active
-  border 0
+  &:active
+    border 0
 
-#vrButton:hover
-  background-position 0 -50.5px
-
-#logo
-  bottom 0
-  position fixed
-  left 0
-  opacity 1
-  transition .1s opacity
-  z-index 99999999
+  &:hover
+    background-position 0 -50.5px
 
 .github-corner
   opacity 1
   transition .1s opacity
 
 .isPlaying
-  #controls,
-  #logo,
   .github-corner
     opacity 0
+  #controls,
+  #pause
+    opacity 1
 
 .a-loader-title
-  display none
+  display none !important

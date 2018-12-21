@@ -1,7 +1,11 @@
+/**
+ * Update the 2D UI. Handle pause and seek.
+ */
 AFRAME.registerComponent('song-controls', {
   dependencies: ['song'],
 
   schema: {
+    difficulty: {default: ''},
     songName: {default: ''},
     songSubName: {default: ''},
     songImage: {default: ''},
@@ -25,14 +29,21 @@ AFRAME.registerComponent('song-controls', {
     document.getElementById('songImage').src = this.data.songImage;
     document.getElementById('songName').innerHTML = this.data.songName;
     document.getElementById('songSubName').innerHTML = this.data.songSubName;
+    document.getElementById('controlsDifficulty').innerHTML = this.data.difficulty;
   },
 
   play: function () {
     this.controls = document.getElementById('controls');
+    this.difficulty = document.getElementById('controlsDifficulty');
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
 
     const timelineWidth = timeline.offsetWidth;
+
+    // Show controls on load.
+    this.el.sceneEl.addEventListener('challengeloadend', () => {
+      this.controls.classList.add('challengeLoaded');
+    });
 
     // Seek.
     timeline.addEventListener('click', event => {
@@ -56,8 +67,17 @@ AFRAME.registerComponent('song-controls', {
       this.song.audioAnalyser.refreshSource();
     });
 
+    // Pause.
     document.getElementById('controlsPause').addEventListener('click', () => {
       this.el.sceneEl.emit('pausegame', null, false);
+    });
+
+    // Difficulty select.
+    this.difficulty.addEventListener('click', () => {
+      this.controls.classList.toggle('difficultyOptionsActive');
+    });
+    this.el.sceneEl.addEventListener('click', evt => {
+      this.controls.classList.remove('difficultyOptionsActive');
     });
   },
 
