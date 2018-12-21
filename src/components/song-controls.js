@@ -35,6 +35,7 @@ AFRAME.registerComponent('song-controls', {
   play: function () {
     this.controls = document.getElementById('controls');
     this.difficulty = document.getElementById('controlsDifficulty');
+    this.difficultyOptions = document.getElementById('controlsDifficultyOptions');
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
 
@@ -72,11 +73,17 @@ AFRAME.registerComponent('song-controls', {
       this.el.sceneEl.emit('pausegame', null, false);
     });
 
-    // Difficulty select.
+    // Difficulty dropdown.
     this.difficulty.addEventListener('click', () => {
       this.controls.classList.toggle('difficultyOptionsActive');
     });
     this.el.sceneEl.addEventListener('click', evt => {
+      this.controls.classList.remove('difficultyOptionsActive');
+    });
+
+    // Difficulty select.
+    this.difficultyOptions.addEventListener('click', evt => {
+      this.el.sceneEl.emit('difficultyselect', evt.target.dataset.difficulty, false);
       this.controls.classList.remove('difficultyOptionsActive');
     });
   },

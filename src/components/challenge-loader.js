@@ -2,14 +2,24 @@ const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
 AFRAME.registerComponent('challenge-loader', {
+  schema: {
+    id: {default: AFRAME.utils.getUrlParameter('id')},
+    difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
+  },
+
+  update: function (oldData) {
+    // Difficulty select.
+    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty) {
+      this.fetchZip(this.data.id, this.data.difficulty);
+      this.el.sceneEl.emit('cleargame', null, false);
+    }
+  },
+
   play: function () {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
 
-    const idParam = AFRAME.utils.getUrlParameter('id');
-    const difficultyParam = AFRAME.utils.getUrlParameter('difficulty');
-
-    if (idParam) {
-      this.fetchZip(idParam, difficultyParam);
+    if (this.data.id) {
+      this.fetchZip(this.data.id, this.data.difficulty);
       return;
     }
 

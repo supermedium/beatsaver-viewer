@@ -73,6 +73,10 @@ AFRAME.registerState({
       state.challenge.isLoading = true;
     },
 
+    difficultyselect: (state, payload) => {
+      state.challenge.difficulty = payload;
+    },
+
     gamemenuresume: state => {
       state.isPaused = false;
     },

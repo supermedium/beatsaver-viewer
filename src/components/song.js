@@ -29,6 +29,7 @@ AFRAME.registerComponent('song', {
     audio: {default: ''},
     analyserEl: {type: 'selector', default: '#audioAnalyser'},
     challengeId: {default: ''},
+    difficulty: {default: ''},
     hasReceivedUserGesture: {default: false},
     isBeatsPreloaded: {default: false},
     isPlaying: {default: false}
@@ -61,8 +62,15 @@ AFRAME.registerComponent('song', {
       return;
     }
 
+    // Difficulty select
+    if (oldData.difficulty && oldData.difficulty !== !data.difficulty) {
+      this.onRestart();
+      return;
+    }
+
     // New challenge, load audio and play when ready.
-    if (oldData.audio !== data.audio && data.audio) {
+    if ((oldData.difficulty && oldData.difficulty !== !data.difficulty) ||
+        (oldData.audio !== data.audio && data.audio)) {
       this.el.sceneEl.emit('songprocessingstart', null, false);
       this.getAudio().then(source => {
         this.el.sceneEl.emit('songprocessingfinish', null, false);
@@ -120,7 +128,9 @@ AFRAME.registerComponent('song', {
     this.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
       this.source = evt.detail;
       this.el.sceneEl.emit('songprocessingfinish', null, false);
-      this.startAudio();
+      if (this.data.isPlaying && this.data.isBeatsPreloaded) {
+        this.startAudio();
+      }
     }, ONCE);
     this.audioAnalyser.refreshSource();
   },
