@@ -17,9 +17,9 @@ AFRAME.registerComponent('song-controls', {
     if (!this.controls) { return; }
 
     if (this.data.isPlaying) {
-      this.controls.classList.add('isPlaying');
+      document.body.classList.add('isPlaying');
     } else {
-      this.controls.classList.remove('isPlaying');
+      document.body.classList.remove('isPlaying');
     }
 
     document.getElementById('songImage').src = this.data.songImage;
