@@ -2,10 +2,13 @@
 <html>
   <head>
     <title>BeatSaver Viewer</title>
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
     
       <script src="vendor/aframe-master.min.js"></script>
     
     <script src="build/build.js"></script>
+
   </head>
   <body>
     <a-scene
@@ -56,13 +59,15 @@
 <a-asset-item id="mineParticlesJSON" src="assets/models/mineparticles.json"></a-asset-item>
 <a-asset-item id="stageNormalObj" src="assets/models/stagenormal.obj"></a-asset-item>
 <a-asset-item id="stageAdditiveObj" src="assets/models/stageadditive.obj"></a-asset-item>
-<a-asset-item id="stepbackObj" src="assets/models/stepback.obj"></a-asset-item>
 <a-asset-item id="smokeObj" src="assets/models/smoke.obj"></a-asset-item>
 <a-asset-item id="audiocolumnObj" src="assets/models/audiocolumn.obj"></a-asset-item>
 <a-asset-item id="leftLaserObj" src="assets/models/leftlaser.obj"></a-asset-item>
 <a-asset-item id="rightLaserObj" src="assets/models/rightlaser.obj"></a-asset-item>
 <a-asset-item id="redbeamObj" src="assets/models/redbeam.obj"></a-asset-item>
 <a-asset-item id="bluebeamObj" src="assets/models/bluebeam.obj"></a-asset-item>
+<a-asset-item id="logoBackObj" src="assets/models/logoback.obj"></a-asset-item>
+<a-asset-item id="logoObj" src="assets/models/logo.obj"></a-asset-item>
+<a-asset-item id="logoGlowObj" src="assets/models/logoglow.obj"></a-asset-item>
 
 <audio id="confirmSound" src="assets/sounds/beatHit.ogg"></audio>
 <audio id="hoverSound" src="assets/sounds/hover.ogg"></audio>
@@ -109,22 +114,13 @@
 <audio id="hitSound10right" src="assets/sounds/hit10right.ogg"></audio>
 
 
-<img id="skyTexture" src="assets/img/sky.jpg">
-<img id="backglowTexture" src="assets/img/backglow.png">
 <img id="cursorMeshImg" src="assets/models/laser/laser.png">
-<img id="downIconImg" src="assets/img/downIcon.png">
 <img id="envmapTexture" src="assets/img/envmap.jpg">
-<img id="envmapWallTexture" src="assets/img/envmapwall.jpg">
 <img id="neonImg" src="assets/img/neon.png">
-<img id="gridImg" src="assets/img/grid.png">
-<img id="playImg" src="assets/img/play.png">
 <img id="sliceImg" src="assets/img/slice.png">
 <img id="slicebtnImg" src="assets/img/slicebtn.png">
-<img id="noiseTexture" src="assets/img/noise.png">
 <img id="sparkImg" src="assets/img/spark.png">
 <img id="spark2Img" src="assets/img/spark2.png">
-<img id="soundboxingImg" src="assets/img/soundboxing.jpg">
-<img id="genresImg" src="assets/img/genres.png">
 <img id="floorEnvImg" src="assets/img/floorenv.jpg">
 <img id="floorNormalsImg" src="assets/img/floornormals.png">
 <img id="atlasImg" src="assets/img/atlas.png">
@@ -253,6 +249,12 @@
 
   <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
 
+  <a-entity id="logo" bind__visible="!isPlaying" position="0 5.5 -6.5" rotation="90 0 0">
+    <a-entity id="logoBackObj" obj-model="obj: #logoBackObj" materials="name: logoadditive"></a-entity>
+    <a-entity id="logoBody" obj-model="obj: #logoObj" materials="name: logo"></a-entity>
+    <a-entity id="logoGlowObj" obj-model="obj: #logoGlowObj" materials="name: logoadditive"></a-entity>
+  </a-entity>
+
   <a-entity
     id="smoke"
     animation__rotate="property: rotation; to: 0 360 0; easing: linear; loop: true; dur: 200000"
@@ -339,7 +341,7 @@
       <a-entity id="gameMenuSongSubName" position="0 0.015 0"
         mixin="font" text="wrapCount: 40; align: center; color: #f01978; width: 0" bind__text="value: challenge.songSubName"></a-entity>
       <a-entity id="gameMenuSongName" position="0 -0.056 0"
-        mixin="font" text="align: center; color: #08bfa2; wrapCount: 30; baseline: top; lineHeight: 36; width: 1.2"
+        mixin="font" text="align: center; color: #fff; wrapCount: 30; baseline: top; lineHeight: 36; width: 1.2"
         bind__text="value: challenge.songName"></a-entity>
     </a-entity>
   </a-entity>
@@ -451,16 +453,18 @@
 
     <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
     <div id="controls">
-  <a id="controlsPause" href="#"><img id="pause" src="assets/img/pause.svg"></a>
+  <a id="controlsPause" href="#"><svg id="pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path id="pauseSymbol" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="#fff"/><path d="M0 0h24v24H0z" fill="none"/></svg></a>
   <div id="timeline">
-    <div id="playhead"></div>
+    <div id="timelineline">
+      <div id="playhead"></div>
+    </div>
   </div>
 
   <div id="songInfoContainer">
     <img id="songImage">
     <div id="songInfo">
-      <p id="songName"></p>
       <p id="songSubName"></p>
+      <p id="songName"></p>
     </div>
   </div>
 </div>
