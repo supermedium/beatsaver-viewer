@@ -1,7 +1,7 @@
 <a-entity
   id="loadingSongInfoContainer"
-  bind__animation__scale="enabled: isSongLoading || !hasReceivedUserGesture"
-  bind__visible="isSongLoading || !hasReceivedUserGesture"
+  bind__animation__scale="enabled: challenge.isLoading || !hasReceivedUserGesture"
+  bind__visible="challenge.isLoading || !hasReceivedUserGesture"
   animation__scale="property: scale; from: 1 1 1; to: 1.05 1.05 1.05; dir: alternate; loop: true; dur: 1200; easing: easeInOutCubic"
   position="0 1.5 -1">
 
@@ -25,24 +25,24 @@
     <a-entity
       id="loadingText"
       mixin="font"
-      bind__animation__color="enabled: isSongLoading"
       bind__text="value: loadingText"
-      bind__visible="isSongLoading"
-      text="align: center; color: #FAFAFA; wrapCount: 18; width: 0.65"
+      bind__visible="challenge.isLoading"
+      text="align: center; color: #FAFAFA; wrapCount: 18; width: 0.65; value: Downloading song..."
       position="0 -0.32 0.001"></a-entity>
 
     <a-entity
-      id="songLoadingIndicator"
-      bind__visible="isSongLoading"
+      id="challengeLoadingIndicator"
+      bind__visible="challenge.isLoading || isSongBufferProcessing"
       geometry="primitive: plane; height: 0.1; width: 0.1"
       material="shader: ring; color: #FAFAFA; radiusInner: 0.2; radiusOuter: 0.9; progress: 0; transparent: true"
-      position="0 -0.38 0.002">
+      position="0 -0.38 0.002"
+      visible="false">
     </a-entity>
 
     <a-entity
       id="songProcessingIndicator"
-      bind__animation__spin="enabled: isSongLoading && !isSongFetching"
-      bind__visible="isSongLoading && !isSongFetching"
+      bind__animation__spin="enabled: isSongBufferProcessing"
+      bind__visible="isSongBufferProcessing"
       animation__spin="property: object3D.rotation.z; from: 0; to: -360; easing: linear; dur: 1000; loop: true"
       geometry="primitive: plane; height: 0.2; width: 0.2"
       material="shader: ring; color: #ABABAB; radiusInner: 0.2; radiusOuter: 0.4; transparent: true; progress: 0.2"
@@ -53,7 +53,7 @@
     <a-entity
       id="loadingGestureButton"
       mixin="bigMenuButton"
-      bind__visible-raycastable="!isSongLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !!challenge.id"
+      bind__visible-raycastable="!challenge.isLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !!challenge.id && !isSongBufferProcessing"
       position="0 -0.31923 0.01"
       proxy-event="event: click; to: a-scene; as: usergesturereceive"
       slice9="width: 0.725"
