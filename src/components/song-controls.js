@@ -41,9 +41,18 @@ AFRAME.registerComponent('song-controls', {
 
     const timelineWidth = timeline.offsetWidth;
 
-    // Show controls on load.
-    this.el.sceneEl.addEventListener('challengeloadend', () => {
+    this.el.sceneEl.addEventListener('challengeloadend', evt => {
+      // Show controls on load.
       this.controls.classList.add('challengeLoaded');
+
+      // Update difficulty list.
+      for (let i = 0; i < this.difficultyOptions.children.length; i++) {
+        this.difficultyOptions.children[i].style.display = 'none';
+      }
+      evt.detail.info.difficultyLevels.forEach(difficulty => {
+        const option = this.difficultyOptions.querySelector(`[data-difficulty="${difficulty.difficulty}"]`);
+        option.style.display = 'inline-block';
+      });
     });
 
     // Seek.

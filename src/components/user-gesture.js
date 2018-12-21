@@ -6,6 +6,6 @@ AFRAME.registerComponent('user-gesture', {
     document.addEventListener('click', evt => {
       if (evt.target.closest('#controls')) { return; }
       this.el.sceneEl.emit('usergesturereceive', null, false);
-    }, {once: true});
+    });
   }
 });
