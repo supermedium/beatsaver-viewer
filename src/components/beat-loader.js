@@ -97,8 +97,8 @@ AFRAME.registerComponent('beat-loader', {
 
     // Prefetch beats.
     // TODO: Remove once bsaber ditches old ID.
-    if (data.challengeId !== oldData.challengeId ||
-        data.difficulty !== oldData.difficulty &&
+    if ((data.challengeId !== oldData.challengeId ||
+        data.difficulty !== oldData.difficulty) &&
         data.challengeId.indexOf('-') === -1) {
       this.fetchBeats();
     }
