@@ -59,6 +59,7 @@ AFRAME.registerState({
       state.challenge.isLoading = false;
       state.challenge.songName = payload.info.songName;
       state.challenge.songNameShort = truncate(payload.info.songName, 18);
+      state.challenge.songNameMedium = truncate(payload.info.songName, 30);
       state.challenge.songSubName = payload.info.songSubName;
       state.challenge.songSubNameShort = truncate(payload.info.songSubName, 21);
     },
