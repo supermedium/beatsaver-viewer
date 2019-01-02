@@ -27,8 +27,10 @@ AFRAME.registerComponent('song-controls', {
     }
 
     document.getElementById('songImage').src = this.data.songImage;
-    document.getElementById('songName').innerHTML = this.data.songName;
-    document.getElementById('songSubName').innerHTML = this.data.songSubName;
+    document.getElementById('songName').innerHTML = truncate(this.data.songName, 18);
+    document.getElementById('songName').setAttribute('title', this.data.songName);
+    document.getElementById('songSubName').innerHTML = truncate(this.data.songSubName, 21);
+    document.getElementById('songSubName').setAttribute('title', this.data.songSubName);
     document.getElementById('controlsDifficulty').innerHTML = this.data.difficulty;
   },
 
@@ -107,3 +109,11 @@ AFRAME.registerComponent('song-controls', {
     this.playhead.style.width = progress + '%';
   }
 });
+
+function truncate (str, length) {
+  if (!str) { return ''; }
+  if (str.length >= length) {
+    return str.substring(0, length - 2) + '..';
+  }
+  return str;
+}

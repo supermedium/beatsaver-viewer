@@ -58,6 +58,7 @@ AFRAME.registerState({
       state.challenge.isLoading = false;
       state.challenge.songName = payload.info.songName;
       state.challenge.songSubName = payload.info.songSubName;
+      state.challenge.songNameLoading = truncate(payload.info.songName, 21);
     },
 
     controllerconnected: (state, payload) => {
@@ -123,3 +124,11 @@ AFRAME.registerState({
       state.hasReceivedUserGesture;
   }
 });
+
+function truncate (str, length) {
+  if (!str) { return ''; }
+  if (str.length >= length) {
+    return str.substring(0, length - 2) + '..';
+  }
+  return str;
+}
