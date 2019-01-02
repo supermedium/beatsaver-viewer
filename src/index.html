@@ -71,6 +71,9 @@
       {% include './templates/loading.html' %}
 
       <a-entity
+        id="saberParticles"
+        particleplayer="src: #saberParticlesJSON; interpolate: true; pscale: 0.55; dur: 800; loop: false; on: explode; img: #sparkImg; count: 20%; animateScale: true; initialScale: 4 1 1; finalScale: 0.2 0.2 1"></a-entity>
+      <a-entity
         id="mineParticles"
         particleplayer="src: #mineParticlesJSON; pscale: 0.5; interpolate: true; scale: 1.4; loop: false; on: explode; img: #sparkImg; count: 20%; animateScale: true; initialScale: 3 1 1; finalScale: 0.2 0.2 1"></a-entity>
       <a-entity

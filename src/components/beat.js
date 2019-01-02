@@ -111,9 +111,9 @@ AFRAME.registerComponent('beat', {
       new THREE.Vector3()
     ];
 
+    this.particles = document.getElementById('saberParticles');
     this.mineParticles = document.getElementById('mineParticles');
     this.mineParticles = document.getElementById('mineParticles');
-
     this.explodeEventDetail = {position: null, rotation: null};
 
     this.initBlock();
@@ -571,6 +571,10 @@ AFRAME.registerComponent('beat', {
     if (this.data.type !== 'mine' && !force) {
       this.el.parentNode.components['beat-hit-sound'].playSound(
         this.el, this.data.cutDirection);
+
+      this.explodeEventDetail.position = this.el.object3D.position;
+      this.explodeEventDetail.rotation = this.el.object3D.rotation;
+      this.particles.emit('explode', this.explodeEventDetail, false);
     }
   },
 
