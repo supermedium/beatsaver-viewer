@@ -57,6 +57,7 @@
 <a-asset-item id="mineObj" src="assets/models/mine.obj"></a-asset-item>
 <a-asset-item id="mineBrokenObj" src="assets/models/minebroken.obj"></a-asset-item>
 <a-asset-item id="mineParticlesJSON" src="assets/models/mineparticles.json"></a-asset-item>
+<a-asset-item id="saberParticlesJSON" src="assets/models/sabercut.json"></a-asset-item>
 <a-asset-item id="stageNormalObj" src="assets/models/stagenormal.obj"></a-asset-item>
 <a-asset-item id="stageAdditiveObj" src="assets/models/stageadditive.obj"></a-asset-item>
 <a-asset-item id="smokeObj" src="assets/models/smoke.obj"></a-asset-item>
@@ -416,6 +417,9 @@
 </a-entity>
 
 
+      <a-entity
+        id="saberParticles"
+        particleplayer="src: #saberParticlesJSON; interpolate: true; pscale: 0.55; dur: 800; loop: false; on: explode; img: #sparkImg; count: 20%; animateScale: true; initialScale: 4 1 1; finalScale: 0.2 0.2 1"></a-entity>
       <a-entity
         id="mineParticles"
         particleplayer="src: #mineParticlesJSON; pscale: 0.5; interpolate: true; scale: 1.4; loop: false; on: explode; img: #sparkImg; count: 20%; animateScale: true; initialScale: 3 1 1; finalScale: 0.2 0.2 1"></a-entity>
