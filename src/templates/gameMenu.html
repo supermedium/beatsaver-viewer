@@ -53,10 +53,10 @@
 
     <a-entity id="gameMenuSongInfo">
       <a-entity id="gameMenuSongSubName" position="0 0.015 0"
-        mixin="font" text="wrapCount: 40; align: center; color: {{ COLORS.UI_ACCENT2 }}; width: 0" bind__text="value: challenge.songSubName"></a-entity>
+        mixin="font" text="wrapCount: 40; align: center; color: {{ COLORS.UI_ACCENT2 }}; width: 0" bind__text="value: challenge.songSubNameShort"></a-entity>
       <a-entity id="gameMenuSongName" position="0 -0.056 0"
         mixin="font" text="align: center; color: {{ COLORS.UI_ACCENT }}; wrapCount: 30; baseline: top; lineHeight: 36; width: 1.2"
-        bind__text="value: challenge.songName"></a-entity>
+        bind__text="value: challenge.songNameShort"></a-entity>
     </a-entity>
   </a-entity>
 </a-entity>

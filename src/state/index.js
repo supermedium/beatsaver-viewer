@@ -31,7 +31,8 @@ AFRAME.registerState({
       isLoading: false,
       isBeatsPreloaded: false,  // Whether we have passed the negative time.
       songName: '',
-      songSubName: ''
+      songNameShort: '',
+      songSubNameShort: ''
     },
     hasReceivedUserGesture: false,
     inVR: false,
@@ -57,8 +58,9 @@ AFRAME.registerState({
       state.challenge.image = payload.image
       state.challenge.isLoading = false;
       state.challenge.songName = payload.info.songName;
+      state.challenge.songNameShort = truncate(payload.info.songName, 18);
       state.challenge.songSubName = payload.info.songSubName;
-      state.challenge.songNameLoading = truncate(payload.info.songName, 21);
+      state.challenge.songSubNameShort = truncate(payload.info.songSubName, 21);
     },
 
     controllerconnected: (state, payload) => {
