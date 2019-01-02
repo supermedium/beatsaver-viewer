@@ -568,7 +568,7 @@ AFRAME.registerComponent('beat', {
     this.el.sceneEl.components[this.poolName].returnEntity(this.el);
 
     // Play sound for viewer.
-    if (this.data.type !== 'mine') {
+    if (this.data.type !== 'mine' && !force) {
       this.el.parentNode.components['beat-hit-sound'].playSound(
         this.el, this.data.cutDirection);
     }
