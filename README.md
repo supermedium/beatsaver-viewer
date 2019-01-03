@@ -29,8 +29,7 @@ containing the song ID and difficulty:
 
 ## Roadmap
 
-- Mobile support
-- Difficulty switcher
+- Safari support (BeatSaver currently serves OGGs which is not supported)
 - Custom saber viewer
 
 ## Community
