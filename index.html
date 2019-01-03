@@ -34,6 +34,7 @@
       pool__beat-dot-blue="mixin: dotBlueBeat; size: 10; container: #beatContainer"
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
+      pool__beat-glow="mixin: beatGlow; size: 20; container: #beatContainer"
       pool__wall="mixin: wall; size: 10; container: #beatContainer"
       proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
@@ -126,6 +127,7 @@
 <img id="floorNormalsImg" src="assets/img/floornormals.png">
 <img id="atlasImg" src="assets/img/atlas.png">
 <img id="logotexImg" src="assets/img/logotex.png">
+<img id="glowImg" src="assets/img/glow.png">
 
 <a-mixin id="slice" slice9="color: #050505; transparent: true; opacity: 0.9; src: #sliceImg; left: 50; right: 52; top: 50; bottom: 52; padding: 0.18"></a-mixin>
 <a-mixin id="font" text="font: assets/fonts/Teko-Bold.json; shader: msdf; letterSpacing: 1"></a-mixin>
@@ -140,6 +142,14 @@
 <a-mixin id="dotRedBeat" mixin="beat" beat="color: red; type: dot"></a-mixin>
 <a-mixin id="gameoverAnimation" animation__gameover="dur: 1000; easing: easeOutQuad"></a-mixin>
 <a-mixin id="mine" mixin="beat" beat="type: mine"></a-mixin>
+
+<a-mixin 
+  id="beatGlow" 
+  geometry="primitive: plane; width: 0.7; height: 0.7"
+  material="shader: flat; fog: false; blending: additive; depthTest: false; transparent: true; src: #glowImg; opacity: 1"
+  animation__opacity="property: components.material.material.opacity; from: 0.9; to: 0; dur: 300; easing: linear; startEvents: explode"
+  animation__scale="property: scale; from: 0.5 0.5 1; to: 1.5 1.5 1; dur: 300; easing: easeOutQuad; startEvents: explode"
+  ></a-mixin>
 
 <a-mixin
   id="wall"
