@@ -72,6 +72,9 @@ AFRAME.registerComponent('challenge-loader', {
         if (filename.endsWith('jpg')) {
           event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
         }
+        if (filename.endsWith('png')) {
+          event.image = loader.extractAsBlobUrl(filename, 'image/png');
+        }
         if (filename.endsWith('ogg')) {
           event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
