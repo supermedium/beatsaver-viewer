@@ -115,6 +115,7 @@ AFRAME.registerComponent('beat', {
     this.mineParticles = document.getElementById('mineParticles');
     this.mineParticles = document.getElementById('mineParticles');
     this.explodeEventDetail = {position: null, rotation: null};
+    this.glow = null;
 
     this.initBlock();
     if (this.data.type === 'mine') {
@@ -158,6 +159,7 @@ AFRAME.registerComponent('beat', {
   },
 
   play: function () {
+    this.glow = this.el.sceneEl.components['pool__beat-glow'].requestEntity();
     this.blockEl.object3D.visible = true;
     this.destroyed = false;
     this.el.object3D.visible = true;
@@ -575,6 +577,16 @@ AFRAME.registerComponent('beat', {
       this.explodeEventDetail.position = this.el.object3D.position;
       this.explodeEventDetail.rotation = this.el.object3D.rotation;
       this.particles.emit('explode', this.explodeEventDetail, false);
+
+      if (this.glow) {
+        this.glow.play();
+        this.glow.object3D.position.copy(this.el.object3D.position);
+        this.glow.object3D.rotation.z = Math.random() * 2.0;
+        this.glow.emit('explode', null, false);
+        setTimeout(()=> {
+          this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
+        }, 350);
+      }
     }
   },
 
