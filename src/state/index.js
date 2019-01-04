@@ -26,10 +26,12 @@ AFRAME.registerState({
       audio: '',
       author: '',
       difficulty: '',
+      hasLoadError: false,
       id: '',
       image: '',
       isLoading: false,
       isBeatsPreloaded: false,  // Whether we have passed the negative time.
+      loadErrorText: '',
       songName: '',
       songNameShort: '',
       songSubNameShort: ''
@@ -62,6 +64,12 @@ AFRAME.registerState({
       state.challenge.songNameMedium = truncate(payload.info.songName, 30);
       state.challenge.songSubName = payload.info.songSubName;
       state.challenge.songSubNameShort = truncate(payload.info.songSubName, 21);
+    },
+
+    challengeloaderror: (state, payload) => {
+      state.challenge.hasLoadError = true;
+      state.challenge.isLoading = false;
+      state.challenge.loadErrorText = `Sorry, song ${AFRAME.utils.getUrlParameter('id')} was not found.`;
     },
 
     controllerconnected: (state, payload) => {

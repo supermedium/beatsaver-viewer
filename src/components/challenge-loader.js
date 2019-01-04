@@ -34,6 +34,10 @@ AFRAME.registerComponent('challenge-loader', {
     const [short] = id.split('-');
     const loader = new ZipLoader(`https://beatsaver.com/storage/songs/${short}/${id}.zip`);
 
+    loader.on('error', err => {
+      this.el.emit('challengeloaderror', null);
+    });
+
     loader.on('progress', evt => {
       this.loadingIndicator.object3D.visible = true;
       this.loadingIndicator.setAttribute('material', 'progress',
