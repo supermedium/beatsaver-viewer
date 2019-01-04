@@ -567,9 +567,8 @@ AFRAME.registerComponent('beat', {
 
   returnToPool: function (force) {
     if (!this.backToPool && !force) { return; }
-    this.el.sceneEl.components[this.poolName].returnEntity(this.el);
 
-    // Play sound for viewer.
+    // Play sound and particles for viewer.
     if (this.data.type !== 'mine' && !force) {
       this.el.parentNode.components['beat-hit-sound'].playSound(
         this.el, this.data.cutDirection);
@@ -587,6 +586,16 @@ AFRAME.registerComponent('beat', {
           this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
         }, 350);
       }
+
+      this.el.sceneEl.components[this.poolName].returnEntity(this.el);
+    }
+
+    // Show mine explode for viewer.
+    if (this.data.type === 'mine' && !force) {
+      this.destroyMine();
+      setTimeout(() => {
+        this.el.sceneEl.components[this.poolName].returnEntity(this.el);
+      }, 800);
     }
   },
 
