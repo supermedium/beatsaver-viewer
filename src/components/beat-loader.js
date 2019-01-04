@@ -119,16 +119,20 @@ AFRAME.registerComponent('beat-loader', {
   tick: function (time, delta) {
     if (!this.data.isPlaying || !this.data.challengeId || !this.beatData) { return; }
 
+    const song = this.el.components.song;
     const prevBeatsTime = this.beatsTime + skipDebug;
+    const prevEventsTime = this.eventsTime + skipDebug;
+
     if (this.beatsPreloadTime === undefined) {
       // Get current song time.
-      const song = this.el.components.song;
       if (!song.isPlaying) { return; }
       this.beatsTime = (song.getCurrentTime() + this.data.beatAnticipationTime +
                         this.data.beatWarmupTime) * 1000;
+      this.eventsTime = song.getCurrentTime() * 1000;
     } else {
       // Song is not playing and is preloading beats, use maintained beat time.
       this.beatsTime = this.beatsPreloadTime;
+      this.eventsTime = song.getCurrentTime() * 1000;
     }
 
     // Skip a frame to update prevBeats data.
@@ -161,10 +165,11 @@ AFRAME.registerComponent('beat-loader', {
     }
 
     // Stage events.
+    const eventsTime = this.eventsTime + skipDebug;
     const events = this.beatData._events;
     for (let i = 0; i < events.length; ++i) {
       let noteTime = events[i]._time * msPerBeat;
-      if (noteTime > prevBeatsTime && noteTime <= beatsTime) {
+      if (noteTime > prevEventsTime && noteTime <= eventsTime) {
         this.generateEvent(events[i]);
       }
     }
