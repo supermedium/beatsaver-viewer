@@ -54,7 +54,7 @@
     "webpack": "2.3.3",
     "webpack-glsl-loader": "^1.0.1",
     "webpack-sources": "1.0.1",
-    "zip-loader": "^1.1.0"
+    "zip-loader": "ngokevin/ZipLoader#beatviewer"
   },
   "devDependencies": {
     "cross-env": "4.0.0",
