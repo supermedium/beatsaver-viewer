@@ -52,6 +52,8 @@ AFRAME.registerComponent('song', {
   update: function (oldData) {
     const data = this.data;
 
+    if (!this.el.sceneEl.isPlaying) { return; }
+
     // New challenge, play if we have loaded and were waiting for beats to preload.
     if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {
       this.startAudio();
@@ -85,6 +87,18 @@ AFRAME.registerComponent('song', {
 
     // Resume.
     if (!oldData.isPlaying && data.isPlaying && this.source) {
+      this.audioAnalyser.resumeContext();
+    }
+  },
+
+  pause: function () {
+    if (this.data.isPlaying) {
+      this.audioAnalyser.suspendContext();
+    }
+  },
+
+  play: function () {
+    if (this.data.isPlaying) {
       this.audioAnalyser.resumeContext();
     }
   },
