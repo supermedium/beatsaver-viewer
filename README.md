@@ -13,8 +13,8 @@ The viewer works within a normal web browser and can be embedded on any
 webpage. It can also be previewed within VR headsets on browsers that support
 VR (e.g., [Supermedium](https://supermedium.com)).
 
-Featured on the unofficial [Beat Saber
-Songs](https://beatsaber-songs.herokuapp.com/top/all) site.
+Featured on [BeastSaber](https://bsaber.com) and the unofficial [Beat Saber
+Songs](https://beatsaber-songs.herokuapp.com/top/all) site!
 
 ## Usage
 
