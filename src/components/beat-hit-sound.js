@@ -77,18 +77,24 @@ AFRAME.registerComponent('beat-hit-sound', {
   play: function () {
     // Kick three.js loader...Don't know why sometimes doesn't load.
     for (let i = 1; i <= 10; i++) {
-      if (!this.el.components[`sound__beathit${i}`].loaded) {
-        this.el.setAttribute(`sound__beathit${i}`, 'src', '');
-        this.el.setAttribute(`sound__beathit${i}`, 'src', `#hitSound${i}`);
-      }
-      if (!this.el.components[`sound__beathit${i}left`].loaded) {
-        this.el.setAttribute(`sound__beathit${i}left`, 'src', '');
-        this.el.setAttribute(`sound__beathit${i}left`, 'src', `#hitSound${i}left`);
-      }
-      if (!this.el.components[`sound__beathit${i}right`].loaded) {
-        this.el.setAttribute(`sound__beathit${i}right`, 'src', '');
-        this.el.setAttribute(`sound__beathit${i}right`, 'src', `#hitSound${i}right`);
-      }
+      setTimeout(() => {
+        if (!this.el.components[`sound__beathit${i}`].loaded) {
+          this.el.setAttribute(`sound__beathit${i}`, 'src', '');
+          this.el.setAttribute(`sound__beathit${i}`, 'src', `#hitSound${i}`);
+        }
+      }, i * 10);
+      setTimeout(() => {
+        if (!this.el.components[`sound__beathit${i}left`].loaded) {
+          this.el.setAttribute(`sound__beathit${i}left`, 'src', '');
+          this.el.setAttribute(`sound__beathit${i}left`, 'src', `#hitSound${i}left`);
+        }
+      }, i * 20);
+      setTimeout(() => {
+        if (!this.el.components[`sound__beathit${i}right`].loaded) {
+          this.el.setAttribute(`sound__beathit${i}right`, 'src', '');
+          this.el.setAttribute(`sound__beathit${i}right`, 'src', `#hitSound${i}right`);
+        }
+      }, i * 30);
     }
   },
 

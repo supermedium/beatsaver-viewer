@@ -186,10 +186,10 @@ AFRAME.registerComponent('beat-loader', {
     }
   },
 
-  seek: function () {
+  seek: function (time) {
     this.clearBeats(true);
     this.beatsTime = (
-      this.el.components.song.getCurrentTime() +
+      time +
       this.data.beatAnticipationTime +
       this.data.beatWarmupTime
     ) * 1000;

@@ -157,6 +157,7 @@ AFRAME.registerComponent('song', {
     this.songStartTime = this.context.currentTime - playTime;
     this.source.start(0, playTime);
     this.isPlaying = true;
+    this.el.emit('songstartaudio');
   },
 
   getCurrentTime: function () {

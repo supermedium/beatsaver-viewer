@@ -1,3 +1,12 @@
+const ONCE = {once: true};
+
+let queryParamTime = AFRAME.utils.getUrlParameter('time').trim();
+if (isNaN(queryParamTime)) {
+  queryParamTime = undefined;
+} else {
+  queryParamTime = parseFloat(queryParamTime);
+}
+
 /**
  * Update the 2D UI. Handle pause and seek.
  */
@@ -15,6 +24,15 @@ AFRAME.registerComponent('song-controls', {
   init: function () {
     this.song = this.el.components.song;
     this.tick = AFRAME.utils.throttleTick(this.tick.bind(this), 100);
+
+    // Seek to ?time if specified.
+    if (queryParamTime !== undefined) {
+      this.el.sceneEl.addEventListener('songstartaudio', () => {
+        setTimeout(() => {
+          this.seek(queryParamTime);
+        }, 100);
+      }, ONCE);
+    }
   },
 
   update: function () {
@@ -63,20 +81,10 @@ AFRAME.registerComponent('song-controls', {
       const percent = marginLeft / timeline.getBoundingClientRect().width;
 
       // Get new audio buffer source (needed every time audio is stopped).
-      this.song.stopAudio();
-      this.song.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
-        // Start audio at seek time.
-        const source = this.song.source = evt.detail;
-
-        // Tell beat generator about seek.
-        this.el.components['beat-loader'].seek();
-
-        const time = percent * source.buffer.duration;
-        this.song.startAudio(time);
-
-        this.updatePlayhead();
-      }, {once: true});
-      this.song.audioAnalyser.refreshSource();
+      // Start audio at seek time.
+      const time = percent * this.song.source.buffer.duration;
+      this.seek(time);
+      setTimeQueryParam(time);
     });
 
     // Pause.
@@ -104,8 +112,29 @@ AFRAME.registerComponent('song-controls', {
     this.updatePlayhead();
   },
 
+  seek: function (time) {
+    this.song.stopAudio();
+
+    // Get new audio buffer source (needed every time audio is stopped).
+    this.song.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
+      // Start audio at seek time.
+      const source = this.song.source = evt.detail;
+
+      this.song.startAudio(time);
+
+      // Tell beat generator about seek.
+      this.el.components['beat-loader'].seek(time);
+
+      this.updatePlayhead();
+    }, ONCE);
+
+    this.song.audioAnalyser.refreshSource();
+  },
+
   updatePlayhead: function () {
-    const progress = Math.max(0, Math.min(100, 100 * (this.song.getCurrentTime() / this.song.source.buffer.duration)));
+    const progress = Math.max(
+      0,
+      Math.min(100, 100 * (this.song.getCurrentTime() / this.song.source.buffer.duration)));
     this.playhead.style.width = progress + '%';
   }
 });
@@ -116,4 +145,22 @@ function truncate (str, length) {
     return str.substring(0, length - 2) + '..';
   }
   return str;
+}
+
+const timeRe = /time=\d+/
+function setTimeQueryParam (time) {
+  let search = window.location.search.toString();
+  if (search) {
+    if (search.match(timeRe)) {
+      search.replace(timeRe, `?time=${time}`);
+    } else {
+      search += `?time=${time}`;
+    }
+  } else {
+    search = `?time=${time}`;
+  }
+
+  let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+  url += search;
+  window.history.pushState({path: url},'', url);
 }
