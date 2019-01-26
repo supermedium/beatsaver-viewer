@@ -162,9 +162,9 @@ function setTimeQueryParam (time) {
   let search = window.location.search.toString();
   if (search) {
     if (search.match(timeRe)) {
-      search.replace(timeRe, `?time=${time}`);
+      search.replace(timeRe, `time=${time}`);
     } else {
-      search += `?time=${time}`;
+      search += `&time=${time}`;
     }
   } else {
     search = `?time=${time}`;
