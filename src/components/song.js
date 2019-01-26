@@ -52,7 +52,7 @@ AFRAME.registerComponent('song', {
     // Stupid Chrome audio policies.
     document.addEventListener('click', evt => {
       if (!evt.isTrusted) { return; }
-      if (!navigator.userAgent.contains('Chrome')) { return; }
+      if (!navigator.userAgent.indexOf('Chrome')) { return; }
       if (this.oldData.isPaused && !this.data.isPaused) {
         this.audioAnalyser.resumeContext();
         this.isPlaying = true;
@@ -66,7 +66,7 @@ AFRAME.registerComponent('song', {
     if (!this.el.sceneEl.isPlaying) { return; }
 
     // Resume.
-    if (oldData.isPaused && !data.isPaused && !navigator.userAgent.contains('Chrome')) {
+    if (oldData.isPaused && !data.isPaused && !navigator.userAgent.indexOf('Chrome')) {
       this.audioAnalyser.resumeContext();
       this.isPlaying = true;
       return;
