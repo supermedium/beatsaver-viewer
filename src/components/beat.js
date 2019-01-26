@@ -120,9 +120,7 @@ AFRAME.registerComponent('beat', {
     this.initBlock();
     if (this.data.type === 'mine') {
       this.initMineFragments();
-    } else {
-      this.initFragments();
-    };
+    }
   },
 
   updatePosition: function () {
@@ -141,7 +139,6 @@ AFRAME.registerComponent('beat', {
   update: function () {
     this.updatePosition();
     this.updateBlock();
-    this.updateFragments();
 
     if (this.data.type === 'mine') {
       this.poolName = `pool__beat-mine`;
@@ -152,10 +149,6 @@ AFRAME.registerComponent('beat', {
 
   pause: function () {
     this.el.object3D.visible = false;
-    if (this.data.type !== 'mine') {
-      this.partLeftEl.object3D.visible = false;
-      this.partRightEl.object3D.visible = false;
-    }
   },
 
   play: function () {
@@ -171,37 +164,32 @@ AFRAME.registerComponent('beat', {
     const position = el.object3D.position;
     const rotation = el.object3D.rotation;
 
-    if (this.destroyed) {
-      this.tockDestroyed(timeDelta);
-    } else {
-      // Move.
-      if (position.z < data.anticipationPosition) {
-        let newPositionZ = position.z + BEAT_WARMUP_SPEED * (timeDelta / 1000);
-        // Warm up / warp in.
-        if (newPositionZ < data.anticipationPosition) {
-          position.z = newPositionZ;
-        } else {
-          position.z = data.anticipationPosition;
-          this.beams.newBeam(this.data.color, position);
-        }
+    // Move.
+    if (position.z < data.anticipationPosition) {
+      let newPositionZ = position.z + BEAT_WARMUP_SPEED * (timeDelta / 1000);
+      // Warm up / warp in.
+      if (newPositionZ < data.anticipationPosition) {
+        position.z = newPositionZ;
       } else {
-        // Standard moving.
-        position.z += this.data.speed * (timeDelta / 1000);
-        rotation.z = this.startRotationZ;
+        position.z = data.anticipationPosition;
+        this.beams.newBeam(this.data.color, position);
       }
-
-      if (position.z > (data.anticipationPosition - BEAT_WARMUP_ROTATION_OFFSET) &&
-          this.currentRotationWarmupTime < BEAT_WARMUP_ROTATION_TIME) {
-        const progress = AFRAME.ANIME.easings.easeOutBack(
-          this.currentRotationWarmupTime / BEAT_WARMUP_ROTATION_TIME);
-        el.object3D.rotation.z = this.rotationZStart + (progress * this.rotationZChange);
-        this.currentRotationWarmupTime += timeDelta;
-      }
-
-      // Check.
-      this.backToPool = position.z >= -1 * SWORD_OFFSET;
+    } else {
+      // Standard moving.
+      position.z += this.data.speed * (timeDelta / 1000);
+      rotation.z = this.startRotationZ;
     }
 
+    if (position.z > (data.anticipationPosition - BEAT_WARMUP_ROTATION_OFFSET) &&
+        this.currentRotationWarmupTime < BEAT_WARMUP_ROTATION_TIME) {
+      const progress = AFRAME.ANIME.easings.easeOutBack(
+        this.currentRotationWarmupTime / BEAT_WARMUP_ROTATION_TIME);
+      el.object3D.rotation.z = this.rotationZStart + (progress * this.rotationZChange);
+      this.currentRotationWarmupTime += timeDelta;
+    }
+
+    // Check.
+    this.backToPool = position.z >= -1 * SWORD_OFFSET;
     this.returnToPool();
   },
 
@@ -269,25 +257,6 @@ AFRAME.registerComponent('beat', {
     }
   },
 
-  initFragments: function () {
-    var cutEl;
-    var partEl;
-
-    partEl = this.partLeftEl = document.createElement('a-entity');
-    cutEl = this.cutLeftEl = document.createElement('a-entity');
-
-    partEl.appendChild(cutEl);
-    this.el.appendChild(partEl);
-
-    partEl = this.partRightEl = document.createElement('a-entity');
-    cutEl = this.cutRightEl = document.createElement('a-entity');
-
-    partEl.appendChild(cutEl);
-    this.el.appendChild(partEl);
-
-    this.initCuttingClippingPlanes();
-  },
-
   initMineFragments: function () {
     var fragment;
     var fragments = this.el.sceneEl.systems['mine-fragments-loader'].fragments.children;
@@ -311,57 +280,6 @@ AFRAME.registerComponent('beat', {
     }
   },
 
-  updateFragments: function () {
-    var cutLeftEl = this.cutLeftEl;
-    var cutRightEl = this.cutRightEl;
-    var partLeftEl = this.partLeftEl;
-    var partRightEl = this.partRightEl;
-    var fragment;
-    if (!partLeftEl) { return; }
-    if (this.data.type === 'mine') {
-      this.resetMineFragments();
-      return;
-    }
-
-    partLeftEl.setAttribute('material', {
-      metalness: 0.7,
-      roughness: 0.1,
-      sphericalEnvMap: '#envmapTexture',
-      emissive: this.materialColor[this.data.color],
-      emissiveIntensity: 0.05,
-      color: this.materialColor[this.data.color],
-      side: 'double'
-    });
-    this.setObjModelFromTemplate(partLeftEl, this.models.dot);
-    partLeftEl.object3D.visible = false;
-
-    cutLeftEl.setAttribute('material', {
-      shader: 'flat',
-      color: this.data.cutColor,
-      side: 'double'
-    });
-    this.setObjModelFromTemplate(cutLeftEl, this.models.dot);
-
-    partRightEl.setAttribute('material', {
-      metalness: 0.7,
-      roughness: 0.1,
-      sphericalEnvMap: '#envmapTexture',
-      emissive: this.materialColor[this.data.color],
-      emissiveIntensity: 0.05,
-      color: this.materialColor[this.data.color],
-      side: 'double'
-    });
-    this.setObjModelFromTemplate(partRightEl, this.models.dot);
-    partRightEl.object3D.visible = false;
-
-    cutRightEl.setAttribute('material', {
-      shader: 'flat',
-      color: this.data.cutColor,
-      side: 'double'
-    });
-    this.setObjModelFromTemplate(cutRightEl, this.models.dot);
-  },
-
   resetMineFragments: function () {
     if (this.data.type !== 'mine') { return; }
     for (let i = 0; i < this.mineFragments.length; i++) {
@@ -375,116 +293,6 @@ AFRAME.registerComponent('beat', {
         Math.random() * 5 - 2.5);
     }
   },
-
-  destroyBeat: (function () {
-    var parallelPlaneMaterial = new THREE.MeshBasicMaterial({
-      color: '#00008b',
-      side: THREE.DoubleSide
-    });
-    var planeMaterial = new THREE.MeshBasicMaterial({color: 'grey', side: THREE.DoubleSide});
-    var point1 = new THREE.Vector3();
-    var point2 = new THREE.Vector3();
-    var point3 = new THREE.Vector3();
-
-    return function () {
-      var coplanarPoint;
-      var cutThickness = this.cutThickness = 0.02;
-      var direction = this.cutDirection;
-      var leftBorderInnerPlane = this.leftBorderInnerPlane;
-      var leftBorderOuterPlane = this.leftBorderOuterPlane;
-      var leftCutPlane = this.leftCutPlane;
-      var planeGeometry;
-      var planeMesh;
-      var rightBorderInnerPlane = this.rightBorderInnerPlane;
-      var rightBorderOuterPlane = this.rightBorderOuterPlane;
-      var rightCutPlane = this.rightCutPlane;
-
-      point1.copy(trailPoints[0].top);
-      point2.copy(trailPoints[0].center);
-      point3.copy(trailPoints[trailPoints.length - 1].top);
-      direction.copy(point1).sub(point3);
-
-      this.partRightEl.object3D.position.set(0, 0, 0);
-      this.partRightEl.object3D.rotation.set(0, 0, 0);
-      this.partRightEl.object3D.updateMatrixWorld();
-
-      this.partRightEl.object3D.worldToLocal(this.rightCutPlanePoints[0].copy(point1));
-      this.partRightEl.object3D.worldToLocal(this.rightCutPlanePoints[1].copy(point2));
-      this.partRightEl.object3D.worldToLocal(this.rightCutPlanePoints[2].copy(point3));
-
-      this.partLeftEl.object3D.position.set(0, 0, 0);
-      this.partLeftEl.object3D.rotation.set(0, 0, 0);
-      this.partLeftEl.object3D.updateMatrixWorld();
-
-      this.partLeftEl.object3D.worldToLocal(this.leftCutPlanePoints[0].copy(point3));
-      this.partLeftEl.object3D.worldToLocal(this.leftCutPlanePoints[1].copy(point2));
-      this.partLeftEl.object3D.worldToLocal(this.leftCutPlanePoints[2].copy(point1));
-
-      this.generateCutClippingPlanes();
-
-      if (this.data.debug) {
-        coplanarPoint = new THREE.Vector3();
-        planeGeometry = new THREE.PlaneGeometry(4.0, 4.0, 1.0, 1.0);
-
-        rightCutPlane.coplanarPoint(coplanarPoint);
-        planeGeometry.lookAt(rightCutPlane.normal);
-        planeGeometry.translate(coplanarPoint.x, coplanarPoint.y, coplanarPoint.z);
-
-        planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-        this.el.sceneEl.setObject3D('rightCutPlane', planeMesh);
-
-        planeGeometry = new THREE.PlaneGeometry(4.0, 4.0, 1.0, 1.0);
-
-        rightBorderOuterPlane.coplanarPoint(coplanarPoint);
-        planeGeometry.lookAt(rightBorderOuterPlane.normal);
-        planeGeometry.translate(coplanarPoint.x, coplanarPoint.y, coplanarPoint.z);
-
-        const parallelPlaneMesh = new THREE.Mesh(planeGeometry, parallelPlaneMaterial);
-        this.el.sceneEl.setObject3D('planeParallel', parallelPlaneMesh);
-      }
-
-      this.blockEl.object3D.visible = false;
-
-      const partRightMaterial = this.partRightEl.getObject3D('mesh').material;
-      partRightMaterial.clippingPlanes = partRightMaterial.clippingPlanes || [];
-      partRightMaterial.clippingPlanes.length = 0;
-      partRightMaterial.clippingPlanes.push(rightCutPlane);
-
-      const cutRightMaterial = this.cutRightEl.getObject3D('mesh').material;
-      cutRightMaterial.clippingPlanes = cutRightMaterial.clippingPlanes || [];
-      cutRightMaterial.clippingPlanes.length = 0;
-      cutRightMaterial.clippingPlanes.push(rightBorderOuterPlane);
-      cutRightMaterial.clippingPlanes.push(rightBorderInnerPlane);
-
-      const partLeftMaterial = this.partLeftEl.getObject3D('mesh').material;
-      partLeftMaterial.clippingPlanes = partLeftMaterial.clippingPlanes || [];
-      partLeftMaterial.clippingPlanes.length = 0;
-      partLeftMaterial.clippingPlanes.push(leftCutPlane);
-
-      const cutLeftMaterial = this.cutLeftEl.getObject3D('mesh').material;
-      cutLeftMaterial.clippingPlanes = cutLeftMaterial.clippingPlanes || [];
-      cutLeftMaterial.clippingPlanes.length = 0;
-      cutLeftMaterial.clippingPlanes.push(leftBorderInnerPlane);
-      cutLeftMaterial.clippingPlanes.push(leftBorderOuterPlane);
-
-      this.partLeftEl.object3D.visible = true;
-      this.partRightEl.object3D.visible = true;
-
-      this.el.sceneEl.renderer.localClippingEnabled = true;
-      this.destroyed = true;
-      this.gravityVelocity = 0.1;
-
-      this.rotationAxis.copy(this.rightCutPlanePoints[0]).sub(this.rightCutPlanePoints[1]);
-
-      this.returnToPoolTimer = 800;
-
-      auxObj3D.up.copy(rightCutPlane.normal);
-      auxObj3D.lookAt(direction);
-      this.explodeEventDetail.position = this.el.object3D.position;
-      this.explodeEventDetail.rotation = auxObj3D.rotation;
-      this.particles.emit('explode', this.explodeEventDetail, false);
-    };
-  })(),
 
   destroyMine: function () {
     for (let i = 0; i < this.mineFragments.length; i++) {
@@ -522,49 +330,6 @@ AFRAME.registerComponent('beat', {
     this.leftBorderInnerPlane = new THREE.Plane();
   },
 
-  generateCutClippingPlanes: function () {
-    var leftBorderInnerPlane = this.leftBorderInnerPlane;
-    var leftBorderOuterPlane = this.leftBorderOuterPlane;
-    var leftCutPlane = this.leftCutPlane;
-    var leftCutPlanePointsWorld = this.leftCutPlanePointsWorld;
-    var partLeftEl = this.partLeftEl;
-    var partRightEl = this.partRightEl;
-    var rightBorderInnerPlane = this.rightBorderInnerPlane;
-    var rightBorderOuterPlane = this.rightBorderOuterPlane;
-    var rightCutPlane = this.rightCutPlane;
-    var rightCutPlanePointsWorld = this.rightCutPlanePointsWorld;
-
-    partRightEl.object3D.updateMatrixWorld();
-    partRightEl.object3D.localToWorld(
-      rightCutPlanePointsWorld[0].copy(this.rightCutPlanePoints[0]));
-    partRightEl.object3D.localToWorld(
-      rightCutPlanePointsWorld[1].copy(this.rightCutPlanePoints[1]));
-    partRightEl.object3D.localToWorld(
-      rightCutPlanePointsWorld[2].copy(this.rightCutPlanePoints[2]));
-
-    partLeftEl.object3D.updateMatrixWorld();
-    partLeftEl.object3D.localToWorld(
-      leftCutPlanePointsWorld[0].copy(this.leftCutPlanePoints[0]));
-    partLeftEl.object3D.localToWorld(
-      leftCutPlanePointsWorld[1].copy(this.leftCutPlanePoints[1]));
-    partLeftEl.object3D.localToWorld(
-      leftCutPlanePointsWorld[2].copy(this.leftCutPlanePoints[2]));
-
-    rightCutPlane.setFromCoplanarPoints(
-      rightCutPlanePointsWorld[0], rightCutPlanePointsWorld[1], rightCutPlanePointsWorld[2]);
-    rightBorderOuterPlane.set(rightCutPlane.normal,
-                              rightCutPlane.constant + this.cutThickness);
-
-    leftCutPlane.setFromCoplanarPoints(
-      leftCutPlanePointsWorld[0], leftCutPlanePointsWorld[1], leftCutPlanePointsWorld[2]);
-    leftBorderOuterPlane.set(leftCutPlane.normal, leftCutPlane.constant + this.cutThickness);
-
-    rightBorderInnerPlane.setFromCoplanarPoints(
-      rightCutPlanePointsWorld[2], rightCutPlanePointsWorld[1], rightCutPlanePointsWorld[0]);
-    leftBorderInnerPlane.setFromCoplanarPoints(
-      leftCutPlanePointsWorld[2], leftCutPlanePointsWorld[1], leftCutPlanePointsWorld[0]);
-  },
-
   returnToPool: function (force) {
     if (!this.backToPool && !force) { return; }
 
@@ -598,58 +363,6 @@ AFRAME.registerComponent('beat', {
       }, 800);
     }
   },
-
-  /**
-   * Destroyed animation.
-   */
-  tockDestroyed: (function () {
-    var leftCutNormal = new THREE.Vector3();
-    var leftRotation = 0;
-    var rightCutNormal = new THREE.Vector3();
-    var rightRotation = 0;
-    var rotationStep = 2 * Math.PI / 150;
-    var fragment;
-
-    return function (timeDelta) {
-      // Update gravity velocity.
-      this.gravityVelocity = getGravityVelocity(this.gravityVelocity, timeDelta);
-      this.el.object3D.position.y += this.gravityVelocity * (timeDelta / 1000);
-
-      if (this.data.type == 'mine') {
-        for (var i = 0; i < this.mineFragments.length; i++) {
-          fragment = this.mineFragments[i];
-          if (!fragment.visible) { continue; }
-          fragment.position.addScaledVector(fragment.speed, timeDelta / 1000);
-          fragment.scale.multiplyScalar(0.97)
-          if (fragment.scale.y < 0.1){
-            fragment.visible = false;
-          }
-        }
-        this.returnToPoolTimer -= timeDelta;
-        this.backToPool = this.returnToPoolTimer <= 0;
-        return;
-      }
-
-      rightCutNormal.copy(this.rightCutPlane.normal)
-                    .multiplyScalar(DESTROYED_SPEED * (timeDelta / 500));
-      rightCutNormal.y = 0;  // Y handled by gravity.
-      this.partRightEl.object3D.position.add(rightCutNormal);
-      this.partRightEl.object3D.setRotationFromAxisAngle(this.rotationAxis, rightRotation);
-      rightRotation = rightRotation >= 2 * Math.PI ? 0 : rightRotation + rotationStep;
-
-      leftCutNormal.copy(this.leftCutPlane.normal)
-                   .multiplyScalar(DESTROYED_SPEED * (timeDelta / 500));
-      leftCutNormal.y = 0;  // Y handled by gravity.
-      this.partLeftEl.object3D.position.add(leftCutNormal);
-      this.partLeftEl.object3D.setRotationFromAxisAngle(this.rotationAxis, leftRotation);
-      leftRotation = leftRotation >= 2 * Math.PI ? 0 : leftRotation + rotationStep;
-
-      this.generateCutClippingPlanes();
-
-      this.returnToPoolTimer -= timeDelta;
-      this.backToPool = this.returnToPoolTimer <= 0;
-    };
-  })(),
 
   /**
    * Load OBJ from already parsed and loaded OBJ template.
