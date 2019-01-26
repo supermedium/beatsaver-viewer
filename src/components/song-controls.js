@@ -149,6 +149,7 @@ function truncate (str, length) {
 
 const timeRe = /time=\d+/
 function setTimeQueryParam (time) {
+  time = parseInt(time);
   let search = window.location.search.toString();
   if (search) {
     if (search.match(timeRe)) {
