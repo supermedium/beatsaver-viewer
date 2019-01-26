@@ -227,7 +227,6 @@ AFRAME.registerComponent('beat-loader', {
       beatObj.verticalPosition = this.verticalPositionsHumanized[noteInfo._lineLayer],
       beatObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;
       beatEl.setAttribute('beat', beatObj);
-      beatEl.components.beat.updatePosition();
 
       beatEl.play();
       beatEl.components.beat.onGenerate();
@@ -315,7 +314,7 @@ AFRAME.registerComponent('beat-loader', {
     for (let i = 0; i < this.beatContainer.children.length; i++) {
       let child = this.beatContainer.children[i];
       if (child.components.beat) {
-        child.components.beat.returnToPool(true);
+        child.components.beat.returnToPool();
       }
       if (child.components.wall) {
         child.components.wall.returnToPool(true);

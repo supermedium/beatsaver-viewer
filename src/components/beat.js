@@ -85,7 +85,6 @@ AFRAME.registerComponent('beat', {
   },
 
   init: function () {
-    this.backToPool = false;
     this.beams = document.getElementById('beams').components.beams;
     this.beatBoundingBox = new THREE.Box3();
     this.currentRotationWarmupTime = 0;
@@ -95,7 +94,7 @@ AFRAME.registerComponent('beat', {
     this.hitEventDetail = {};
     this.hitBoundingBox = new THREE.Box3();
     this.poolName = undefined;
-    this.returnToPoolTimer = 800;
+    this.returnToPoolTimeStart = undefined;
     this.rotationAxis = new THREE.Vector3();
     this.scoreEl = null;
     this.scoreElTime = undefined;
@@ -103,8 +102,7 @@ AFRAME.registerComponent('beat', {
 
     this.particles = document.getElementById('saberParticles');
     this.mineParticles = document.getElementById('mineParticles');
-    this.mineParticles = document.getElementById('mineParticles');
-    this.explodeEventDetail = {position: null, rotation: null};
+    this.explodeEventDetail = {position: new THREE.Vector3(), rotation: new THREE.Euler()};
     this.glow = null;
 
     this.initBlock();
@@ -113,21 +111,7 @@ AFRAME.registerComponent('beat', {
     }
   },
 
-  updatePosition: function () {
-    const el = this.el;
-    const data = this.data;
-
-    el.object3D.position.set(
-      this.horizontalPositions[data.horizontalPosition],
-      this.verticalPositions[data.verticalPosition],
-      data.anticipationPosition + data.warmupPosition
-    );
-
-    el.object3D.rotation.z = THREE.Math.degToRad(this.rotations[data.cutDirection]);
-  },
-
   update: function () {
-    this.updatePosition();
     this.updateBlock();
 
     if (this.data.type === 'mine') {
@@ -154,6 +138,12 @@ AFRAME.registerComponent('beat', {
     const position = el.object3D.position;
     const rotation = el.object3D.rotation;
 
+    if (this.returnToPoolTimeStart && time - this.returnToPoolTimeStart > 800) {
+      this.returnToPool();
+      this.returnToPoolTimeStart = undefined;
+      return;
+    }
+
     // Move.
     if (position.z < data.anticipationPosition) {
       let newPositionZ = position.z + BEAT_WARMUP_SPEED * (timeDelta / 1000);
@@ -165,9 +155,20 @@ AFRAME.registerComponent('beat', {
         this.beams.newBeam(this.data.color, position);
       }
     } else {
+      const oldPosition = position.z;
+
       // Standard moving.
       position.z += this.data.speed * (timeDelta / 1000);
       rotation.z = this.startRotationZ;
+
+      if (oldPosition < -1 * SWORD_OFFSET && position.z >= -1 * SWORD_OFFSET) {
+        this.returnToPoolTimeStart = time;
+        if (this.data.type === 'mine') {
+          this.destroyMine();
+        } else {
+          this.destroyBeat();
+        }
+      }
     }
 
     if (position.z > (data.anticipationPosition - BEAT_WARMUP_ROTATION_OFFSET) &&
@@ -177,19 +178,25 @@ AFRAME.registerComponent('beat', {
       el.object3D.rotation.z = this.rotationZStart + (progress * this.rotationZChange);
       this.currentRotationWarmupTime += timeDelta;
     }
-
-    // Check.
-    this.backToPool = position.z >= -1 * SWORD_OFFSET;
-    this.returnToPool();
   },
 
   /**
    * Called when summoned by beat-loader.
    */
   onGenerate: function () {
-    this.startRotationZ = this.el.object3D.rotation.z;
+    const el = this.el;
+    const data = this.data;
+
+    // Set position.
+    el.object3D.position.set(
+      this.horizontalPositions[data.horizontalPosition],
+      this.verticalPositions[data.verticalPosition],
+      data.anticipationPosition + data.warmupPosition
+    );
+    el.object3D.rotation.z = THREE.Math.degToRad(this.rotations[data.cutDirection]);
 
     // Set up rotation warmup.
+    this.startRotationZ = this.el.object3D.rotation.z;
     this.currentRotationWarmupTime = 0;
     this.rotationZChange = BEAT_WARMUP_ROTATION_CHANGE;
     if (Math.random > 0.5) { this.rotationZChange *= -1; }
@@ -197,6 +204,8 @@ AFRAME.registerComponent('beat', {
     this.rotationZStart = this.el.object3D.rotation.z;
     // Reset mine.
     if (this.data.type == 'mine') { this.resetMineFragments(); }
+
+    this.returnToPoolTimeStart = undefined;
   },
 
   initBlock: function () {
@@ -294,43 +303,35 @@ AFRAME.registerComponent('beat', {
     this.gravityVelocity = 0.1;
     this.returnToPoolTimer = 800;
 
-    this.explodeEventDetail.position = this.el.object3D.position;
-    this.explodeEventDetail.rotation = this.randVec;
+    this.explodeEventDetail.position.copy(this.el.object3D.position);
+    this.explodeEventDetail.rotation.copy(this.randVec);
     this.mineParticles.emit('explode', this.explodeEventDetail, false);
   },
 
-  returnToPool: function (force) {
-    if (!this.backToPool && !force) { return; }
+  destroyBeat: function () {
+    this.el.object3D.visible = false;
 
+    this.el.parentNode.components['beat-hit-sound'].playSound(
+      this.el, this.data.cutDirection);
+
+    this.explodeEventDetail.position.copy(this.el.object3D.position);
+    this.explodeEventDetail.rotation.copy(this.el.object3D.rotation);
+    this.particles.emit('explode', this.explodeEventDetail, false);
+
+    if (this.glow) {
+      this.glow.play();
+      this.glow.object3D.position.copy(this.el.object3D.position);
+      this.glow.object3D.rotation.z = Math.random() * 2.0;
+      this.glow.emit('explode', null, false);
+    }
+  },
+
+  returnToPool: function () {
     // Play sound and particles for viewer.
-    if (this.data.type !== 'mine' && !force) {
-      this.el.parentNode.components['beat-hit-sound'].playSound(
-        this.el, this.data.cutDirection);
-
-      this.explodeEventDetail.position = this.el.object3D.position;
-      this.explodeEventDetail.rotation = this.el.object3D.rotation;
-      this.particles.emit('explode', this.explodeEventDetail, false);
-
-      if (this.glow) {
-        this.glow.play();
-        this.glow.object3D.position.copy(this.el.object3D.position);
-        this.glow.object3D.rotation.z = Math.random() * 2.0;
-        this.glow.emit('explode', null, false);
-        setTimeout(()=> {
-          this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
-        }, 350);
-      }
-
-      this.el.sceneEl.components[this.poolName].returnEntity(this.el);
+    if (this.data.type !== 'mine') {
+      this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
     }
-
-    // Show mine explode for viewer.
-    if (this.data.type === 'mine' && !force) {
-      this.destroyMine();
-      setTimeout(() => {
-        this.el.sceneEl.components[this.poolName].returnEntity(this.el);
-      }, 800);
-    }
+    this.el.sceneEl.components[this.poolName].returnEntity(this.el);
   },
 
   /**
