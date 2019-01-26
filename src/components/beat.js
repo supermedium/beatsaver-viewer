@@ -19,7 +19,7 @@ const SCORE_POOL = {
 
 /**
  * Bears, beats, Battlestar Galactica.
- * Create beat from pool, collision detection, clipping planes, movement, scoring.
+ * Create beat from pool, collision detection, movement, scoring.
  */
 AFRAME.registerComponent('beat', {
   schema: {
@@ -100,16 +100,6 @@ AFRAME.registerComponent('beat', {
     this.scoreEl = null;
     this.scoreElTime = undefined;
     this.startPositionZ = undefined;
-    this.rightCutPlanePoints = [
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3()
-    ];
-    this.leftCutPlanePoints = [
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3()
-    ];
 
     this.particles = document.getElementById('saberParticles');
     this.mineParticles = document.getElementById('mineParticles');
@@ -307,27 +297,6 @@ AFRAME.registerComponent('beat', {
     this.explodeEventDetail.position = this.el.object3D.position;
     this.explodeEventDetail.rotation = this.randVec;
     this.mineParticles.emit('explode', this.explodeEventDetail, false);
-  },
-
-  initCuttingClippingPlanes: function () {
-    this.leftCutPlanePointsWorld = [
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3()
-    ];
-    this.rightCutPlanePointsWorld = [
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3()
-    ];
-
-    this.rightCutPlane = new THREE.Plane();
-    this.rightBorderOuterPlane = new THREE.Plane();
-    this.rightBorderInnerPlane = new THREE.Plane();
-
-    this.leftCutPlane = new THREE.Plane();
-    this.leftBorderOuterPlane = new THREE.Plane();
-    this.leftBorderInnerPlane = new THREE.Plane();
   },
 
   returnToPool: function (force) {
