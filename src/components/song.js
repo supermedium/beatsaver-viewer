@@ -48,16 +48,6 @@ AFRAME.registerComponent('song', {
     this.audioAnalyser.gainNode.gain.value = BASE_VOLUME;
 
     this.el.addEventListener('gamemenurestart', this.onRestart.bind(this));
-
-    // Stupid Chrome audio policies.
-    document.addEventListener('click', evt => {
-      if (!evt.isTrusted) { return; }
-      if (!navigator.userAgent.indexOf('Chrome')) { return; }
-      if (this.oldData.isPaused && !this.data.isPaused) {
-        this.audioAnalyser.resumeContext();
-        this.isPlaying = true;
-      }
-    });
   },
 
   update: function (oldData) {
@@ -66,8 +56,12 @@ AFRAME.registerComponent('song', {
     if (!this.el.sceneEl.isPlaying) { return; }
 
     // Resume.
-    if (oldData.isPaused && !data.isPaused && !navigator.userAgent.indexOf('Chrome')) {
-      this.audioAnalyser.resumeContext();
+    if (oldData.isPaused && !data.isPaused) {
+      if (navigator.userAgent.indexOf('Chrome') !== -1) {
+        this.source.playbackRate.value = 1;
+      } else {
+        this.audioAnalyser.resumeContext();
+      }
       this.isPlaying = true;
       return;
     }
@@ -75,7 +69,12 @@ AFRAME.registerComponent('song', {
     // Pause / stop.
     if ((oldData.isPlaying && !data.isPlaying) ||
         (!oldData.isPaused && data.isPaused)) {
-      this.audioAnalyser.suspendContext();
+      if (navigator.userAgent.indexOf('Chrome') !== -1) {
+        // Stupid Chrome audio policies. Can't resume.
+        this.source.playbackRate.value = 0.000000001;
+      } else {
+        this.audioAnalyser.suspendContext();
+      }
       this.isPlaying = false;
       return;
     }
