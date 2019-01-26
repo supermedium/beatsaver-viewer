@@ -32,6 +32,7 @@ AFRAME.registerComponent('song', {
     difficulty: {default: ''},
     hasReceivedUserGesture: {default: false},
     isBeatsPreloaded: {default: false},
+    isPaused: {default: false},
     isPlaying: {default: false}
   },
 
@@ -47,6 +48,16 @@ AFRAME.registerComponent('song', {
     this.audioAnalyser.gainNode.gain.value = BASE_VOLUME;
 
     this.el.addEventListener('gamemenurestart', this.onRestart.bind(this));
+
+    // Stupid Chrome audio policies.
+    document.addEventListener('click', evt => {
+      if (!evt.isTrusted) { return; }
+      if (!navigator.userAgent.contains('Chrome')) { return; }
+      if (this.oldData.isPaused && !this.data.isPaused) {
+        this.audioAnalyser.resumeContext();
+        this.isPlaying = true;
+      }
+    });
   },
 
   update: function (oldData) {
@@ -54,9 +65,25 @@ AFRAME.registerComponent('song', {
 
     if (!this.el.sceneEl.isPlaying) { return; }
 
+    // Resume.
+    if (oldData.isPaused && !data.isPaused && !navigator.userAgent.contains('Chrome')) {
+      this.audioAnalyser.resumeContext();
+      this.isPlaying = true;
+      return;
+    }
+
+    // Pause / stop.
+    if ((oldData.isPlaying && !data.isPlaying) ||
+        (!oldData.isPaused && data.isPaused)) {
+      this.audioAnalyser.suspendContext();
+      this.isPlaying = false;
+      return;
+    }
+
     // New challenge, play if we have loaded and were waiting for beats to preload.
     if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {
       this.startAudio();
+      return;
     }
 
     if (oldData.challengeId && !data.challengeId) {
@@ -78,16 +105,6 @@ AFRAME.registerComponent('song', {
         this.el.sceneEl.emit('songprocessingfinish', null, false);
       }).catch(console.error);
 
-    }
-
-    // Pause / stop.
-    if (oldData.isPlaying && !data.isPlaying) {
-      this.audioAnalyser.suspendContext();
-    }
-
-    // Resume.
-    if (!oldData.isPlaying && data.isPlaying && this.source) {
-      this.audioAnalyser.resumeContext();
     }
   },
 
