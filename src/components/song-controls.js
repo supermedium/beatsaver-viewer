@@ -66,6 +66,7 @@ AFRAME.registerComponent('song-controls', {
     this.difficultyOptions = document.getElementById('controlsDifficultyOptions');
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
+    const timelineHover = this.timelineHover = document.getElementById('timelineHover');
 
     const timelineWidth = timeline.offsetWidth;
 
@@ -85,6 +86,8 @@ AFRAME.registerComponent('song-controls', {
 
     // Seek.
     timeline.addEventListener('click', event => {
+      if (!this.song.source) { return; }
+
       const marginLeft = (event.clientX - timeline.getBoundingClientRect().left);
       const percent = marginLeft / timeline.getBoundingClientRect().width;
 
@@ -93,6 +96,21 @@ AFRAME.registerComponent('song-controls', {
       const time = percent * this.song.source.buffer.duration;
       this.seek(time);
       setTimeQueryParam(time);
+    });
+
+    // Seek hover.
+    timeline.addEventListener('mouseenter', evt => {
+      if (!this.song.source) { return; }
+      timelineHover.classList.add('timelineHoverActive');
+    });
+    timeline.addEventListener('mousemove', evt => {
+      const marginLeft = (evt.clientX - timeline.getBoundingClientRect().left);
+      const percent = marginLeft / timeline.getBoundingClientRect().width;
+      timelineHover.style.left = marginLeft - 17 + 'px';
+      timelineHover.innerHTML = formatSeconds(percent * this.song.source.buffer.duration);
+    });
+    timeline.addEventListener('mouseleave', evt => {
+      timelineHover.classList.remove('timelineHoverActive');
     });
 
     // Pause.
