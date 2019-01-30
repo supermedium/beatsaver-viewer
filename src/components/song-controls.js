@@ -140,7 +140,7 @@ AFRAME.registerComponent('song-controls', {
   },
 
   seek: function (time) {
-    this.song.stopAudio();
+    if (this.data.isPlaying) { this.song.stopAudio();  }
 
     // Get new audio buffer source (needed every time audio is stopped).
     this.song.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
