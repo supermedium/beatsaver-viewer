@@ -1,7 +1,7 @@
 const ONCE = {once: true};
 
 let queryParamTime = AFRAME.utils.getUrlParameter('time').trim();
-if (isNaN(queryParamTime)) {
+if (!queryParamTime || isNaN(queryParamTime)) {
   queryParamTime = undefined;
 } else {
   queryParamTime = parseFloat(queryParamTime);
