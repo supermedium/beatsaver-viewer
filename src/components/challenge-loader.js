@@ -95,6 +95,7 @@ AFRAME.registerComponent('challenge-loader', {
  */
 function jsonParseClean (str) {
   try {
+    str = str.trim();
     str = str.replace(/\u0000/g, '').replace(/\u\d\d\d\d/g, '');
     str = str.replace('\b', ' ');
     if (str[0] !== '{') {
@@ -102,13 +103,29 @@ function jsonParseClean (str) {
     }
 
     // Remove Unicode escape sequences.
-    let stringified = JSON.stringify(str);
-    stringified = stringified.replace(/\\u..../g, ' ');
-
-    return JSON.parse(JSON.parse(stringified));
+    // stringified = stringified.replace(/\\u..../g, ' ');
+    return jsonParseLoop(str, 0);
   } catch (e) {
     // Should not reach here.
     console.log(e, str);
     return null;
+  }
+}
+
+const errorRe1 = /column (\d+)/m;
+const errorRe2 = /position (\d+)/m;
+
+function jsonParseLoop (str, i) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    let match = e.toString().match(errorRe1);
+    if (!match) { match = e.toString().match(errorRe2); }
+    if (!match) { throw e; }
+    const errorPos = parseInt(match[1]);
+    str = str.replace(str[errorPos], 'x');
+    str = str.replace(str[errorPos + 1], 'x');
+    str = str.replace(str[errorPos + 2], 'x');
+    return jsonParseLoop(str, i + 1);
   }
 }
