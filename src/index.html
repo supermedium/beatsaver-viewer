@@ -34,6 +34,7 @@
       {% else %}
         inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js"
       {% endif %}
+      iframe-url
       loading-screen="backgroundColor: #000;"
       pool__beat-arrow-blue="mixin: arrowBlueBeat; size: 10; container: #beatContainer"
       pool__beat-arrow-red="mixin: arrowRedBeat; size: 10; container: #beatContainer"
@@ -112,5 +113,7 @@
     <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
     {% include './templates/controls.html' %}
     {% include './templates/ga.html' %}
+
+    <span id="iframeUrl"></span>
   </body>
 </html>
