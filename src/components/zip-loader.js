@@ -1,7 +1,7 @@
 const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
-AFRAME.registerComponent('challenge-loader', {
+AFRAME.registerComponent('zip-loader', {
   schema: {
     id: {default: AFRAME.utils.getUrlParameter('id')},
     difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
@@ -30,9 +30,11 @@ AFRAME.registerComponent('challenge-loader', {
   fetchZip: function (id, difficulty) {
     this.el.emit('challengeloadstart', null, false);
 
-    // Unzip.
+    // Fetch and unzip.
+    const zipUrl = AFRAME.utils.getUrlParameter('zip') ||
+                   `https://beatsaver.com/storage/songs/${short}/${id}.zip`;
     const [short] = id.split('-');
-    const loader = new ZipLoader(`https://beatsaver.com/storage/songs/${short}/${id}.zip`);
+    const loader = new ZipLoader(zipUrl);
 
     loader.on('error', err => {
       this.el.emit('challengeloaderror', null);

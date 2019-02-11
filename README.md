@@ -27,6 +27,10 @@ containing the song ID and difficulty:
 <iframe src="https://supermedium.com/beatsaver-viewer/?id=811-535&difficulty=Expert">
 ```
 
+To directly preview a BeatSaver ZIP, use the `zip` parameter in the URL:
+
+`https://supermedium.com/beatsaver-viewer/?zip={zipURL}`
+
 ## Roadmap
 
 - Safari support (BeatSaver currently serves OGGs which is not supported)
