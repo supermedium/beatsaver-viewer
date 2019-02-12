@@ -390,7 +390,7 @@
       id="loadingText"
       mixin="font"
       bind__text="value: (isSongBufferProcessing && 'Processing audio...' || 'Downloading song...')"
-      bind__visible="(challenge.isLoading || isSongBufferProcessing) && !challenge.hasLoadError"
+      bind__visible="challenge.isLoading || isSongBufferProcessing && !challenge.hasLoadError"
       text="align: center; color: #FAFAFA; wrapCount: 18; width: 0.65"
       position="0 -0.32 0.001"></a-entity>
 
