@@ -417,7 +417,7 @@
     <a-entity
       id="loadingGestureButton"
       mixin="bigMenuButton"
-      bind__visible-raycastable="!challenge.isLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !isSongBufferProcessing"
+      bind__visible-raycastable="!challenge.isLoading && !isPlaying && !isPaused && !hasReceivedUserGesture && !isSongBufferProcessing && !challenge.hasLoadError"
       position="0 -0.31923 0.01"
       proxy-event="event: click; to: a-scene; as: usergesturereceive"
       slice9="width: 0.725"
