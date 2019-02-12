@@ -5,5 +5,7 @@ AFRAME.registerComponent('iframe-url', {
       window.location.toString()
         .replace('https://', '')
         .replace('http://', '');
+
+    document.getElementById('vrButton').style.display = 'none';
   }
 });
