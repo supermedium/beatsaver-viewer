@@ -3,7 +3,6 @@ import {BEAT_WARMUP_OFFSET, BEAT_WARMUP_SPEED, BEAT_WARMUP_TIME} from '../consta
 // So wall does not clip the stage ground.
 const RAISE_Y_OFFSET = 0.1;
 
-const WALL_THICKNESS = 0.50;
 const CEILING_THICKNESS = 1.5;
 const CEILING_HEIGHT = 1.4 + CEILING_THICKNESS / 2;
 const CEILING_WIDTH = 4;
@@ -38,7 +37,7 @@ AFRAME.registerComponent('wall', {
   update: function () {
     const el = this.el;
     const data = this.data;
-    const width = data.width * WALL_THICKNESS;
+    const width = data.width;
 
     const halfDepth = data.durationSeconds * data.speed / 2;
 
