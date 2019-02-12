@@ -7,7 +7,7 @@ skipDebug = parseInt(skipDebug, 10);
 /**
  * Load beat data (all the beats and such).
  */
-AFRAME.registerComponent('beat-loader', {
+AFRAME.registerComponent('beat-generator', {
   dependencies: ['stage-colors'],
 
   schema: {
@@ -72,7 +72,6 @@ AFRAME.registerComponent('beat-loader', {
     this.beatsPreloadTimeTotal =
       (this.data.beatAnticipationTime + this.data.beatWarmupTime) * 1000;
     this.bpm = undefined;
-    this.xhr = null;
     this.stageColors = this.el.components['stage-colors'];
     // Beats arrive at sword stroke distance synced with the music.
     this.swordOffset = 1.5;
@@ -109,7 +108,7 @@ AFRAME.registerComponent('beat-loader', {
     }
 
     this.beatDataProcessed = true;
-    console.log('[beat-loader] Finished processing beat data.');
+    console.log('[beat-generator] Finished processing beat data.');
   },
 
   /**

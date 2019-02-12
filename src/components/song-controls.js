@@ -152,7 +152,7 @@ AFRAME.registerComponent('song-controls', {
       this.song.startAudio(time);
 
       // Tell beat generator about seek.
-      this.el.components['beat-loader'].seek(time);
+      this.el.components['beat-generator'].seek(time);
 
       this.updatePlayhead();
     }, ONCE);

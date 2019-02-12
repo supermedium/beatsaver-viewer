@@ -181,7 +181,7 @@ AFRAME.registerComponent('beat', {
   },
 
   /**
-   * Called when summoned by beat-loader.
+   * Called when summoned by beat-generator.
    */
   onGenerate: function () {
     const el = this.el;

@@ -14,15 +14,15 @@ if (!!skipDebug) {
 /**
  * Active challenge song / audio.
  *
- * Order of song init in conjuction with beat-loader:
+ * Order of song init in conjuction with beat-generator:
  *
  * 1. previewStartTime is playing
  * 2. songloadfinish
- * 3. beat-loader preloading
+ * 3. beat-generator preloading
  * 4. preloaded beats generated
- * 5. beat-loader preloading finish
+ * 5. beat-generator preloading finish
  * 6. startAudio / songStartTime is set
- * 7. beat-loader continues off song current time
+ * 7. beat-generator continues off song current time
  */
 AFRAME.registerComponent('song', {
   schema: {
