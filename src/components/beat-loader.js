@@ -15,7 +15,6 @@ AFRAME.registerComponent('beat-loader', {
     beatSpeed: {default: 8.0},
     beatWarmupTime: {default: BEAT_WARMUP_TIME / 1000},
     beatWarmupSpeed: {default: BEAT_WARMUP_SPEED},
-    challengeId: {type: 'string'},  // If clicked play.
     difficulty: {type: 'string'},
     isPlaying: {default: false}
   },
@@ -117,7 +116,7 @@ AFRAME.registerComponent('beat-loader', {
    * Generate beats and stuff according to timestamp.
    */
   tick: function (time, delta) {
-    if (!this.data.isPlaying || !this.data.challengeId || !this.beatData) { return; }
+    if (!this.data.isPlaying || !this.beatData) { return; }
 
     const song = this.el.components.song;
     const prevBeatsTime = this.beatsTime + skipDebug;
@@ -317,7 +316,7 @@ AFRAME.registerComponent('beat-loader', {
         child.components.beat.returnToPool();
       }
       if (child.components.wall) {
-        child.components.wall.returnToPool(true);
+        child.components.wall.returnToPool();
       }
     }
   },

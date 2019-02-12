@@ -1,39 +1,31 @@
 const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
+const zipUrl = AFRAME.utils.getUrlParameter('zip');
+
 AFRAME.registerComponent('zip-loader', {
   schema: {
-    id: {default: AFRAME.utils.getUrlParameter('id')},
+    id: {default: AFRAME.utils.getUrlParameter('id') || '811-535'},
     difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
   },
 
   update: function (oldData) {
     // Difficulty select.
     if (oldData.difficulty && oldData.difficulty !== this.data.difficulty) {
-      this.fetchZip(this.data.id, this.data.difficulty);
+      this.fetchZip(zipUrl || getZipUrl(this.data.id), this.data.difficulty);
       this.el.sceneEl.emit('cleargame', null, false);
     }
   },
 
   play: function () {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
-
-    if (this.data.id) {
-      this.fetchZip(this.data.id, this.data.difficulty);
-      return;
-    }
-
-    // No parameter. Just Beat It!
-    this.fetchZip('811-535', 'Expert');
+    this.fetchZip(zipUrl || getZipUrl(this.data.id), this.data.difficulty);
   },
 
-  fetchZip: function (id, difficulty) {
+  fetchZip: function (zipUrl, difficulty) {
     this.el.emit('challengeloadstart', null, false);
 
     // Fetch and unzip.
-    const zipUrl = AFRAME.utils.getUrlParameter('zip') ||
-                   `https://beatsaver.com/storage/songs/${short}/${id}.zip`;
-    const [short] = id.split('-');
     const loader = new ZipLoader(zipUrl);
 
     loader.on('error', err => {
@@ -53,7 +45,7 @@ AFRAME.registerComponent('zip-loader', {
         audio: '',
         beats: '',
         difficulty: difficulty,
-        id: id,
+        id: this.data.id,
         image: '',
         info: ''
       };
@@ -130,4 +122,9 @@ function jsonParseLoop (str, i) {
     str = str.replace(str[errorPos + 2], 'x');
     return jsonParseLoop(str, i + 1);
   }
+}
+
+function getZipUrl (id) {
+  const [short] = id.split('-');
+  return `https://beatsaver.com/storage/songs/${short}/${id}.zip`;
 }

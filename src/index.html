@@ -17,9 +17,9 @@
   <body>
     <a-scene
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
-      bind__beat-loader="challengeId: challenge.id; difficulty: challenge.difficulty; isPlaying: isPlaying"
+      bind__beat-loader="difficulty: challenge.difficulty; isPlaying: isPlaying"
       bind__pauser="enabled: isPlaying"
-      bind__song="audio: challenge.audio; challengeId: challenge.id; difficulty: challenge.difficulty; isPaused: isPaused; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song="audio: challenge.audio; difficulty: challenge.difficulty; isPaused: isPaused; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
       bind__song-controls="difficulty: challenge.difficulty; isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
       bind__zip-loader="difficulty: challenge.difficulty; id: challenge.id"
       console-shortcuts
@@ -42,7 +42,7 @@
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
       pool__beat-glow="mixin: beatGlow; size: 20; container: #beatContainer"
-      pool__wall="mixin: wall; size: 10; container: #beatContainer"
+      pool__wall="mixin: wall; size: 15; container: #beatContainer"
       proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
       proxy-event__resumegame="event: gamemenuresume; as: textglownormal; to: a-scene"

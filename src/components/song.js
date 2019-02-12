@@ -28,7 +28,6 @@ AFRAME.registerComponent('song', {
   schema: {
     audio: {default: ''},
     analyserEl: {type: 'selector', default: '#audioAnalyser'},
-    challengeId: {default: ''},
     difficulty: {default: ''},
     hasReceivedUserGesture: {default: false},
     isBeatsPreloaded: {default: false},
@@ -63,12 +62,28 @@ AFRAME.registerComponent('song', {
         this.audioAnalyser.resumeContext();
       }
       this.isPlaying = true;
-      return;
+    }
+
+    // Difficulty select
+    if (oldData.difficulty && oldData.difficulty !== data.difficulty) {
+      this.onRestart();
+    }
+
+    // Play if we have loaded and were waiting for beats to preload.
+    if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {
+      this.startAudio();
+    }
+
+    // New challenge, load audio and play when ready.
+    if (oldData.audio !== data.audio && data.audio) {
+      this.el.sceneEl.emit('songprocessingstart', null, false);
+      this.getAudio().then(source => {
+        this.el.sceneEl.emit('songprocessingfinish', null, false);
+      }).catch(console.error);
     }
 
     // Pause / stop.
-    if ((oldData.isPlaying && !data.isPlaying) ||
-        (!oldData.isPaused && data.isPaused)) {
+    if (!oldData.isPaused && data.isPaused) {
       if (navigator.userAgent.indexOf('Chrome') !== -1) {
         // Stupid Chrome audio policies. Can't resume.
         this.source.playbackRate.value = 0.000000001;
@@ -76,34 +91,6 @@ AFRAME.registerComponent('song', {
         this.audioAnalyser.suspendContext();
       }
       this.isPlaying = false;
-      return;
-    }
-
-    // New challenge, play if we have loaded and were waiting for beats to preload.
-    if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {
-      this.startAudio();
-      return;
-    }
-
-    if (oldData.challengeId && !data.challengeId) {
-      this.stopAudio();
-      return;
-    }
-
-    // Difficulty select
-    if (oldData.difficulty && oldData.difficulty !== !data.difficulty) {
-      this.onRestart();
-      return;
-    }
-
-    // New challenge, load audio and play when ready.
-    if ((oldData.difficulty && oldData.difficulty !== !data.difficulty) ||
-        (oldData.audio !== data.audio && data.audio)) {
-      this.el.sceneEl.emit('songprocessingstart', null, false);
-      this.getAudio().then(source => {
-        this.el.sceneEl.emit('songprocessingfinish', null, false);
-      }).catch(console.error);
-
     }
   },
 
@@ -155,6 +142,7 @@ AFRAME.registerComponent('song', {
     const gain = this.audioAnalyser.gainNode.gain;
     gain.cancelScheduledValues(0);
 
+    this.el.sceneEl.emit('songprocessingstart', null, false);
     this.data.analyserEl.addEventListener('audioanalyserbuffersource', evt => {
       this.source = evt.detail;
       this.el.sceneEl.emit('songprocessingfinish', null, false);

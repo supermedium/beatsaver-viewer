@@ -128,6 +128,8 @@ AFRAME.registerComponent('song-controls', {
 
     // Difficulty select.
     this.difficultyOptions.addEventListener('click', evt => {
+      this.songProgress.innerHTML = formatSeconds(0);
+      this.playhead.style.width = '0%';
       this.el.sceneEl.emit('difficultyselect', evt.target.dataset.difficulty, false);
       this.controls.classList.remove('difficultyOptionsActive');
     });

@@ -87,6 +87,8 @@ AFRAME.registerState({
 
     difficultyselect: (state, payload) => {
       state.challenge.difficulty = payload;
+      state.challenge.isBeatsPreloaded = false;
+      state.isPaused = false;
     },
 
     gamemenuresume: state => {
@@ -131,8 +133,7 @@ AFRAME.registerState({
   computeState: state => {
     state.isPlaying =
       !state.isPaused && !state.isSongBufferProcessing &&
-      !state.challenge.isLoading && !!state.challenge.id &&
-      state.hasReceivedUserGesture;
+      !state.challenge.isLoading && state.hasReceivedUserGesture;
   }
 });
 
