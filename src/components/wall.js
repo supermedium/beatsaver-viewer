@@ -70,7 +70,7 @@ AFRAME.registerComponent('wall', {
   },
 
   pause: function () {
-    // this.el.object3D.visible = false;
+    this.el.object3D.visible = false;
     this.el.removeAttribute('data-collidable-head');
   },
 
@@ -100,7 +100,7 @@ AFRAME.registerComponent('wall', {
     }
 
     if (this.el.object3D.position.z > (this.maxZ + halfDepth)) {
-      // this.returnToPool();
+      this.returnToPool();
       return;
     }
   },
