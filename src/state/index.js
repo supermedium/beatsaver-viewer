@@ -69,7 +69,7 @@ AFRAME.registerState({
     challengeloaderror: (state, payload) => {
       state.challenge.hasLoadError = true;
       state.challenge.isLoading = false;
-      state.challenge.loadErrorText = `Sorry, song ${AFRAME.utils.getUrlParameter('id')} was not found.`;
+      state.challenge.loadErrorText = `Sorry, song ${AFRAME.utils.getUrlParameter('id')} was not found or ZIP requires CORS headers.`;
     },
 
     controllerconnected: (state, payload) => {
