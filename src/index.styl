@@ -16,11 +16,11 @@ html
   display none
   font-family $font
   left 0
-  margin 0 auto 30px auto
+  margin 0 auto 20px auto
   padding 10px
   position fixed
   right 0
-  width 600px
+  width 675px
   z-index 99999999
 
   &.challengeLoaded
@@ -93,14 +93,18 @@ html
   #songSubName
     color $lightred
 
+  #songInfoSelect
+    align-items center
+    display flex
+    position absolute
+    right 10px
+
   #controlsDifficulty
     border 1px solid $gray
     border-radius 5px
     color $gray
     cursor pointer
     padding 5px 10px
-    position absolute
-    right 10px
     text-align center
     transition all .1s
     p
@@ -118,7 +122,7 @@ html
   background #020202
   border 1px solid $gray
   border-radius 5px
-  bottom 60px
+  bottom 50px
   color $white
   display none
   flex-direction column
@@ -129,7 +133,7 @@ html
   opacity 0
   padding 0
   position absolute
-  right 5px
+  right 35px
   transition all .2s
   li
     cursor pointer
@@ -162,11 +166,11 @@ html
   background url(assets/img/enter-vr-button-background.png) no-repeat
   background-size cover
   border 0
-  bottom 45px
+  bottom 35px
   cursor pointer
   height 23.5px
   position absolute
-  right 20px
+  right 30px
   width 42px
   z-index 9999999
 
@@ -193,20 +197,92 @@ html
 .a-loader-title
   display none !important
 
-#iframeUrl
-  background rgba(0, 0, 0, 0.75)
-  border-radius 10px 10px 0 0
-  bottom 0
-  color $white
-  font-family $font
-  font-size 12px
-  padding 5px 10px
-  position fixed
+#songInfoContainer #searchToggle
+  cursor pointer
+  height 30px
+  padding 0 5px 0 20px
+  width 30px
+  svg
+    left 5px
+    position relative
+    top 5px
+    transform scale(1.5)
+  g
+    stroke $gray
+    transition stroke .1s
+  &:hover g
+    stroke $white
+
+#search
+  bottom 50px
+  align-items center
+  display flex
+  flex-direction column
+  justify-content center
   left 0
   margin 0 auto
+  position absolute
   right 0
-  text-align center
-  width fit-content
-  width -moz-fit-content
-  width -webkit-fit-content
-  z-index 999999999
+
+  input,
+  #url
+    background rgba(0, 0, 0, 0.85)
+    border-radius 10px
+    font-family $font
+    font-size 14px
+    position relative
+
+  input
+    border 1px solid $gray
+    bottom 15px
+    color $white
+    padding 8px 20px
+    width 340px
+
+  #url
+    border 1px solid #222
+    color $gray
+    padding 8px 20px
+    text-align center
+
+  #searchResultsContainer
+    background rgba(0, 0, 0, 0.95)
+    border 1px solid $gray
+    border-radius 10px
+    bottom 25px
+    display flex
+    flex-direction column
+    position relative
+    width 340px
+
+    > h3
+      color $gray
+      font-size 14px
+      text-align center
+      margin 8px 0 0 0
+
+  #searchResults
+    display flex
+    flex-direction column
+    margin 0
+    list-style none
+    padding 5px 0 5px 0
+
+    li
+      align-items center
+      background rgba(0, 0, 0, 0.95)
+      color $gray
+      cursor pointer
+      display flex
+      font-size 12px
+      margin 0
+      margin-bottom 2px
+      padding-left 10px
+      transition background .1s
+      &:hover
+        background rgba(30, 30, 30, 0.95)
+      img
+        height 24px
+      p
+        margin 0
+        padding-left 10px

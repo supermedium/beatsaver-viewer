@@ -10,6 +10,19 @@ const DEBUG_CHALLENGE = {
   songSubName: 'Rebecca Black'
 };
 
+const emptyChallenge = {
+  audio: '',
+  author: '',
+  difficulty: '',
+  id: '',
+  image: '',
+  songName: '',
+  songNameMedium: '',
+  songNameShort: '',
+  songSubName: '',
+  songSubNameShort: ''
+};
+
 /**
  * State handler.
  *
@@ -22,20 +35,12 @@ const DEBUG_CHALLENGE = {
  */
 AFRAME.registerState({
   initialState: {
-    challenge: {  // Actively playing challenge.
-      audio: '',
-      author: '',
-      difficulty: '',
+    challenge: Object.assign({  // Actively playing challenge.
       hasLoadError: false,
-      id: '',
-      image: '',
       isLoading: false,
       isBeatsPreloaded: false,  // Whether we have passed the negative time.
       loadErrorText: '',
-      songName: '',
-      songNameShort: '',
-      songSubNameShort: ''
-    },
+    }, emptyChallenge),
     hasReceivedUserGesture: false,
     inVR: false,
     isPaused: false,  // Playing, but paused.
@@ -112,6 +117,20 @@ AFRAME.registerState({
 
     songprocessingstart: state => {
       state.isSongBufferProcessing = true;
+    },
+
+    /**
+     * From search.
+     */
+    songselect: (state, payload) => {
+      state.challenge = Object.assign(state.challenge, emptyChallenge);
+      state.challenge.id = payload;
+      state.challenge.isBeatsPreloaded = false;
+      state.challenge.isLoading = true;
+
+      state.hasReceivedUserGesture = false;
+      state.isPaused = false;
+      state.isSongBufferProcessing = false;
     },
 
     usergesturereceive: state => {

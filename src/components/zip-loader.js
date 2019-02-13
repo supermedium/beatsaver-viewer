@@ -11,10 +11,13 @@ AFRAME.registerComponent('zip-loader', {
 
   update: function (oldData) {
     // Difficulty select.
-    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty) {
+    if (oldData.difficulty !== this.data.difficulty ||
+        oldData.id !== this.data.id) {
       this.fetchZip(zipUrl || getZipUrl(this.data.id), this.data.difficulty);
       this.el.sceneEl.emit('cleargame', null, false);
     }
+
+    this.el.sceneEl.emit('challengeset', this.data.id);
   },
 
   play: function () {

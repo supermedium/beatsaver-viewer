@@ -7,7 +7,7 @@
     "lint": "semistandard -v | snazzy",
     "lint:fix": "semistandard --fix",
     "predeploy": "npm run build && shx mkdir -p .ghpages && cp -r index.html assets build vendor .ghpages",
-    "start": "webpack-dev-server --host 0.0.0.0 --progress --colors --hot --inline --port 9999"
+    "start": "webpack-dev-server --host 0.0.0.0 --progress --colors --hot --inline --port 3000"
   },
   "dependencies": {
     "aframe-aabb-collider-component": "^3.1.0",
@@ -24,7 +24,7 @@
     "aframe-slice9-component": "^1.0.0",
     "aframe-state-component": "^6.4.2",
     "aframe-thumb-controls-component": "^1.1.0",
-    "algoliasearch": "^3.29.0",
+    "algoliasearch": "^3.32.0",
     "ansi-html": "0.0.7",
     "autoprefixer": "^7.2.6",
     "babel": "6.23.0",
@@ -32,6 +32,7 @@
     "babel-loader": "7.0.0",
     "babel-minify-webpack-plugin": "0.2.0",
     "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "body-parser": "1.18.2",
     "classnames": "^2.2.5",
@@ -45,6 +46,7 @@
     "nunjucks": "3.0.1",
     "postcss": "^6.0.23",
     "postcss-loader": "^0.9.1",
+    "preact": "^8.4.2",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
