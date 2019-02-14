@@ -6,6 +6,7 @@ const zipUrl = AFRAME.utils.getUrlParameter('zip');
 AFRAME.registerComponent('zip-loader', {
   schema: {
     id: {default: AFRAME.utils.getUrlParameter('id') || '811-535'},
+    isSafari: {default: false},
     difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
   },
 
@@ -26,6 +27,8 @@ AFRAME.registerComponent('zip-loader', {
   },
 
   fetchZip: function (zipUrl, difficulty) {
+    if (this.data.isSafari) { return; }
+
     this.el.emit('challengeloadstart', null, false);
 
     // Fetch and unzip.

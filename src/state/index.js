@@ -23,6 +23,8 @@ const emptyChallenge = {
   songSubNameShort: ''
 };
 
+const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
+
 /**
  * State handler.
  *
@@ -36,15 +38,16 @@ const emptyChallenge = {
 AFRAME.registerState({
   initialState: {
     challenge: Object.assign({  // Actively playing challenge.
-      hasLoadError: false,
+      hasLoadError: isSafari,
       isLoading: false,
       isBeatsPreloaded: false,  // Whether we have passed the negative time.
-      loadErrorText: '',
+      loadErrorText: isSafari ? 'iOS and Safari support coming soon! We need to convert songs to MP3 first.' : '',
     }, emptyChallenge),
     hasReceivedUserGesture: false,
     inVR: false,
     isPaused: false,  // Playing, but paused.
     isPlaying: false,  // Actively playing.
+    isSafari: isSafari,
     isSongBufferProcessing: false,
   },
 
