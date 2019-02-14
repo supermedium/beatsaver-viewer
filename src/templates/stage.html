@@ -28,12 +28,12 @@
 
   <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
 
+  <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
+
   <a-entity
     id="stageadditiveobj"
     obj-model="obj: #stageAdditiveObj"
     materials="name: stageAdditive"></a-entity>
-
-  <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
 
   <a-entity id="logo" bind__visible="!isPlaying" position="0 4.75 -5" rotation="90 0 0">
     <a-entity id="logoBackObj" obj-model="obj: #logoBackObj" materials="name: logoadditive"></a-entity>
