@@ -27,9 +27,18 @@ containing the song ID and difficulty:
 <iframe src="https://supermedium.com/beatsaver-viewer/?id=811-535&difficulty=Expert">
 ```
 
-To directly preview a BeatSaver ZIP, use the `zip` parameter in the URL:
+To directly preview a BeatSaver ZIP file, use the `?zip` parameter in the URL:
 
 `https://supermedium.com/beatsaver-viewer/?zip={zipURL}`
+
+Note the ZIP must be served with CORS header. An easy way to do this is to
+prepend `https://cors-anywhere.herokuapp.com/` to your ZIP URL:
+
+`https://supermedium.com/beatsaver-viewer/?zip=https://cors-anywhere.herokuapp.com/{YOUR_FULL_ZIP_URL}`
+
+To directly link to a seeked time, use the `?time` parameter in the URL (seconds):
+
+`https://supermedium.com/beatsaver-viewer/?time=15`
 
 ## Roadmap
 
