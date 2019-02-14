@@ -7,7 +7,7 @@
     "lint": "semistandard -v | snazzy",
     "lint:fix": "semistandard --fix",
     "predeploy": "npm run build && shx mkdir -p .ghpages && cp -r index.html assets build vendor .ghpages",
-    "start": "webpack-dev-server --host 0.0.0.0 --progress --colors --hot --inline --port 3000"
+    "start": "webpack-dev-server --host 0.0.0.0 --progress --colors --hot --inline --port 9999"
   },
   "dependencies": {
     "aframe-aabb-collider-component": "^3.1.0",
