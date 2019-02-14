@@ -29,7 +29,7 @@ AFRAME.registerComponent('zip-loader', {
   fetchZip: function (zipUrl, difficulty) {
     if (this.data.isSafari) { return; }
 
-    this.el.emit('challengeloadstart', null, false);
+    this.el.emit('challengeloadstart', this.data.id, false);
 
     // Fetch and unzip.
     const loader = new ZipLoader(zipUrl);
@@ -73,12 +73,17 @@ AFRAME.registerComponent('zip-loader', {
         if (filename.endsWith(`${event.difficulty}.json`)) {
           event.beats = loader.extractAsJSON(filename);
         }
-        if (filename.endsWith('jpg')) {
-          event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
+
+        if (!this.data.id) {
+          // Only needed if loading ZIP directly and not from API.
+          if (filename.endsWith('jpg')) {
+            event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
+          }
+          if (filename.endsWith('png')) {
+            event.image = loader.extractAsBlobUrl(filename, 'image/png');
+          }
         }
-        if (filename.endsWith('png')) {
-          event.image = loader.extractAsBlobUrl(filename, 'image/png');
-        }
+
         if (filename.endsWith('ogg')) {
           event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }

@@ -56,7 +56,13 @@ AFRAME.registerState({
       state.challenge.isBeatsPreloaded = true;
     },
 
-    challengeloadstart: state => {
+    challengeloadstart: (state, payload) => {
+      if (payload) {
+        const id = payload;
+        const [short] = id.split('-');
+        state.challenge.image =
+          `https://beatsaver.com/storage/songs/${short}/${id}.jpg`;
+      }
       state.challenge.isLoading = true;
     },
 
@@ -65,7 +71,7 @@ AFRAME.registerState({
       state.challenge.author = payload.info.author;
       state.challenge.difficulty = payload.difficulty;
       state.challenge.id = payload.id;
-      state.challenge.image = payload.image
+      if (payload.image) { state.challenge.image = payload.image }
       state.challenge.isLoading = false;
       state.challenge.songName = payload.info.songName;
       state.challenge.songNameShort = truncate(payload.info.songName, 18);

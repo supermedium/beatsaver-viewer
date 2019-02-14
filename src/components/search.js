@@ -55,10 +55,12 @@ class Search extends Component {
   }
 
   search (evt) {
-    const queryObject = {hitsPerPage: 5, query: evt.target.value};
-    algolia.search(queryObject, (err, content) => {
-      this.setState({results: content.hits});
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `https://beatsaver.com/api/songs/search/song/${evt.target.value}`);
+    xhr.addEventListener('load', () => {
+      this.setState({results: JSON.parse(xhr.responseText).songs});
     });
+    xhr.send();
   }
 
   selectSong (evt) {
@@ -84,7 +86,7 @@ class Search extends Component {
             {this.state.results.map((result, i) => (
               <li class="searchResult" data-id={result.version} onClick={this.selectSong}
                   key={result.version} data-i={i}>
-                <img src={`https://saber.supermedium.com/${result.id}-image.jpg`}/>
+                <img src={result.coverUrl}/>
                 <p>
                   {result.songSubName && truncate(result.songSubName, 20) + ' \u2014 ' || '' }
                   {truncate(result.songName, 25)}</p>
@@ -94,8 +96,7 @@ class Search extends Component {
         </div>
         <p
           id="url"
-          style={{display: this.state.open ? 'none' : 'block'}}
-          onClick={() => this.setState({open: true})}>{this.state.url}</p>
+          style={{display: this.state.open ? 'none' : 'block'}}>{this.state.url}</p>
         <input
           id="searchInput"
           type="search"
