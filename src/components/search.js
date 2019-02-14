@@ -62,7 +62,9 @@ class Search extends Component {
   }
 
   selectSong (evt) {
-    scene.emit('songselect', evt.target.closest('.searchResult').dataset.id);
+    scene.emit(
+      'songselect',
+      this.state.results[evt.target.closest('.searchResult').dataset.i]);
     this.setState({open: false});
 
     // Count as a pageview.
@@ -79,12 +81,13 @@ class Search extends Component {
           style={{display: this.state.open && this.state.results.length ? 'flex' : 'none'}}>
           <h3>Search Results (beatsaver.com)</h3>
           <ul id="searchResults">
-            {this.state.results.map(result => (
-              <li class="searchResult" data-id={result.version} onClick={this.selectSong}>
+            {this.state.results.map((result, i) => (
+              <li class="searchResult" data-id={result.version} onClick={this.selectSong}
+                  key={result.version} data-i={i}>
                 <img src={`https://saber.supermedium.com/${result.id}-image.jpg`}/>
                 <p>
                   {result.songSubName && truncate(result.songSubName, 20) + ' \u2014 ' || '' }
-                  {truncate(result.songName, 30)}</p>
+                  {truncate(result.songName, 25)}</p>
               </li>
             ))}
           </ul>

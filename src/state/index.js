@@ -124,7 +124,14 @@ AFRAME.registerState({
      */
     songselect: (state, payload) => {
       state.challenge = Object.assign(state.challenge, emptyChallenge);
-      state.challenge.id = payload;
+      state.challenge.id = payload.version;
+      state.challenge.author = payload.author;
+      state.challenge.image = 'assets/img/logo.png';
+      state.challenge.songName = payload.songName;
+      state.challenge.songNameShort = truncate(payload.songName, 18);
+      state.challenge.songNameMedium = truncate(payload.songName, 30);
+      state.challenge.songSubName = payload.songSubName;
+      state.challenge.songSubNameShort = truncate(payload.songSubName, 21);
       state.challenge.isBeatsPreloaded = false;
       state.challenge.isLoading = true;
 
