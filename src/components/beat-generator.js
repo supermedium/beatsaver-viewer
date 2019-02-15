@@ -310,6 +310,7 @@ AFRAME.registerComponent('beat-generator', {
     if (!isSeeking) {
       this.beatsPreloadTime = 0;
       this.beatsTime = 0;
+      this.eventsTime = 0;
     }
     for (let i = 0; i < this.beatContainer.children.length; i++) {
       let child = this.beatContainer.children[i];
