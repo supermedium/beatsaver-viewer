@@ -38,6 +38,7 @@ class Search extends Component {
     // Update URL.
     scene.addEventListener('challengeset', evt => {
       const id = evt.detail;
+      if (!id) { return; }
       this.setState({url: `supermedium.com/beatsaver-viewer?id=${id}`});
       setIdQueryParam(id);
     });
