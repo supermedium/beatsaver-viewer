@@ -23,7 +23,8 @@ const emptyChallenge = {
   songSubNameShort: ''
 };
 
-const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') !== -1;
+const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') !== -1 &&
+                 navigator.userAgent.toLowerCase().indexOf('chrome') === -1;
 
 /**
  * State handler.
