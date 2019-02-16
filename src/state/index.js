@@ -15,7 +15,7 @@ const emptyChallenge = {
   author: '',
   difficulty: '',
   id: '',
-  image: '',
+  image: 'assets/img/logo.png',
   songName: '',
   songNameMedium: '',
   songNameShort: '',

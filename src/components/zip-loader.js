@@ -89,6 +89,10 @@ AFRAME.registerComponent('zip-loader', {
         }
       });
 
+      if (!this.data.id && !event.image) {
+        event.image = 'assets/img/logo.png';
+      }
+
       this.el.emit('challengeloadend', event, false);
     });
     loader.load();
