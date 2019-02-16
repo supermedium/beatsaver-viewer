@@ -133,6 +133,27 @@ AFRAME.registerComponent('song-controls', {
       this.el.sceneEl.emit('difficultyselect', evt.target.dataset.difficulty, false);
       this.controls.classList.remove('difficultyOptionsActive');
     });
+
+    // Hide volume if click anywhere.
+    document.addEventListener('click', evt => {
+      if (evt.target.closest('#volumeSliderContainer') ||
+          evt.target.closest('#controlsVolume')) { return; }
+      const slider = document.getElementById('volumeSliderContainer');
+      const active = slider.classList.contains('volumeActive');
+      if (!active) { return; }
+      slider.classList.remove('volumeActive');
+    });
+
+    // Toggle volume slider.
+    document.getElementById('controlsVolume').addEventListener('click', evt => {
+      document.getElementById('volumeSliderContainer').classList.toggle('volumeActive');
+    });
+
+    // Update volume.
+    document.getElementById('volumeSlider').addEventListener('change', evt => {
+      this.song.audioAnalyser.gainNode.gain.cancelScheduledValues(0);
+      this.song.audioAnalyser.gainNode.gain.value = evt.target.value;
+    });
   },
 
   tick: function () {

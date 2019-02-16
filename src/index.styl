@@ -26,6 +26,32 @@ html
   &.challengeLoaded
     display flex
 
+  #controlsVolume
+    cursor pointer
+    padding 3px 10px 0 3px
+    img
+      height 20px
+      width 20px
+
+  #volumeSliderContainer
+    background rgba(0, 0, 0, 0.85)
+    border-radius 0 5px 5px 0
+    bottom 95px
+    cursor pointer
+    display none
+    left 9px
+    padding-top 4px
+    position absolute
+    transform rotate(-90deg)
+    z-index 999999999
+    &.volumeActive
+      display block
+
+    input
+      cursor pointer
+      padding 0
+      width 100px
+
   #pause
     cursor pointer
     display flex

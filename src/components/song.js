@@ -2,7 +2,6 @@ const utils = require('../utils');
 
 const GAME_OVER_LENGTH = 3.5;
 const ONCE = {once: true};
-const BASE_VOLUME = 0.75;
 
 let skipDebug = AFRAME.utils.getUrlParameter('skip');
 if (!!skipDebug) {
@@ -43,8 +42,8 @@ AFRAME.registerComponent('song', {
     this.songLoadingIndicator = document.getElementById('songLoadingIndicator');
     this.songStartTime = 0;
 
-    // Base volume.
-    this.audioAnalyser.gainNode.gain.value = BASE_VOLUME;
+    this.audioAnalyser.gainNode.gain.value =
+      document.getElementById('volumeSlider').value || 0.35;
 
     this.el.addEventListener('gamemenurestart', this.onRestart.bind(this));
   },
@@ -155,9 +154,6 @@ AFRAME.registerComponent('song', {
 
   startAudio: function (time) {
     const playTime = time || skipDebug || 0;
-
-    const gain = this.audioAnalyser.gainNode.gain;
-    gain.setValueAtTime(BASE_VOLUME, this.context.currentTime);
     this.songStartTime = this.context.currentTime - playTime;
     this.source.start(0, playTime);
     this.isPlaying = true;
