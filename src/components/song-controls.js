@@ -153,6 +153,8 @@ AFRAME.registerComponent('song-controls', {
     document.getElementById('volumeSlider').addEventListener('change', evt => {
       this.song.audioAnalyser.gainNode.gain.cancelScheduledValues(0);
       this.song.audioAnalyser.gainNode.gain.value = evt.target.value;
+      document.getElementById('beatContainer').components['beat-hit-sound']
+        .setVolume(evt.target.value);
     });
   },
 

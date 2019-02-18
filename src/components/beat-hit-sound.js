@@ -143,5 +143,16 @@ AFRAME.registerComponent('beat-hit-sound', {
     if (y === 1) { return LAYER_BOTTOM; }
     if (y === 1.70) { return LAYER_TOP; }
     return LAYER_MIDDLE;
+  },
+
+  setVolume: function (volume) {
+    volume = volume * 0.4;
+    for (let i = 1; i <= 10; i++) {
+      for (let j = 0; j < 4; j++) {
+        this.el.components[`sound__beathit${i}`].pool.children[j].setVolume(volume);
+        this.el.components[`sound__beathit${i}left`].pool.children[j].setVolume(volume);
+        this.el.components[`sound__beathit${i}right`].pool.children[j].setVolume(volume);
+      }
+    }
   }
 });
