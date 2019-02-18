@@ -34,7 +34,7 @@
       pool__beat-dot-blue="mixin: dotBlueBeat; size: 10; container: #beatContainer"
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
-      pool__beat-glow="mixin: beatGlow; size: 20; container: #beatContainer"
+      pool__beat-glow="mixin: beatGlow; size: 20; container: #glowContainer"
       pool__wall="mixin: wall; size: 30; container: #beatContainer"
       proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
@@ -148,8 +148,7 @@
   geometry="primitive: plane; width: 0.7; height: 0.7"
   material="shader: flat; fog: false; blending: additive; depthTest: false; transparent: true; src: #glowImg; opacity: 1"
   animation__opacity="property: components.material.material.opacity; from: 0.9; to: 0; dur: 300; easing: linear; startEvents: explode"
-  animation__scale="property: scale; from: 0.5 0.5 1; to: 1.5 1.5 1; dur: 300; easing: easeOutQuad; startEvents: explode"
-  ></a-mixin>
+  animation__scale="property: scale; from: 0.5 0.5 1; to: 1.5 1.5 1; dur: 300; easing: easeOutQuad; startEvents: explode"></a-mixin>
 
 <a-mixin
   id="wall"
@@ -415,6 +414,8 @@
   </a-entity>
 </a-entity>
 
+
+      <a-entity id="glowContainer"></a-entity>
 
       <a-entity
         id="saberParticles"
