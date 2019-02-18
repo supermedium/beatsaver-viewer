@@ -74,8 +74,8 @@ AFRAME.registerComponent('zip-loader', {
           event.beats = loader.extractAsJSON(filename);
         }
 
+        // Only needed if loading ZIP directly and not from API.
         if (!this.data.id) {
-          // Only needed if loading ZIP directly and not from API.
           if (filename.endsWith('jpg')) {
             event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
           }
@@ -89,8 +89,13 @@ AFRAME.registerComponent('zip-loader', {
         }
       });
 
-      if (!this.data.id && !event.image) {
-        event.image = 'assets/img/logo.png';
+      if (!event.image) {
+        if (this.data.id) {
+          const [short] = this.data.id.split('-');
+          event.image = `https://beatsaver.com/storage/songs/${short}/${this.data.id}.jpg`;
+        } else {
+          event.image = 'assets/img/logo.png';
+        }
       }
 
       this.el.emit('challengeloadend', event, false);
