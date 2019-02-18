@@ -314,23 +314,27 @@ AFRAME.registerComponent('beat', {
     this.el.parentNode.components['beat-hit-sound'].playSound(
       this.el, this.data.cutDirection);
 
+    // Play sound and particles for viewer.
     this.explodeEventDetail.position.copy(this.el.object3D.position);
     this.explodeEventDetail.rotation.copy(this.el.object3D.rotation);
     this.particles.emit('explode', this.explodeEventDetail, false);
 
     if (this.glow) {
       this.glow.play();
+      this.glow.object3D.visible = true;
       this.glow.object3D.position.copy(this.el.object3D.position);
       this.glow.object3D.rotation.z = Math.random() * 2.0;
       this.glow.emit('explode', null, false);
+
+      if (this.data.type !== 'mine') {
+        setTimeout(() => {
+          this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
+        }, 350);
+      }
     }
   },
 
   returnToPool: function () {
-    // Play sound and particles for viewer.
-    if (this.data.type !== 'mine') {
-      this.el.sceneEl.components['pool__beat-glow'].returnEntity(this.glow);
-    }
     this.el.sceneEl.components[this.poolName].returnEntity(this.el);
   },
 

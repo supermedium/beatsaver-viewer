@@ -40,7 +40,7 @@
       pool__beat-dot-blue="mixin: dotBlueBeat; size: 10; container: #beatContainer"
       pool__beat-dot-red="mixin: dotRedBeat; size: 10; container: #beatContainer"
       pool__beat-mine="mixin: mine; size: 12; container: #beatContainer"
-      pool__beat-glow="mixin: beatGlow; size: 20; container: #beatContainer"
+      pool__beat-glow="mixin: beatGlow; size: 20; container: #glowContainer"
       pool__wall="mixin: wall; size: 30; container: #beatContainer"
       proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
       proxy-event__pausegame="event: pausegame; as: textglowoff; to: a-scene"
@@ -70,6 +70,8 @@
       {% include './templates/gameMenu.html' %}
 
       {% include './templates/loading.html' %}
+
+      <a-entity id="glowContainer"></a-entity>
 
       <a-entity
         id="saberParticles"
