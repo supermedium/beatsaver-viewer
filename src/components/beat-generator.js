@@ -81,7 +81,7 @@ AFRAME.registerComponent('beat-generator', {
 
     this.el.addEventListener('cleargame', this.clearBeats.bind(this));
     this.el.addEventListener('challengeloadend', evt => {
-      this.beatData = evt.detail.beats;
+      this.beatData = evt.detail.beats[this.data.difficulty || evt.detail.difficulty];
       this.processBeats();
     });
   },

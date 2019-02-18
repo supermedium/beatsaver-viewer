@@ -57,13 +57,11 @@ AFRAME.registerState({
       state.challenge.isBeatsPreloaded = true;
     },
 
+    challengeimage: (state, payload) => {
+      state.challenge.image = payload;
+    },
+
     challengeloadstart: (state, payload) => {
-      const id = payload;
-      if (id) {
-        const [short] = id.split('-');
-        state.challenge.image =
-          `https://beatsaver.com/storage/songs/${short}/${id}.jpg`;
-      }
       state.challenge.isLoading = true;
     },
 

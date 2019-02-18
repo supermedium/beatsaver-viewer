@@ -2,6 +2,7 @@ const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
 const zipUrl = AFRAME.utils.getUrlParameter('zip');
+const CACHE = {};
 
 AFRAME.registerComponent('zip-loader', {
   schema: {
@@ -11,10 +12,8 @@ AFRAME.registerComponent('zip-loader', {
   },
 
   update: function (oldData) {
-    // Difficulty select.
-    if (oldData.difficulty !== this.data.difficulty ||
-        oldData.id !== this.data.id) {
-      this.fetchZip(zipUrl || getZipUrl(this.data.id), this.data.difficulty);
+    if ((oldData.id !== this.data.id || (oldData.difficulty !== this.data.difficulty))) {
+      this.fetchZip(zipUrl || getZipUrl(this.data.id));
       this.el.sceneEl.emit('cleargame', null, false);
     }
 
@@ -23,19 +22,46 @@ AFRAME.registerComponent('zip-loader', {
 
   play: function () {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
-    this.fetchZip(zipUrl || getZipUrl(this.data.id), this.data.difficulty);
   },
 
-  fetchZip: function (zipUrl, difficulty) {
+  fetchZip: function (zipUrl) {
     if (this.data.isSafari) { return; }
 
+    // Already fetching.
+    if (this.isFetching === zipUrl) { return; }
+
     this.el.emit('challengeloadstart', this.data.id, false);
+    this.isFetching = zipUrl;
+
+    // Already fetched.
+    if (CACHE[zipUrl]) {
+      this.el.emit('challengeloadend', CACHE[zipUrl]);
+      this.isFetching = '';
+      return;
+    }
+
+    // Get image first. Try jpg, if not then switch to png after.
+    if (this.data.id) {
+      const [short] = this.data.id.split('-');
+      const jpgPath = `https://beatsaver.com/storage/songs/${short}/${this.data.id}.jpg`;
+      const xhr = new XMLHttpRequest();
+      xhr.open('HEAD', jpgPath);
+      xhr.addEventListener('load', () => {
+        if (xhr.statusCode === 404) { return; }
+        this.el.emit('challengeimage', jpgPath);
+      });
+      xhr.addEventListener('error', () => {
+        this.el.emit('challengeimage', jpgPath.replace(/.jpg$/, '.png'));
+      });
+      xhr.send();
+    }
 
     // Fetch and unzip.
     const loader = new ZipLoader(zipUrl);
 
     loader.on('error', err => {
       this.el.emit('challengeloaderror', null);
+      this.isFetching = '';
     });
 
     loader.on('progress', evt => {
@@ -49,8 +75,7 @@ AFRAME.registerComponent('zip-loader', {
       let songBlob;
       const event = {
         audio: '',
-        beats: '',
-        difficulty: difficulty,
+        beats: {},
         id: this.data.id,
         image: '',
         info: ''
@@ -70,8 +95,11 @@ AFRAME.registerComponent('zip-loader', {
       }
 
       Object.keys(loader.files).forEach(filename => {
-        if (filename.endsWith(`${event.difficulty}.json`)) {
-          event.beats = loader.extractAsJSON(filename);
+        for (let i = 0; i < difficulties.length; i++) {
+          let difficulty = difficulties[i].difficulty;
+          if (filename.endsWith(`${difficulty}.json`)) {
+            event.beats[difficulty] = loader.extractAsJSON(filename);
+          }
         }
 
         // Only needed if loading ZIP directly and not from API.
@@ -89,17 +117,15 @@ AFRAME.registerComponent('zip-loader', {
         }
       });
 
-      if (!event.image) {
-        if (this.data.id) {
-          const [short] = this.data.id.split('-');
-          event.image = `https://beatsaver.com/storage/songs/${short}/${this.data.id}.jpg`;
-        } else {
-          event.image = 'assets/img/logo.png';
-        }
+      if (!event.image && !this.data.id) {
+        event.image = 'assets/img/logo.png';
       }
 
+      CACHE[zipUrl] = event;
+      this.isFetching = '';
       this.el.emit('challengeloadend', event, false);
     });
+
     loader.load();
   }
 });
