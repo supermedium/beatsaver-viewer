@@ -76,6 +76,7 @@ AFRAME.registerComponent('zip-loader', {
       const event = {
         audio: '',
         beats: {},
+        difficulties: null,
         id: this.data.id,
         image: '',
         info: ''
@@ -93,6 +94,8 @@ AFRAME.registerComponent('zip-loader', {
       if (!event.difficulty) {
         event.difficulty = difficulties.sort(d => d.rank)[0].difficulty;
       }
+      event.difficulties = difficulties.sort(d => d.rank).map(
+        difficulty => difficulty.difficulty);
 
       Object.keys(loader.files).forEach(filename => {
         for (let i = 0; i < difficulties.length; i++) {

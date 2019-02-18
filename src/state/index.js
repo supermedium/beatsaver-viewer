@@ -68,7 +68,10 @@ AFRAME.registerState({
     challengeloadend: (state, payload) => {
       state.challenge.audio = payload.audio;
       state.challenge.author = payload.info.author;
-      state.challenge.difficulty = payload.difficulty;
+      if (!state.challenge.difficulty ||
+          payload.difficulties.indexOf(state.challenge.difficulty) === -1) {
+        state.challenge.difficulty = payload.difficulty;
+      }
       state.challenge.id = payload.id;
       if (payload.image) {
         state.challenge.image = payload.image;
