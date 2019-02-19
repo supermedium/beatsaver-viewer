@@ -60,7 +60,7 @@ class Search extends Component {
     xhr.open('GET', `https://beatsaver.com/api/songs/search/song/${evt.target.value}`);
     xhr.addEventListener('load', () => {
       this.setState({results: JSON.parse(xhr.responseText).songs});
-      ga('send', 'event', 'search');
+      ga('send', 'event', 'search', 'search');
     });
     xhr.send();
   }
