@@ -5,6 +5,7 @@
 
 Web-based viewer for BeatSaver maps, built with [A-Frame] and JavaScript.
 
+
 **[CLICK TO VIEW][visit]**
 
 ![https://supermedium.com/beatsaver-viewer/?id=811-535&difficulty=Expert](https://raw.githubusercontent.com/supermedium/beatsaver-viewer/master/assets/img/sshot.jpg)
@@ -42,7 +43,7 @@ To directly link to a seeked time, use the `?time` parameter in the URL (seconds
 
 ## Roadmap
 
-- Safari support (BeatSaver currently serves OGGs which is not supported)
+- Safari support (BeatSaver currently serves OGGs which are not supported)
 - Custom saber viewer
 
 ## Community
