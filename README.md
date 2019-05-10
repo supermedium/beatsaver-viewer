@@ -55,6 +55,11 @@ affiliated with Beat Saber.*
 - [BeastSaber Discord](https://discordapp.com/invite/cZpFayw)
 - [BeatSaber Songs](https://beatsaber-songs.herokuapp.com/top/all)
 
+It is adopted officially by the community on the Discord though, used as the
+official tool for sharing maps online and featured on [BeastSaber](bsaber.com):
+
+![](https://user-images.githubusercontent.com/674727/57561078-abdc0300-733e-11e9-9476-88e1bc6b2867.png)
+
 ## Development
 
 Built with [A-Frame](https://aframe.io), a web framework that we created for
