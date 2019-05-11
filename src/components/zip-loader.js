@@ -92,7 +92,8 @@ AFRAME.registerComponent('zip-loader', {
       // Default to hardest.
       const difficulties = event.info.difficultyLevels;
       if (!event.difficulty) {
-        event.difficulty = difficulties.sort(d => d.rank)[0].difficulty;
+        event.difficulty = this.data.difficulty ||
+                           difficulties.sort(d => d.rank)[0].difficulty;
       }
       event.difficulties = difficulties.sort(d => d.rank).map(
         difficulty => difficulty.difficulty);
