@@ -10,9 +10,13 @@ AFRAME.registerComponent('zip-loader', {
     difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
   },
 
+  init: function () {
+    this.hash = '';
+  },
+
   update: function (oldData) {
     if ((oldData.id !== this.data.id || (oldData.difficulty !== this.data.difficulty))) {
-      this.fetchZip(zipUrl || getZipUrl(this.data.id, hash));
+      this.fetchData(this.data.id);
       this.el.sceneEl.emit('cleargame', null, false);
     }
 
@@ -23,6 +27,21 @@ AFRAME.registerComponent('zip-loader', {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
   },
 
+  /**
+   * Read API first to get hash and URLs.
+   */
+  fetchData: function (id) {
+    return fetch(`https://beatsaver.com/api/maps/detail/${id}/`).then(res => {
+      const data = res.json();
+      this.hash = data.hash;
+      this.el.sceneEl.emit(
+        'challengeimage',
+        'https://beatsaver.com/cdn/52f5/da23f3feb865d3af2fdf2e0ab972da4640745d62.jpg'
+      );
+      this.fetchZip(zipUrl || getZipUrl(this.data.id, this.hash));
+    });
+  },
+
   fetchZip: function (zipUrl) {
     if (this.data.isSafari) { return; }
 
@@ -31,22 +50,6 @@ AFRAME.registerComponent('zip-loader', {
 
     this.el.emit('challengeloadstart', this.data.id, false);
     this.isFetching = zipUrl;
-
-    // Get image first. Try jpg, if not then switch to png after.
-    if (this.data.id) {
-      const [short] = this.data.id.split('-');
-      const jpgPath = `https://beatsaver.com/storage/songs/${short}/${this.data.id}.jpg`;
-      const xhr = new XMLHttpRequest();
-      xhr.open('HEAD', jpgPath);
-      xhr.addEventListener('load', () => {
-        if (xhr.statusCode === 404) { return; }
-        this.el.emit('challengeimage', jpgPath);
-      });
-      xhr.addEventListener('error', () => {
-        this.el.emit('challengeimage', jpgPath.replace(/.jpg$/, '.png'));
-      });
-      xhr.send();
-    }
 
     // Fetch and unzip.
     const loader = new ZipLoader(zipUrl);
@@ -118,7 +121,6 @@ AFRAME.registerComponent('zip-loader', {
         event.image = 'assets/img/logo.png';
       }
 
-      console.log(event);
       this.isFetching = '';
       this.el.emit('challengeloadend', event, false);
     });
@@ -168,5 +170,5 @@ function jsonParseLoop (str, i) {
 }
 
 function getZipUrl (key, hash) {
-  return `https://cors-anywhere.herokuapp.com/https://beatsaver.com/api/download/key/${key}/`;
+  return `https://beatsaver.com/cdn/${key}/${hash}.zip`;
 }
