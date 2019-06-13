@@ -2,18 +2,17 @@ const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
 const zipUrl = AFRAME.utils.getUrlParameter('zip');
-const CACHE = {};
 
 AFRAME.registerComponent('zip-loader', {
   schema: {
-    id: {default: zipUrl ? '' : (AFRAME.utils.getUrlParameter('id') || '811-535')},
+    id: {default: zipUrl ? '' : (AFRAME.utils.getUrlParameter('id') || '811')},
     isSafari: {default: false},
     difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
   },
 
   update: function (oldData) {
     if ((oldData.id !== this.data.id || (oldData.difficulty !== this.data.difficulty))) {
-      this.fetchZip(zipUrl || getZipUrl(this.data.id));
+      this.fetchZip(zipUrl || getZipUrl(this.data.id, hash));
       this.el.sceneEl.emit('cleargame', null, false);
     }
 
@@ -32,13 +31,6 @@ AFRAME.registerComponent('zip-loader', {
 
     this.el.emit('challengeloadstart', this.data.id, false);
     this.isFetching = zipUrl;
-
-    // Already fetched.
-    if (CACHE[zipUrl]) {
-      this.el.emit('challengeloadend', CACHE[zipUrl]);
-      this.isFetching = '';
-      return;
-    }
 
     // Get image first. Try jpg, if not then switch to png after.
     if (this.data.id) {
@@ -84,24 +76,25 @@ AFRAME.registerComponent('zip-loader', {
 
       // Process info first.
       Object.keys(loader.files).forEach(filename => {
-        if (filename.endsWith('info.json')) {
+        if (filename.endsWith('info.dat')) {
           event.info = jsonParseClean(loader.extractAsText(filename));
         }
       });
 
       // Default to hardest.
+      event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
       const difficulties = event.info.difficultyLevels;
       if (!event.difficulty) {
         event.difficulty = this.data.difficulty ||
-                           difficulties.sort(d => d.rank)[0].difficulty;
+                           difficulties.sort(d => d._diificultyRank)[0]._difficulty;
       }
-      event.difficulties = difficulties.sort(d => d.rank).map(
-        difficulty => difficulty.difficulty);
+      event.difficulties = difficulties.sort(d => d._difficultyRank).map(
+        difficulty => difficulty._difficulty);
 
       Object.keys(loader.files).forEach(filename => {
         for (let i = 0; i < difficulties.length; i++) {
-          let difficulty = difficulties[i].difficulty;
-          if (filename.endsWith(`${difficulty}.json`)) {
+          let difficulty = difficulties[i]._difficulty;
+          if (filename.endsWith(`${difficulty}.dat`)) {
             event.beats[difficulty] = loader.extractAsJSON(filename);
           }
         }
@@ -125,7 +118,7 @@ AFRAME.registerComponent('zip-loader', {
         event.image = 'assets/img/logo.png';
       }
 
-      CACHE[zipUrl] = event;
+      console.log(event);
       this.isFetching = '';
       this.el.emit('challengeloadend', event, false);
     });
@@ -174,7 +167,6 @@ function jsonParseLoop (str, i) {
   }
 }
 
-function getZipUrl (id) {
-  const [short] = id.split('-');
-  return `https://beatsaver.com/storage/songs/${short}/${id}.zip`;
+function getZipUrl (key, hash) {
+  return `https://cors-anywhere.herokuapp.com/https://beatsaver.com/api/download/key/${key}/`;
 }

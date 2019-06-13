@@ -79,7 +79,7 @@ AFRAME.registerComponent('song-controls', {
         this.difficultyOptions.children[i].style.display = 'none';
       }
       evt.detail.info.difficultyLevels.forEach(difficulty => {
-        const option = this.difficultyOptions.querySelector(`[data-difficulty="${difficulty.difficulty}"]`);
+        const option = this.difficultyOptions.querySelector(`[data-difficulty="${difficulty._difficulty}"]`);
         option.style.display = 'inline-block';
       });
     });

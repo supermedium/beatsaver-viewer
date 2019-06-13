@@ -82,6 +82,7 @@ AFRAME.registerComponent('beat-generator', {
     this.el.addEventListener('cleargame', this.clearBeats.bind(this));
     this.el.addEventListener('challengeloadend', evt => {
       this.beatData = evt.detail.beats[this.data.difficulty || evt.detail.difficulty];
+      this.info = evt.detail.info;
       this.processBeats();
     });
   },
@@ -97,7 +98,7 @@ AFRAME.registerComponent('beat-generator', {
     this.beatData._events.sort(lessThan);
     this.beatData._obstacles.sort(lessThan);
     this.beatData._notes.sort(lessThan);
-    this.bpm = this.beatData._beatsPerMinute;
+    this.bpm = this.info._beatsPerMinute;
 
     // Some events have negative time stamp to initialize the stage.
     const events = this.beatData._events;
@@ -142,8 +143,7 @@ AFRAME.registerComponent('beat-generator', {
     // Load in stuff scheduled between the last timestamp and current timestamp.
     // Beats.
     const beatsTime = this.beatsTime + skipDebug;
-    const bpm = this.beatData._beatsPerMinute;
-    const msPerBeat = 1000 * 60 / this.beatData._beatsPerMinute;
+    const msPerBeat = 1000 * 60 / this.bpm;
     const notes = this.beatData._notes;
     for (let i = 0; i < notes.length; ++i) {
       let noteTime = notes[i]._time * msPerBeat;
