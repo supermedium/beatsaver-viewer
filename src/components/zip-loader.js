@@ -32,13 +32,14 @@ AFRAME.registerComponent('zip-loader', {
    */
   fetchData: function (id) {
     return fetch(`https://beatsaver.com/api/maps/detail/${id}/`).then(res => {
-      const data = res.json();
-      this.hash = data.hash;
-      this.el.sceneEl.emit(
-        'challengeimage',
-        'https://beatsaver.com/cdn/52f5/da23f3feb865d3af2fdf2e0ab972da4640745d62.jpg'
-      );
-      this.fetchZip(zipUrl || getZipUrl(this.data.id, this.hash));
+      res.json().then(data => {
+        this.hash = data.hash;
+        this.el.sceneEl.emit(
+          'challengeimage',
+          'https://beatsaver.com/cdn/52f5/da23f3feb865d3af2fdf2e0ab972da4640745d62.jpg'
+        );
+        this.fetchZip(zipUrl || getZipUrl(this.data.id, this.hash));
+      });
     });
   },
 
@@ -112,7 +113,7 @@ AFRAME.registerComponent('zip-loader', {
           }
         }
 
-        if (filename.endsWith('ogg')) {
+        if (filename.endsWith('egg')) {
           event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
       });

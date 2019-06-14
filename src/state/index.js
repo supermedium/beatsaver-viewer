@@ -66,8 +66,9 @@ AFRAME.registerState({
     },
 
     challengeloadend: (state, payload) => {
+      console.log(payload.audio);
       state.challenge.audio = payload.audio;
-      state.challenge.author = payload.info.author;
+      state.challenge.author = payload.info._levelAuthorName;
       if (!state.challenge.difficulty ||
           payload.difficulties.indexOf(state.challenge.difficulty) === -1) {
         state.challenge.difficulty = payload.difficulty;
@@ -77,11 +78,11 @@ AFRAME.registerState({
         state.challenge.image = payload.image;
       }
       state.challenge.isLoading = false;
-      state.challenge.songName = payload.info.songName;
-      state.challenge.songNameShort = truncate(payload.info.songName, 18);
-      state.challenge.songNameMedium = truncate(payload.info.songName, 30);
-      state.challenge.songSubName = payload.info.songSubName;
-      state.challenge.songSubNameShort = truncate(payload.info.songSubName, 21);
+      state.challenge.songName = payload.info._songName;
+      state.challenge.songNameShort = truncate(payload.info._songName, 18);
+      state.challenge.songNameMedium = truncate(payload.info._songName, 30);
+      state.challenge.songSubName = payload.info._songSubName;
+      state.challenge.songSubNameShort = truncate(payload.info._songSubName, 21);
     },
 
     challengeloaderror: (state, payload) => {

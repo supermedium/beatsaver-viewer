@@ -143,7 +143,7 @@ function debounce (func, wait, immediate) {
 };
 
 // Push state URL in browser.
-const idRe = /id=[\d-]+/
+const idRe = /id=[\d\w-]+/
 function setIdQueryParam (id) {
   let search = window.location.search.toString();
   if (search) {
