@@ -37,7 +37,7 @@ AFRAME.registerComponent('zip-loader', {
         this.hash = data.hash;
         this.el.sceneEl.emit(
           'challengeimage',
-          'https://beatsaver.com/cdn/52f5/da23f3feb865d3af2fdf2e0ab972da4640745d62.jpg'
+          `https://beatsaver.com${data.coverURL}`
         );
         this.fetchZip(zipUrl || getZipUrl(this.data.id, this.hash));
       });
