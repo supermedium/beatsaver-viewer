@@ -66,7 +66,6 @@ AFRAME.registerState({
     },
 
     challengeloadend: (state, payload) => {
-      console.log(payload.audio);
       state.challenge.audio = payload.audio;
       state.challenge.author = payload.info._levelAuthorName;
       if (!state.challenge.difficulty ||
@@ -138,14 +137,14 @@ AFRAME.registerState({
      */
     songselect: (state, payload) => {
       state.challenge = Object.assign(state.challenge, emptyChallenge);
-      state.challenge.id = payload.version;
-      state.challenge.author = payload.author;
+      state.challenge.id = payload.key;
+      state.challenge.author = payload.metadata.levelAuthorName;
       state.challenge.image = 'assets/img/logo.png';
-      state.challenge.songName = payload.songName;
-      state.challenge.songNameShort = truncate(payload.songName, 18);
-      state.challenge.songNameMedium = truncate(payload.songName, 30);
-      state.challenge.songSubName = payload.songSubName;
-      state.challenge.songSubNameShort = truncate(payload.songSubName, 21);
+      state.challenge.songName = payload.metadata.songName;
+      state.challenge.songNameShort = truncate(payload.metadata.songName, 18);
+      state.challenge.songNameMedium = truncate(payload.metadata.songName, 30);
+      state.challenge.songSubName = payload.metadata.songSubName;
+      state.challenge.songSubNameShort = truncate(payload.metadata.songSubName, 21);
       state.challenge.isBeatsPreloaded = false;
       state.challenge.isLoading = true;
 

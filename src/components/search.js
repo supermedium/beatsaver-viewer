@@ -1,8 +1,4 @@
-const algoliasearch = require('algoliasearch/lite');
 import {h, render, Component} from 'preact';
-
-const client = algoliasearch('QULTOY3ZWU', 'be07164192471df7e97e6fa70c1d041d');
-const algolia = client.initIndex('beatsaver');
 
 let scene;
 
@@ -57,9 +53,9 @@ class Search extends Component {
 
   search (evt) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://beatsaver.com/api/songs/search/song/${evt.target.value}`);
+    xhr.open('GET', `https://beatsaver.com/api/search/text/0?q=${evt.target.value}`);
     xhr.addEventListener('load', () => {
-      this.setState({results: JSON.parse(xhr.responseText).songs});
+      this.setState({results: JSON.parse(xhr.responseText).docs});
       ga('send', 'event', 'search', 'search');
     });
     xhr.send();
@@ -86,12 +82,12 @@ class Search extends Component {
           <h3>Search Results (beatsaver.com)</h3>
           <ul id="searchResults">
             {this.state.results.map((result, i) => (
-              <li class="searchResult" data-id={result.version} onClick={this.selectSong}
-                  key={result.version} data-i={i}>
-                <img src={result.coverUrl}/>
+              <li class="searchResult" data-id={result.key} onClick={this.selectSong}
+                  key={result.key} data-i={i}>
+                <img src={`https://beatsaver.com${result.coverURL}`}/>
                 <p>
-                  {result.songSubName && truncate(result.songSubName, 20) + ' \u2014 ' || '' }
-                  {truncate(result.songName, 25)}</p>
+                  {result.metadata.songSubName && truncate(result.metadata.songSubName, 20) + ' \u2014 ' || '' }
+                  {truncate(result.metadata.songName, 25)}</p>
               </li>
             ))}
           </ul>
