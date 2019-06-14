@@ -11,6 +11,7 @@ AFRAME.registerComponent('zip-loader', {
   },
 
   init: function () {
+    this.fetchedZip = ''
     this.hash = '';
   },
 
@@ -47,7 +48,7 @@ AFRAME.registerComponent('zip-loader', {
     if (this.data.isSafari) { return; }
 
     // Already fetching.
-    if (this.isFetching === zipUrl) { return; }
+    if (this.isFetching === zipUrl || this.fetchedZip === this.data.id) { return; }
 
     this.el.emit('challengeloadstart', this.data.id, false);
     this.isFetching = zipUrl;
@@ -67,6 +68,8 @@ AFRAME.registerComponent('zip-loader', {
     });
 
     loader.on('load', () => {
+      this.fetchedZip = this.data.id;
+
       let imageBlob;
       let songBlob;
       const event = {

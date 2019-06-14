@@ -139,7 +139,7 @@ AFRAME.registerState({
       state.challenge = Object.assign(state.challenge, emptyChallenge);
       state.challenge.id = payload.key;
       state.challenge.author = payload.metadata.levelAuthorName;
-      state.challenge.image = 'assets/img/logo.png';
+      state.challenge.image = `https://beatsaver.com${payload.coverURL}`;
       state.challenge.songName = payload.metadata.songName;
       state.challenge.songNameShort = truncate(payload.metadata.songName, 18);
       state.challenge.songNameMedium = truncate(payload.metadata.songName, 30);
