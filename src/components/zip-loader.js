@@ -15,12 +15,19 @@ AFRAME.registerComponent('zip-loader', {
     this.hash = '';
   },
 
+  init: function () {
+    if (zipUrl) {
+      this.fetchZip(zipUrl);
+    }
+  },
+
   update: function (oldData) {
+    if (!this.data.id) { return; }
+
     if ((oldData.id !== this.data.id || (oldData.difficulty !== this.data.difficulty))) {
       this.fetchData(this.data.id);
       this.el.sceneEl.emit('cleargame', null, false);
     }
-
     this.el.sceneEl.emit('challengeset', this.data.id);
   },
 
@@ -116,7 +123,7 @@ AFRAME.registerComponent('zip-loader', {
           }
         }
 
-        if (filename.endsWith('egg')) {
+        if (filename.endsWith('egg') || filename.endsWith('ogg')) {
           event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
         }
       });

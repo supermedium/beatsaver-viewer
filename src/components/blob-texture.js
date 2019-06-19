@@ -19,6 +19,7 @@ AFRAME.registerComponent('blob-texture', {
       image.onload = function () {
         const map = new THREE.Texture();
         map.image = image;
+        el.setAttribute('material', 'src', '');
         el.getObject3D('mesh').material.map = map;
         el.getObject3D('mesh').material.needsUpdate = true;
         map.needsUpdate = true;
