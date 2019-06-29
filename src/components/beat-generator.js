@@ -81,10 +81,18 @@ AFRAME.registerComponent('beat-generator', {
 
     this.el.addEventListener('cleargame', this.clearBeats.bind(this));
     this.el.addEventListener('challengeloadend', evt => {
+      this.allBeatData = evt.detail.beats;
       this.beatData = evt.detail.beats[this.data.difficulty || evt.detail.difficulty];
       this.info = evt.detail.info;
       this.processBeats();
     });
+  },
+
+  update: function (oldData) {
+    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty &&
+        this.allBeatData) {
+      this.beatData = this.allBeatData[this.data.difficulty];
+    }
   },
 
   /**
