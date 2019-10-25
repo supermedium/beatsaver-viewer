@@ -46,7 +46,7 @@ AFRAME.registerComponent('zip-loader', {
           'challengeimage',
           `https://beatsaver.com${data.coverURL}`
         );
-        this.fetchZip(zipUrl || getZipUrl(this.data.id, this.hash));
+        this.fetchZip(zipUrl || `https://beatsaver.com/${data.directDownload}`);
       });
     });
   },
