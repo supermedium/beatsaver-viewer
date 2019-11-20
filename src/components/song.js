@@ -63,6 +63,15 @@ AFRAME.registerComponent('song', {
       this.isPlaying = true;
     }
 
+    // New challenge, load audio and play when ready.
+    if (oldData.audio !== data.audio && data.audio) {
+      this.el.sceneEl.emit('songprocessingstart', null, false);
+      this.getAudio().then(source => {
+        this.el.sceneEl.emit('songprocessingfinish', null, false);
+      }).catch(console.error);
+      return;
+    }
+
     // Difficulty select
     if (oldData.difficulty && oldData.difficulty !== data.difficulty) {
       this.onRestart();
@@ -71,14 +80,6 @@ AFRAME.registerComponent('song', {
     // Play if we have loaded and were waiting for beats to preload.
     if (!oldData.isBeatsPreloaded && this.data.isBeatsPreloaded && this.source) {
       this.startAudio();
-    }
-
-    // New challenge, load audio and play when ready.
-    if (oldData.audio !== data.audio && data.audio) {
-      this.el.sceneEl.emit('songprocessingstart', null, false);
-      this.getAudio().then(source => {
-        this.el.sceneEl.emit('songprocessingfinish', null, false);
-      }).catch(console.error);
     }
 
     // Pause / stop.

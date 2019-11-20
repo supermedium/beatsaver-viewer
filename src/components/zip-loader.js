@@ -1,3 +1,4 @@
+const dragDrop = require('drag-drop')
 const utils = require('../utils');
 import ZipLoader from 'zip-loader';
 
@@ -17,6 +18,10 @@ AFRAME.registerComponent('zip-loader', {
     if (zipUrl) {
       this.fetchZip(zipUrl);
     }
+
+    dragDrop('#body', (files) => {
+      this.readFile(files[0]);
+    });
   },
 
   update: function (oldData) {
@@ -31,6 +36,67 @@ AFRAME.registerComponent('zip-loader', {
 
   play: function () {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
+  },
+
+  processFiles: function (loader) {
+    let imageBlob;
+    let songBlob;
+    const event = {
+      audio: '',
+      beats: {},
+      difficulties: null,
+      id: '',
+      image: '',
+      info: ''
+    };
+
+    // Process info first.
+    Object.keys(loader.files).forEach(filename => {
+      if (filename.endsWith('info.dat')) {
+        event.info = jsonParseClean(loader.extractAsText(filename));
+      }
+    });
+
+    // Default to hardest.
+    event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
+    const difficulties = event.info.difficultyLevels;
+    if (!event.difficulty) {
+      event.difficulty = this.data.difficulty ||
+                         difficulties.sort(d => d._diificultyRank)[0]._difficulty;
+    }
+    event.difficulties = difficulties.sort(d => d._difficultyRank).map(
+      difficulty => difficulty._difficulty);
+
+    Object.keys(loader.files).forEach(filename => {
+      for (let i = 0; i < difficulties.length; i++) {
+        let difficulty = difficulties[i]._difficulty;
+        if (filename.endsWith(`${difficulty}.dat`)) {
+          event.beats[difficulty] = loader.extractAsJSON(filename);
+        }
+      }
+
+      // Only needed if loading ZIP directly and not from API.
+      if (!this.data.id) {
+        if (filename.endsWith('jpg')) {
+          event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
+        }
+        if (filename.endsWith('png')) {
+          event.image = loader.extractAsBlobUrl(filename, 'image/png');
+        }
+      }
+
+      if (filename.endsWith('egg') || filename.endsWith('ogg')) {
+        event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
+      }
+    });
+
+    if (!event.image && !this.data.id) {
+      event.image = 'assets/img/logo.png';
+    }
+
+    this.isFetching = '';
+    console.log(event);
+    this.el.emit('challengeloadend', event, false);
   },
 
   /**
@@ -74,67 +140,28 @@ AFRAME.registerComponent('zip-loader', {
 
     loader.on('load', () => {
       this.fetchedZip = this.data.id;
-
-      let imageBlob;
-      let songBlob;
-      const event = {
-        audio: '',
-        beats: {},
-        difficulties: null,
-        id: this.data.id,
-        image: '',
-        info: ''
-      };
-
-      // Process info first.
-      Object.keys(loader.files).forEach(filename => {
-        if (filename.endsWith('info.dat')) {
-          event.info = jsonParseClean(loader.extractAsText(filename));
-        }
-      });
-
-      // Default to hardest.
-      event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
-      const difficulties = event.info.difficultyLevels;
-      if (!event.difficulty) {
-        event.difficulty = this.data.difficulty ||
-                           difficulties.sort(d => d._diificultyRank)[0]._difficulty;
-      }
-      event.difficulties = difficulties.sort(d => d._difficultyRank).map(
-        difficulty => difficulty._difficulty);
-
-      Object.keys(loader.files).forEach(filename => {
-        for (let i = 0; i < difficulties.length; i++) {
-          let difficulty = difficulties[i]._difficulty;
-          if (filename.endsWith(`${difficulty}.dat`)) {
-            event.beats[difficulty] = loader.extractAsJSON(filename);
-          }
-        }
-
-        // Only needed if loading ZIP directly and not from API.
-        if (!this.data.id) {
-          if (filename.endsWith('jpg')) {
-            event.image = loader.extractAsBlobUrl(filename, 'image/jpg');
-          }
-          if (filename.endsWith('png')) {
-            event.image = loader.extractAsBlobUrl(filename, 'image/png');
-          }
-        }
-
-        if (filename.endsWith('egg') || filename.endsWith('ogg')) {
-          event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
-        }
-      });
-
-      if (!event.image && !this.data.id) {
-        event.image = 'assets/img/logo.png';
-      }
-
-      this.isFetching = '';
-      this.el.emit('challengeloadend', event, false);
+      this.processFiles(loader);
     });
 
     loader.load();
+  },
+
+  /**
+    * From dragged ZIP.
+    */
+  readFile: function (file) {
+    this.data.difficulty = null;
+    this.data.id = null;
+    ZipLoader.unzip(file).then(loader => {
+      Object.keys(loader.files).forEach(filename => {
+        if (filename.endsWith('info.dat')) {
+          const id = jsonParseClean(loader.extractAsText(filename)).id;
+          this.el.emit('challengeloadstart', id, false);
+        }
+      });
+
+      this.processFiles(loader);
+    });
   }
 });
 
