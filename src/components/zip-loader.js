@@ -13,9 +13,7 @@ AFRAME.registerComponent('zip-loader', {
   init: function () {
     this.fetchedZip = ''
     this.hash = '';
-  },
 
-  init: function () {
     if (zipUrl) {
       this.fetchZip(zipUrl);
     }
