@@ -1,7 +1,7 @@
 module.exports = {
   OFF: '#111',
   RED: '#ff3a7b',
-  BLUE: '#08bfa2',
+  BLUE: '#08a2bf',
 
   UI_ACCENT: '#fff',
   UI_ACCENT2: '#f01978',
@@ -17,7 +17,7 @@ module.exports = {
   BG_BRIGHTRED: '#ff6bb0',
 
   NEON_OFF: '#000',
-  NEON_BLUE: '#008a70',
+  NEON_BLUE: '#00708a',
   NEON_BRIGHTBLUE: '#87c2ff',
   NEON_RED: '#f01978',
   NEON_BRIGHTRED: '#ff70b5',
@@ -27,7 +27,7 @@ module.exports = {
   TEXT_BOLD: '#888',
 
   BEAT_RED: '#660338',
-  BEAT_BLUE: '#036657',
+  BEAT_BLUE: '#034470',
 
   MINE_RED: '#1c060e',
   MINE_RED_EMISSION: '#2a0d1b',
