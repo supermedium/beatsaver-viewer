@@ -38,14 +38,14 @@ AFRAME.registerComponent('zip-loader', {
     this.loadingIndicator = document.getElementById('challengeLoadingIndicator');
   },
 
-  processFiles: function (loader) {
+  processFiles: function (loader, isDragDrop) {
     let imageBlob;
     let songBlob;
     const event = {
       audio: '',
       beats: {},
       difficulties: null,
-      id: '',
+      id: isDragDrop ? '' : this.data.id,
       image: '',
       info: ''
     };
@@ -160,7 +160,7 @@ AFRAME.registerComponent('zip-loader', {
         }
       });
 
-      this.processFiles(loader);
+      this.processFiles(loader, true);
     });
   }
 });

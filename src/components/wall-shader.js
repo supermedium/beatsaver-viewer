@@ -77,8 +77,8 @@ AFRAME.registerShader('wallShader', {
       vec2 uv;
       uv.x = uv1.x * cos(angle) - uv1.y * sin(angle);
       uv.y = uv1.y * cos(angle) + uv1.x * sin(angle);
-      uv.x += sin(uv.y * 2.7 + time / 1.7) * 0.2;
-      uv.y += sin(uv.x * 3.1 + time / 2.4) * 0.3;
+      uv.x += sin(uv.y * 1.7 + time / 1.7) * 0.2;
+      uv.y += sin(uv.x * 1.1 + time / 2.4) * 0.3;
 
       float w, r, bg;
       r = smoothNoise(vec3(uv + worldPos.x, time / 2.0), 3.0) * 0.65;
@@ -104,13 +104,7 @@ AFRAME.registerShader('wallShader', {
 
       vec3 col = vec3(r * COL.r + w + BG.r, r * COL.g + w + BG.g, r * COL.b + w + BG.b);
 
-      vec3 hit;
-      hit = drawCircle(worldPos, hitRight, 0.04, 0.05, COL);
-      hit += drawCircle(worldPos, hitRight, 0.02, 0.03, vec3(0.7, 0.7, 0.7));
-      hit += drawCircle(worldPos, hitLeft, 0.04, 0.05, COL);
-      hit += drawCircle(worldPos, hitLeft, 0.02, 0.03, vec3(0.7, 0.7, 0.7));
-
-      gl_FragColor = vec4(col + hit, 0.7 + w + hit.x);
+      gl_FragColor = vec4(col, 0.7 + w);
     }
 `
 
