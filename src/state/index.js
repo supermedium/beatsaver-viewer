@@ -83,7 +83,7 @@ AFRAME.registerState({
       state.challenge.songSubName = payload.info._songSubName;
       state.challenge.songSubNameShort = truncate(payload.info._songSubName, 21);
 
-      document.title = `BeatSaverViewer | ${payload.info._songName}`;
+      document.title = `BeatSaver Viewer | ${payload.info._songName}`;
     },
 
     challengeloaderror: (state, payload) => {
