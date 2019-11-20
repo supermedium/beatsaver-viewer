@@ -24,8 +24,8 @@ fs.writeFileSync('index.html', nunjucks.render('index.html'));
 // For development, watch HTML for changes to compile Nunjucks.
 // The production Express server will handle Nunjucks by itself.
 if (process.env.NODE_ENV !== 'production') {
-  fs.watch('src', { recursive: true }, (eventType, filename) => {
-    if (filename.indexOf('.html') === -1) {
+  fs.watch('src/', {recursive: true}, (eventType, filename) => {
+    if (filename.indexOf('.html') === -1 && filename.indexOf('templates') === -1) {
       return;
     }
     try {

@@ -40,6 +40,7 @@
     "debug": "^4.1.0",
     "drag-drop": "^6.0.0",
     "firebase": "^5.5.8",
+    "fswatch": "^0.1.4",
     "html-entities": "^1.2.1",
     "html-minifier": "^3.5.11",
     "ip": "1.1.5",
