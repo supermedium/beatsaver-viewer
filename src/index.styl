@@ -334,3 +334,73 @@ html
   text-align center
   z-index 999999999
   top 20px
+
+#subscribeForm {
+  background: rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0 1px #888;
+  bottom: 0;
+  color: #FAFAFA;
+  font-family $font
+  height: 100px;
+  left: 0;
+  margin: 0;
+  min-width: 360px;
+  padding: 0 0 0 20px;
+  position: fixed;
+  z-index: 9999999;
+
+  .closeSubscribe {
+    color #FAFAFA
+    cursor pointer
+    font-size 28px
+    margin 0
+    padding 0
+    position absolute
+    top -5px
+    transition all .1s
+    right 5px
+
+    &:hover {
+      color $red
+    }
+  }
+}
+
+#subscribeForm h2 {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+#subscribeForm input[type="email"] {
+  background: #FAFAFA;
+  border: 0;
+  border-radius: 5px;
+  color: #333;
+  height: 40px;
+  padding-bottom 0;
+  padding-top 0;
+  padding-left: 20px;
+  margin-right: 10px;
+  max-width: 480px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: 50%;
+}
+
+#subscribeForm button {
+  border: 0;
+  background: #FF74b8;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #FAFAFA;
+  text-transform: uppercase;
+  transition: .1s all;
+  padding: 11px 20px;
+  vertical-align: middle;
+}
+
+button:hover {
+  background: #FF94C8;
+}
