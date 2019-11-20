@@ -336,29 +336,36 @@ html
   top 20px
 
 #subscribeForm {
-  background: rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0 1px #888;
-  bottom: 0;
+  align-items center
+  background: rgba(0, 0, 0, 0.35);
+  border-radius 2px
+  display: flex;
+  top: 0;
   color: #FAFAFA;
   font-family $font
-  height: 80px;
+  height: 50px;
   left: 0;
   margin: 0;
-  min-width: 320px;
-  padding: 0 0 5px 20px;
+  width: 430px;
+  padding: 0 0 0 20px;
   position: fixed;
   z-index: 9999999;
+
+  form {
+    align-items center
+    display flex
+  }
 
   .closeSubscribe {
     color #FAFAFA
     cursor pointer
-    font-size 28px
+    font-size 25px
     margin 0
     padding 0
     position absolute
-    top -5px
+    top -10px
     transition all .1s
-    right 5px
+    right 0
 
     &:hover {
       color $red
@@ -368,7 +375,7 @@ html
 
 #subscribeForm h2 {
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 300;
 }
 
@@ -377,15 +384,16 @@ html
   border: 0;
   border-radius: 5px;
   color: #333;
-  height: 30px;
+  font-size 11px
+  height: 24px;
   padding-bottom 0;
   padding-top 0;
-  padding-left: 20px;
+  padding-left: 10px;
+  margin-left 10px
   margin-right: 10px;
-  max-width: 480px;
+  width: 60px;
   text-transform: uppercase;
   vertical-align: middle;
-  width: 50%;
 }
 
 #subscribeForm button {
@@ -393,7 +401,7 @@ html
   background: #FF74b8;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
   color: #FAFAFA;
   text-transform: uppercase;
   transition: .1s all;
