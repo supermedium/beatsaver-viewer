@@ -22,6 +22,7 @@ AFRAME.registerComponent('song-controls', {
   },
 
   init: function () {
+    this.customDifficultyLabels = {};
     this.song = this.el.components.song;
     this.tick = AFRAME.utils.throttleTick(this.tick.bind(this), 100);
 
@@ -57,7 +58,9 @@ AFRAME.registerComponent('song-controls', {
     document.getElementById('songName').setAttribute('title', this.data.songName);
     document.getElementById('songSubName').innerHTML = truncate(this.data.songSubName, 18);
     document.getElementById('songSubName').setAttribute('title', this.data.songSubName);
-    document.getElementById('controlsDifficulty').innerHTML = this.data.difficulty;
+
+    document.getElementById('controlsDifficulty').innerHTML =
+      this.customDifficultyLabels[this.data.difficulty] || this.data.difficulty;
   },
 
   play: function () {
@@ -71,16 +74,38 @@ AFRAME.registerComponent('song-controls', {
     const timelineWidth = timeline.offsetWidth;
 
     this.el.sceneEl.addEventListener('challengeloadend', evt => {
+      this.customDifficultyLabels = {};
+
       // Show controls on load.
       this.controls.classList.add('challengeLoaded');
 
       // Update difficulty list.
       for (let i = 0; i < this.difficultyOptions.children.length; i++) {
-        this.difficultyOptions.children[i].style.display = 'none';
+        const option = this.difficultyOptions.children[i];
+        option.style.display = 'none';
+        option.innerHTML = option.dataset.difficulty;
       }
       evt.detail.info.difficultyLevels.forEach(difficulty => {
         const option = this.difficultyOptions.querySelector(`[data-difficulty="${difficulty._difficulty}"]`);
         option.style.display = 'inline-block';
+
+        // Custom difficulty labels.
+        if (!evt.detail.info._difficultyBeatmapSets) { return; }
+        evt.detail.info._difficultyBeatmapSets.forEach(set => {
+          if (set._beatmapCharacteristicName !== 'Standard') { return; }
+          set._difficultyBeatmaps.forEach(diff => {
+            const customLabel = diff._customData._difficultyLabel;
+            if (!customLabel) { return; }
+
+            this.customDifficultyLabels[diff._difficulty] = customLabel;
+            if (this.difficulty.innerHTML === diff._difficulty) {
+              this.difficulty.innerHTML = customLabel;
+            }
+
+            if (diff._difficulty !== difficulty._difficulty) { return; }
+            option.innerHTML = customLabel;
+          });
+        });
       });
     });
 
@@ -131,6 +156,7 @@ AFRAME.registerComponent('song-controls', {
       this.songProgress.innerHTML = formatSeconds(0);
       this.playhead.style.width = '0%';
       this.el.sceneEl.emit('difficultyselect', evt.target.dataset.difficulty, false);
+      this.difficulty.innerHTML = evt.target.innerHTML;
       this.controls.classList.remove('difficultyOptionsActive');
     });
 
