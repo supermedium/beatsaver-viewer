@@ -4,6 +4,7 @@
     <title>BeatSaver Viewer</title>
     <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
     <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
+    <script>window.vrDisabled = true;</script>
     {% if DEBUG_AFRAME %}
       <script src="http://{{ HOST }}:9000/dist/aframe-master.js"></script>
     {% elif IS_PRODUCTION %}
@@ -49,7 +50,7 @@
       stage-colors="color: blue"
       stats-param
       user-gesture
-      vr-mode-ui="enterVRButton: #vrButton"
+      vr-mode-ui="enabled: false"
       tutorial-2d>
 
       <a-assets timeout="10000">
@@ -111,7 +112,6 @@
         bind__cursor-mesh="active: menuActive"></a-entity>
     </a-scene>
 
-    <a id="vrButton" href="#" title="Enter VR / Fullscreen"></a>
     {% include './templates/controls.html' %}
     {% include './templates/ga.html' %}
 
