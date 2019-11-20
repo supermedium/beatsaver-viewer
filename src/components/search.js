@@ -56,7 +56,7 @@ class Search extends Component {
     xhr.open('GET', `https://beatsaver.com/api/search/text/0?q=${evt.target.value}`);
     xhr.addEventListener('load', () => {
       this.setState({results: JSON.parse(xhr.responseText).docs});
-      ga('send', 'event', 'search', 'search');
+      if (typeof ga !== 'undefined') { ga('send', 'event', 'search', 'search'); }
     });
     xhr.send();
   }
@@ -68,7 +68,7 @@ class Search extends Component {
     this.setState({open: false});
 
     // Count as a pageview.
-    ga('send', 'pageview');
+    if (typeof ga !== 'undefined') { ga('send', 'pageview'); }
 
     document.getElementById('searchInput').value = '';
   }
