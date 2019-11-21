@@ -43,12 +43,12 @@ AFRAME.registerComponent('wall', {
 
     if (data.isCeiling) {
       el.object3D.position.set(
-        0,
+        this.horizontalPositions[data.horizontalPosition] + width / 2  - 0.25,
         CEILING_HEIGHT,
         data.anticipationPosition + data.warmupPosition - halfDepth
       );
       el.object3D.scale.set(
-        CEILING_WIDTH,
+        width,
         CEILING_THICKNESS,
         data.durationSeconds * data.speed
       );
