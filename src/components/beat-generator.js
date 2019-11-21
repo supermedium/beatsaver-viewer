@@ -85,6 +85,15 @@ AFRAME.registerComponent('beat-generator', {
       this.beatData = evt.detail.beats[this.data.difficulty || evt.detail.difficulty];
       this.info = evt.detail.info;
       this.processBeats();
+
+      // Mapping extensions.
+      // https://github.com/joshwcomeau/beatmapper/tree/master/src/helpers/obstacles.helpers.js
+      if (evt.detail.mappingExtensions && evt.detail.mappingExtensions.isEnabled) {
+        this.mappingExtensions = evt.detail.mappingExtensions;
+        console.log(this.mappingExtensions);
+      } else {
+        this.mappingExtensions = null;
+      }
     });
   },
 

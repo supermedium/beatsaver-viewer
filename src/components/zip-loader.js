@@ -49,7 +49,8 @@ AFRAME.registerComponent('zip-loader', {
       id: isDragDrop ? '' : this.data.id,
       image: '',
       info: '',
-      isDragDrop: isDragDrop
+      isDragDrop: isDragDrop,
+      mappingExtensions: {isEnabled: false}
     };
 
     // Process info first.
@@ -58,6 +59,15 @@ AFRAME.registerComponent('zip-loader', {
         event.info = jsonParseClean(loader.extractAsText(filename));
       }
     });
+
+    const customData = event.info._customData;
+    if (customData &&
+        customData._editorSettings &&
+        customData._editorSettings.modSettings &&
+        customData._editorSettings.modSettings.mappingExtensions &&
+        customData._editorSettings.modSettings.mappingExtensions.isEnabled) {
+      event.mappingExtensions = event.info._customData._editorSettings.modSettings.mappingExtensions;
+    }
 
     // Default to hardest.
     event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
