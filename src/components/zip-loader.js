@@ -47,7 +47,8 @@ AFRAME.registerComponent('zip-loader', {
       difficulties: null,
       id: isDragDrop ? '' : this.data.id,
       image: '',
-      info: ''
+      info: '',
+      isDragDrop: isDragDrop
     };
 
     // Process info first.
@@ -67,10 +68,16 @@ AFRAME.registerComponent('zip-loader', {
     event.difficulties = difficulties.sort(d => d._difficultyRank).map(
       difficulty => difficulty._difficulty);
 
+    // Get difficulty file names. Can be different like including different modes.
+    const diffFilenames = {};
+    event.info.difficultyLevels.forEach(diff => {
+      diffFilenames[diff._difficulty] = diff._beatmapFilename;
+    });
+
     Object.keys(loader.files).forEach(filename => {
       for (let i = 0; i < difficulties.length; i++) {
         let difficulty = difficulties[i]._difficulty;
-        if (filename.endsWith(`${difficulty}.dat`)) {
+        if (filename === diffFilenames[difficulty]) {
           event.beats[difficulty] = loader.extractAsJSON(filename);
         }
       }
@@ -150,8 +157,8 @@ AFRAME.registerComponent('zip-loader', {
     * From dragged ZIP.
     */
   readFile: function (file) {
-    this.data.difficulty = null;
-    this.data.id = null;
+    this.data.difficulty = '';
+    this.data.id = '';
     ZipLoader.unzip(file).then(loader => {
       Object.keys(loader.files).forEach(filename => {
         if (filename.endsWith('info.dat')) {
@@ -160,6 +167,7 @@ AFRAME.registerComponent('zip-loader', {
         }
       });
 
+      removeIdQueryParam();
       this.processFiles(loader, true);
     });
   }
@@ -207,4 +215,14 @@ function jsonParseLoop (str, i) {
 
 function getZipUrl (key, hash) {
   return `https://beatsaver.com/cdn/${key}/${hash}.zip`;
+}
+
+// Push state URL in browser.
+const idRe = /&?id=[\d\w-]+/
+function removeIdQueryParam () {
+  let search = window.location.search.toString();
+  search = search.replace(idRe, '');
+  let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+  url += search;
+  window.history.pushState({path: url},'', url);
 }
