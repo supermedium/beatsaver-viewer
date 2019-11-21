@@ -20,7 +20,7 @@
   <body id="body">
     <a-scene
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
-      bind__beat-generator="difficulty: challenge.difficulty; isPlaying: isPlaying"
+      bind__beat-generator="difficulty: challenge.difficulty; isPlaying: isPlaying; beatSpeed: challenge.beatSpeed"
       bind__pauser="enabled: isPlaying"
       bind__song="audio: challenge.audio; difficulty: challenge.difficulty; isPaused: isPaused; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
       bind__song-controls="difficulty: challenge.difficulty; isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"

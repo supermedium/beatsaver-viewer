@@ -44,6 +44,7 @@ AFRAME.registerComponent('zip-loader', {
     const event = {
       audio: '',
       beats: {},
+      beatSpeeds: {},
       difficulties: null,
       id: isDragDrop ? '' : this.data.id,
       image: '',
@@ -72,6 +73,7 @@ AFRAME.registerComponent('zip-loader', {
     const diffFilenames = {};
     event.info.difficultyLevels.forEach(diff => {
       diffFilenames[diff._difficulty] = diff._beatmapFilename;
+      event.beatSpeeds[diff._difficulty] = diff._noteJumpMovementSpeed;
     });
 
     Object.keys(loader.files).forEach(filename => {
@@ -159,6 +161,7 @@ AFRAME.registerComponent('zip-loader', {
   readFile: function (file) {
     this.data.difficulty = '';
     this.data.id = '';
+    this.el.emit('challengeloadstart', '', false);
     ZipLoader.unzip(file).then(loader => {
       Object.keys(loader.files).forEach(filename => {
         if (filename.endsWith('info.dat')) {

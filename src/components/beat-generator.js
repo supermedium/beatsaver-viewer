@@ -92,6 +92,7 @@ AFRAME.registerComponent('beat-generator', {
     if (oldData.difficulty && oldData.difficulty !== this.data.difficulty &&
         this.allBeatData) {
       this.beatData = this.allBeatData[this.data.difficulty];
+      this.processBeats();
     }
   },
 

@@ -68,10 +68,17 @@ AFRAME.registerState({
     challengeloadend: (state, payload) => {
       state.challenge.audio = payload.audio;
       state.challenge.author = payload.info._levelAuthorName;
+      state.challenge.difficulties = payload.difficulties;
+
       if (!state.challenge.difficulty ||
           payload.difficulties.indexOf(state.challenge.difficulty) === -1) {
         state.challenge.difficulty = payload.difficulty;
       }
+
+      // Note jump movement speed.
+      state.challenge.beatSpeeds = payload.beatSpeeds;
+      state.challenge.beatSpeed = payload.beatSpeeds[state.challenge.difficulty];
+
       state.challenge.id = payload.isDragDrop ? '' : payload.id;
       if (payload.image) {
         state.challenge.image = payload.image;
@@ -109,6 +116,9 @@ AFRAME.registerState({
       state.challenge.difficulty = payload;
       state.challenge.isBeatsPreloaded = false;
       state.isPaused = false;
+
+      // Note jump movement speed.
+      state.challenge.beatSpeed = state.challenge.beatSpeeds[state.challenge.difficulty];
     },
 
     gamemenuresume: state => {
