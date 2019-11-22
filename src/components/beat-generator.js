@@ -223,7 +223,7 @@ AFRAME.registerComponent('beat-generator', {
       const data = this.data;
 
       // Apply sword offset. Blocks arrive on beat in front of the user.
-      beatObj.anticipationPosition = -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
+      beatObj.anticipationPosition = -data.beatAnticipationTime * this.beatSpeed - this.swordOffset;
       beatObj.color = color;
       beatObj.cutDirection = this.orientationsHumanized[note._cutDirection];
       beatObj.speed = this.beatSpeed;
@@ -265,7 +265,7 @@ AFRAME.registerComponent('beat-generator', {
 
       const durationSeconds = 60 * (wall._duration / this.bpm);
       wallObj.anticipationPosition =
-        -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
+        -data.beatAnticipationTime * this.beatSpeed - this.swordOffset;
       wallObj.durationSeconds = durationSeconds;
       wallObj.horizontalPosition = wall._lineIndex;
       wallObj.isCeiling = wall._type === 1;
