@@ -15,6 +15,7 @@ AFRAME.registerComponent('song-controls', {
 
   schema: {
     difficulty: {default: ''},
+    mode: {default: 'Standard'},
     songName: {default: ''},
     songSubName: {default: ''},
     songImage: {default: ''},
@@ -87,7 +88,7 @@ AFRAME.registerComponent('song-controls', {
         option.style.display = 'none';
         option.innerHTML = option.dataset.difficulty;
       }
-      evt.detail.info.difficultyLevels.forEach(difficulty => {
+      evt.detail.difficulties[this.data.mode].forEach(difficulty => {
         const option = this.difficultyOptions.querySelector(`[data-difficulty="${difficulty._difficulty}"]`);
         option.style.display = 'inline-block';
 
@@ -108,6 +109,18 @@ AFRAME.registerComponent('song-controls', {
             option.innerHTML = customLabel;
           });
         });
+      });
+
+      // Update mode list.
+      for (let i = 0; i < this.modeOptionEls.children.length; i++) {
+        const option = this.modeOptionEls.children[i];
+        option.style.display = 'none';
+        option.innerHTML = option.dataset.mode;
+      }
+      Object.keys(evt.detail.beatmaps).forEach(mode => {
+        console.log(this.modeOptionEls);
+        const option = this.modeOptionEls.querySelector(`[data-mode="${mode}"]`);
+        option.style.display = 'inline-block';
       });
     });
 

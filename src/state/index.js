@@ -68,10 +68,10 @@ AFRAME.registerState({
     challengeloadend: (state, payload) => {
       state.challenge.audio = payload.audio;
       state.challenge.author = payload.info._levelAuthorName;
-      state.challenge.difficulties = payload.difficulties;
+      state.challenge.difficulties = payload.difficulties.Standard;
 
       if (!state.challenge.difficulty ||
-          payload.difficulties.indexOf(state.challenge.difficulty) === -1) {
+          state.challenge.difficulties.indexOf(state.challenge.difficulty) === -1) {
         state.challenge.difficulty = payload.difficulty;
       }
 

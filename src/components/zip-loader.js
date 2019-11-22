@@ -45,8 +45,8 @@ AFRAME.registerComponent('zip-loader', {
     const event = {
       audio: '',
       beatmaps: {Standard: {}},
-      beatSpeeds: {},
-      difficulties: null,
+      beatSpeeds: {Standard: {}},
+      difficulties: {Standard: []},
       id: isDragDrop ? '' : this.data.id,
       image: '',
       info: '',
@@ -75,29 +75,30 @@ AFRAME.registerComponent('zip-loader', {
     const beatmapSets = event.info._difficultyBeatmapSets;
     beatmapSets.forEach(set => {
       const mode = set._beatmapCharacteristicName;
+      event.beatmaps[mode] = {};
+      event.beatSpeeds[mode] = {};
 
-      set._difficultyBeatmaps.forEach(diff => {
+      const diffBeatmaps = set._difficultyBeatmaps.sort(d => d._difficultyRank);
+      diffBeatmaps.forEach(diff => {
         event.beatmaps[mode][diff._difficulty] = loader.extractAsJSON(diff._beatmapFilename);
+        event.beatSpeeds[mode][diff._difficulty] = diff._noteJumpMovementSpeed;
+
+        // TODO: Assume for now if one difficulty wants extensions, they all do. Fix later.
+        if (diff._customData &&
+            diff._customData._requirements &&
+            diff._customData._requirements.indexOf('Mapping Extensions') !== -1) {
+          event.mappingExtensions = {isEnabled: true};
+        }
       });
+
+      // Get difficulties.
+      event.difficulties[mode] = diffBeatmaps;
     });
 
     // Default to hardest of first beatmap.
-    event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
-    const difficulties = event.info.difficultyLevels;
     if (!event.difficulty) {
-      event.difficulty = this.data.difficulty ||
-                         difficulties.sort(d => d._difficultyRank)[0]._difficulty;
+      event.difficulty = this.data.difficulty || event.difficulties.Standard[0]._difficulty;
     }
-    event.difficulties = difficulties.sort(d => d._difficultyRank).map(
-      difficulty => difficulty._difficulty);
-
-    event.info.difficultyLevels.forEach(diff => {
-      event.beatSpeeds[diff._difficulty] = diff._noteJumpMovementSpeed;
-
-      if (diff._customData._requirements.indexOf('Mapping Extensions') !== -1) {
-        event.mappingExtensions = {isEnabled: true};
-      }
-    });
 
     Object.keys(loader.files).forEach(filename => {
       // Only needed if loading ZIP directly and not from API.

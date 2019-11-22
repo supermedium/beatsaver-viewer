@@ -92,7 +92,7 @@ AFRAME.registerComponent('beat-generator', {
     this.beatData._events.sort(lessThan);
     this.beatData._obstacles.sort(lessThan);
     this.beatData._notes.sort(lessThan);
-    this.beatSpeed = this.beatSpeeds[this.data.difficulty];
+    this.beatSpeed = this.beatSpeeds[this.data.mode][this.data.difficulty];
     this.bpm = this.info._beatsPerMinute;
 
     // Some events have negative time stamp to initialize the stage.
