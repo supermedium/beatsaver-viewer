@@ -76,6 +76,11 @@ AFRAME.registerComponent('beat-generator', {
 
   update: function (oldData) {
     if (!this.beatmaps) { return; }
+
+    if (oldData.isPlaying && !this.data.isPlaying) {
+      this.clearBeats(true);
+    }
+
     if ((oldData.difficulty && oldData.difficulty !== this.data.difficulty) ||
         (oldData.mode && oldData.mode !== this.data.mode)) {
       this.beatData = this.beatmaps[this.data.mode][this.data.difficulty];
@@ -140,6 +145,7 @@ AFRAME.registerComponent('beat-generator', {
     // Load in stuff scheduled between the last timestamp and current timestamp.
     // Beats.
     const beatsTime = this.beatsTime + skipDebug;
+
     const msPerBeat = 1000 * 60 / this.bpm;
     const notes = this.beatData._notes;
     for (let i = 0; i < notes.length; ++i) {
