@@ -81,9 +81,7 @@ AFRAME.registerShader('wallShader', {
       uv.y += sin(uv.x * 1.1 + time / 2.4) * 0.3;
 
       float w, r, bg;
-      r = smoothNoise(vec3(uv + worldPos.x, time / 2.0), 3.0) * 0.65;
-      r += smoothNoise(vec3(uv, time / 6.0), 8.0) * 0.3;
-      r += smoothNoise(vec3(uv, time / 14.0), 50.0) * 0.04;
+      r = 0.;
 
       bg = smoothstep(0.5, 1.0, r) + smoothstep(0.5, 0.0, r);
       r = smoothstep(0.4, 0.50, r) - smoothstep(0.50, 0.6, r);
