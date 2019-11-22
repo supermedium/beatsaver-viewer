@@ -65,6 +65,25 @@ AFRAME.registerComponent('wall', {
     );
   },
 
+  setMappingExtensionsHeight: function (startHeight, height) {
+    const data = this.data;
+    const el = this.el;
+
+    const halfDepth = data.durationSeconds * data.speed / 2;
+
+    el.object3D.position.set(
+      getHorizontalPosition(data.horizontalPosition) + data.width / 2  - 0.25,
+      startHeight + RAISE_Y_OFFSET,
+      data.anticipationPosition + data.warmupPosition - halfDepth
+    );
+
+    el.object3D.scale.set(
+      data.width,
+      height,
+      data.durationSeconds * data.speed
+    );
+  },
+
   pause: function () {
     this.el.object3D.visible = false;
     this.el.removeAttribute('data-collidable-head');

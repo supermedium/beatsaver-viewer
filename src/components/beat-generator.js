@@ -5,6 +5,10 @@ let skipDebug = AFRAME.utils.getUrlParameter('skip') || 0;
 skipDebug = parseInt(skipDebug, 10);
 
 const RIDICULOUS_MAP_EX_CONSTANT = 4001;
+const WALL_HEIGHT_MIN = 0;
+const WALL_HEIGHT_MAX = 1000;
+const WALL_START_BASE = 100;
+const WALL_START_MAX = 400;
 
 /**
  * Load beat data (all the beats and such).
@@ -258,11 +262,6 @@ AFRAME.registerComponent('beat-generator', {
       wallObj.width = wall._width * WALL_THICKNESS;
 
       if (this.mappingExtensions) {
-        const typeValue = wall._type - RIDICULOUS_MAP_EX_CONSTANT;
-        const height = Math.round(typeValue / 1000);
-        const wallStartHeight = typeValue % 1000;
-        // TODO: Mapping extension wall heights + vertical position.
-
         wallObj.horizontalPosition = wall._lineIndex < 0
           ? wall._lineIndex / 1000 + 1
           : wall._lineIndex / 1000 - 1;
@@ -270,6 +269,30 @@ AFRAME.registerComponent('beat-generator', {
       }
 
       el.setAttribute('wall', wallObj);
+
+      if (this.mappingExtensions) {
+        const typeValue = wall._type - RIDICULOUS_MAP_EX_CONSTANT;
+        let height = Math.round(typeValue / 1000);
+        let startHeight = typeValue % 1000;
+
+				height = roundToNearest(
+					normalize(
+						height,
+						WALL_HEIGHT_MIN,
+						WALL_HEIGHT_MAX,
+						0,
+						5
+					),
+					0.001
+				);
+				startHeight = roundToNearest(
+					normalize(startHeight, WALL_START_BASE, WALL_START_MAX, 0, 2),
+					0.01
+				);
+
+        el.components.wall.setMappingExtensionsHeight(startHeight, height);
+      }
+
       el.play();
     };
   })(),
@@ -341,3 +364,20 @@ AFRAME.registerComponent('beat-generator', {
 });
 
 function lessThan (a, b) { return a._time - b._time; }
+
+/**
+ * Say I have a value, 15, out of a range between 0 and 30.
+ * I might want to know what that is on a scale of 1-5 instead.
+ */
+function normalize (number, currentScaleMin, currentScaleMax, newScaleMin, newScaleMax) {
+  // First, normalize the value between 0 and 1.
+  const standardNormalization =
+    (number - currentScaleMin) / (currentScaleMax - currentScaleMin);
+
+  // Next, transpose that value to our desired scale.
+  return (newScaleMax - newScaleMin) * standardNormalization + newScaleMin;
+};
+
+function roundToNearest (number, nearest) {
+  return Math.round(number / nearest) * nearest;
+}
