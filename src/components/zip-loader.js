@@ -84,6 +84,10 @@ AFRAME.registerComponent('zip-loader', {
     event.info.difficultyLevels.forEach(diff => {
       diffFilenames[diff._difficulty] = diff._beatmapFilename;
       event.beatSpeeds[diff._difficulty] = diff._noteJumpMovementSpeed;
+
+      if (diff._customData._requirements.indexOf('Mapping Extensions') !== -1) {
+        event.mappingExtensions = {isEnabled: true};
+      }
     });
 
     Object.keys(loader.files).forEach(filename => {

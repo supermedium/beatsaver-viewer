@@ -89,7 +89,7 @@ AFRAME.registerState({
       state.challenge.songNameMedium = truncate(payload.info._songName, 30);
 
       state.challenge.songSubName = payload.info._songSubName || payload.info._songAuthorName;
-      state.challenge.songSubNameShort = truncate(payload.info._songSubName, 21);
+      state.challenge.songSubNameShort = truncate(state.challenge.songSubName, 21);
 
       document.title = `BeatSaver Viewer | ${payload.info._songName}`;
     },
