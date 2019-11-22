@@ -270,6 +270,7 @@ AFRAME.registerComponent('beat-generator', {
 
       el.setAttribute('wall', wallObj);
 
+      // Handle mapping extensions wall format.
       if (this.mappingExtensions) {
         const typeValue = wall._type - RIDICULOUS_MAP_EX_CONSTANT;
         let height = Math.round(typeValue / 1000);
@@ -286,7 +287,7 @@ AFRAME.registerComponent('beat-generator', {
 					0.001
 				);
 				startHeight = roundToNearest(
-					normalize(startHeight, WALL_START_BASE, WALL_START_MAX, 0, 2),
+					normalize(startHeight, WALL_START_BASE, WALL_START_MAX, 0, 1.3),
 					0.01
 				);
 
