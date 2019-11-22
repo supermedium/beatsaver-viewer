@@ -239,30 +239,32 @@
     audio-columns="analyser: #audioAnalyser; height: 28; mirror: 18; scale: 9; thickness: 0.6; separation: 0.55"
     position="0 -19 5"></a-entity>
 
-  <a-entity id="stageObj" obj-model="obj: #stageNormalObj" materials="name: stageNormal"></a-entity>
+  <a-entity position="0 -1 0">
+    <a-entity id="stageObj" obj-model="obj: #stageNormalObj" materials="name: stageNormal"></a-entity>
 
-  <!-- Lasers left. -->
-  <a-entity id="leftStageLasers" bind__stage-lasers="enabled: isPlaying">
-    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-6 2.3 -41"></a-entity>
-    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-10 0 -40"></a-entity>
-    <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-14 -3 -39"></a-entity>
+    <!-- Lasers left. -->
+    <a-entity id="leftStageLasers" bind__stage-lasers="enabled: isPlaying">
+      <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-6 2.3 -41"></a-entity>
+      <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-10 0 -40"></a-entity>
+      <a-entity obj-model="obj: #leftLaserObj" materials="name: stageAdditive" position="-14 -3 -39"></a-entity>
+    </a-entity>
+
+    <!-- Lasers right. -->
+    <a-entity id="rightStageLasers" bind__stage-lasers="enabled: isPlaying">
+      <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="6 4 -38"></a-entity>
+      <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="10 2 -37"></a-entity>
+      <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="14 -1.5 -36"></a-entity>
+    </a-entity>
+
+    <a-entity
+      id="stageadditiveobj"
+      obj-model="obj: #stageAdditiveObj"
+      materials="name: stageAdditive"></a-entity>
   </a-entity>
-
-  <!-- Lasers right. -->
-  <a-entity id="rightStageLasers" bind__stage-lasers="enabled: isPlaying">
-    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="6 4 -38"></a-entity>
-    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="10 2 -37"></a-entity>
-    <a-entity obj-model="obj: #rightLaserObj" materials="name: stageAdditive" position="14 -1.5 -36"></a-entity>
-  </a-entity>
-
-  <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
 
   <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
 
-  <a-entity
-    id="stageadditiveobj"
-    obj-model="obj: #stageAdditiveObj"
-    materials="name: stageAdditive"></a-entity>
+  <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
 
   <a-entity id="logo" bind__visible="!isPlaying" position="0 4.75 -5" rotation="90 0 0">
     <a-entity id="logoBackObj" obj-model="obj: #logoBackObj" materials="name: logoadditive"></a-entity>
