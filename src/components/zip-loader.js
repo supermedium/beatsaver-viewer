@@ -8,7 +8,8 @@ AFRAME.registerComponent('zip-loader', {
   schema: {
     id: {default: zipUrl ? '' : (AFRAME.utils.getUrlParameter('id') || '22cc')},
     isSafari: {default: false},
-    difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')}
+    difficulty: {default: AFRAME.utils.getUrlParameter('difficulty')},
+    mode: {default: AFRAME.utils.getUrlParameter('mode') || 'Standard'}
   },
 
   init: function () {
@@ -43,7 +44,7 @@ AFRAME.registerComponent('zip-loader', {
     let songBlob;
     const event = {
       audio: '',
-      beats: {},
+      beatmaps: {Standard: {}},
       beatSpeeds: {},
       difficulties: null,
       id: isDragDrop ? '' : this.data.id,
@@ -60,6 +61,7 @@ AFRAME.registerComponent('zip-loader', {
       }
     });
 
+    // See whether we need mapping extensions (per difficulty).
     const customData = event.info._customData;
     if (customData &&
         customData._editorSettings &&
@@ -69,20 +71,27 @@ AFRAME.registerComponent('zip-loader', {
       event.mappingExtensions = event.info._customData._editorSettings.modSettings.mappingExtensions;
     }
 
-    // Default to hardest.
+    // Index beatmaps (modes + difficulties).
+    const beatmapSets = event.info._difficultyBeatmapSets;
+    beatmapSets.forEach(set => {
+      const mode = set._beatmapCharacteristicName;
+
+      set._difficultyBeatmaps.forEach(diff => {
+        event.beatmaps[mode][diff._difficulty] = loader.extractAsJSON(diff._beatmapFilename);
+      });
+    });
+
+    // Default to hardest of first beatmap.
     event.info.difficultyLevels = event.info._difficultyBeatmapSets[0]._difficultyBeatmaps;
     const difficulties = event.info.difficultyLevels;
     if (!event.difficulty) {
       event.difficulty = this.data.difficulty ||
-                         difficulties.sort(d => d._diificultyRank)[0]._difficulty;
+                         difficulties.sort(d => d._difficultyRank)[0]._difficulty;
     }
     event.difficulties = difficulties.sort(d => d._difficultyRank).map(
       difficulty => difficulty._difficulty);
 
-    // Get difficulty file names. Can be different like including different modes.
-    const diffFilenames = {};
     event.info.difficultyLevels.forEach(diff => {
-      diffFilenames[diff._difficulty] = diff._beatmapFilename;
       event.beatSpeeds[diff._difficulty] = diff._noteJumpMovementSpeed;
 
       if (diff._customData._requirements.indexOf('Mapping Extensions') !== -1) {
@@ -91,13 +100,6 @@ AFRAME.registerComponent('zip-loader', {
     });
 
     Object.keys(loader.files).forEach(filename => {
-      for (let i = 0; i < difficulties.length; i++) {
-        let difficulty = difficulties[i]._difficulty;
-        if (filename === diffFilenames[difficulty]) {
-          event.beats[difficulty] = loader.extractAsJSON(filename);
-        }
-      }
-
       // Only needed if loading ZIP directly and not from API.
       if (!this.data.id) {
         if (filename.endsWith('jpg')) {
@@ -107,7 +109,6 @@ AFRAME.registerComponent('zip-loader', {
           event.image = loader.extractAsBlobUrl(filename, 'image/png');
         }
       }
-
       if (filename.endsWith('egg') || filename.endsWith('ogg')) {
         event.audio = loader.extractAsBlobUrl(filename, 'audio/ogg');
       }

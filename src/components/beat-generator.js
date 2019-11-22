@@ -18,11 +18,11 @@ AFRAME.registerComponent('beat-generator', {
 
   schema: {
     beatAnticipationTime: {default: 1.1},
-    beatSpeed: {default: 8.0},
     beatWarmupTime: {default: BEAT_WARMUP_TIME / 1000},
     beatWarmupSpeed: {default: BEAT_WARMUP_SPEED},
     difficulty: {type: 'string'},
-    isPlaying: {default: false}
+    isPlaying: {default: false},
+    mode: {default: 'Standard'}
   },
 
   orientationsHumanized: [
@@ -57,8 +57,9 @@ AFRAME.registerComponent('beat-generator', {
 
     this.el.addEventListener('cleargame', this.clearBeats.bind(this));
     this.el.addEventListener('challengeloadend', evt => {
-      this.allBeatData = evt.detail.beats;
-      this.beatData = evt.detail.beats[this.data.difficulty || evt.detail.difficulty];
+      this.beatmaps = evt.detail.beatmaps;
+      this.beatData = this.beatmaps.Standard[this.data.difficulty || evt.detail.difficulty];
+      this.beatSpeeds = evt.detail.beatSpeeds;
       this.info = evt.detail.info;
       this.processBeats();
 
@@ -74,9 +75,8 @@ AFRAME.registerComponent('beat-generator', {
   },
 
   update: function (oldData) {
-    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty &&
-        this.allBeatData) {
-      this.beatData = this.allBeatData[this.data.difficulty];
+    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty && this.beatmaps) {
+      this.beatData = this.beatmaps[this.data.mode][this.data.difficulty];
       this.processBeats();
     }
   },
@@ -92,6 +92,7 @@ AFRAME.registerComponent('beat-generator', {
     this.beatData._events.sort(lessThan);
     this.beatData._obstacles.sort(lessThan);
     this.beatData._notes.sort(lessThan);
+    this.beatSpeed = this.beatSpeeds[this.data.difficulty];
     this.bpm = this.info._beatsPerMinute;
 
     // Some events have negative time stamp to initialize the stage.
@@ -225,7 +226,7 @@ AFRAME.registerComponent('beat-generator', {
       beatObj.anticipationPosition = -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
       beatObj.color = color;
       beatObj.cutDirection = this.orientationsHumanized[note._cutDirection];
-      beatObj.speed = this.data.beatSpeed;
+      beatObj.speed = this.beatSpeed;
       beatObj.size = 0.4;
       beatObj.type = type;
       beatObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;
@@ -260,7 +261,7 @@ AFRAME.registerComponent('beat-generator', {
       if (!el) { return; }
 
       const data = this.data;
-      const speed = this.data.beatSpeed;
+      const speed = this.beatSpeed;
 
       const durationSeconds = 60 * (wall._duration / this.bpm);
       wallObj.anticipationPosition =
