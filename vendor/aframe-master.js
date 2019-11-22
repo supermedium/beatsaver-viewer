@@ -66225,11 +66225,8 @@ module.exports.Component = registerComponent('pool', {
     var el;
     if (this.availableEls.length === 0) {
       if (this.data.dynamic === false) {
-        warn('Requested entity from empty pool: ' + this.attrName);
         return;
       } else {
-        warn('Requested entity from empty pool. This pool is dynamic and will resize ' +
-             'automatically. You might want to increase its initial size: ' + this.attrName);
       }
       this.createEntity();
     }
@@ -66245,7 +66242,6 @@ module.exports.Component = registerComponent('pool', {
   returnEntity: function (el) {
     var index = this.usedEls.indexOf(el);
     if (index === -1) {
-      warn('The returned entity was not previously pooled from ' + this.attrName);
       return;
     }
     this.usedEls.splice(index, 1);
@@ -66966,7 +66962,6 @@ module.exports.Component = registerComponent('sound', {
     // Create new sound if not yet created or changing `src`.
     if (srcChanged) {
       if (!data.src) {
-        warn('Audio source was not specified with `src`');
         return;
       }
       this.setupSound();
@@ -67145,8 +67140,6 @@ module.exports.Component = registerComponent('sound', {
     }
 
     if (!found) {
-      warn('All the sounds are playing. If you need to play more sounds simultaneously ' +
-           'consider increasing the size of pool with the `poolSize` attribute.', this.el);
       return;
     }
 
@@ -69387,7 +69380,6 @@ var proto = Object.create(ANode.prototype, {
     value: function (type) {
       var obj = this.getObject3D(type);
       if (!obj) {
-        warn('Tried to remove `Object3D` of type:', type, 'which was not defined.');
         return;
       }
       this.object3D.remove(obj);
@@ -74316,7 +74308,7 @@ _dereq_('./core/a-mixin');
 _dereq_('./extras/components/');
 _dereq_('./extras/primitives/');
 
-console.log('A-Frame Version: 0.8.2 (Date 2019-11-20, Commit #358c5da5)');
+console.log('A-Frame Version: 0.8.2 (Date 2019-11-22, Commit #358c5da5)');
 console.log('three Version:', pkg.dependencies['three']);
 
 module.exports = window.AFRAME = {

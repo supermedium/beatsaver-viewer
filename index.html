@@ -32,11 +32,11 @@
       
       iframe-url
       loading-screen="backgroundColor: #000;"
-      pool__beat-arrow-blue="mixin: arrowBlueBeat; size: 30; container: #beatContainer; dynamic: true"
-      pool__beat-arrow-red="mixin: arrowRedBeat; size: 30; container: #beatContainer; dynamic: true"
-      pool__beat-dot-blue="mixin: dotBlueBeat; size: 30; container: #beatContainer; dynamic: true"
-      pool__beat-dot-red="mixin: dotRedBeat; size: 30; container: #beatContainer; dynamic: true"
-      pool__beat-mine="mixin: mine; size: 15; container: #beatContainer; dynamic: true"
+      pool__beat-arrow-blue="mixin: arrowBlueBeat; size: 50; container: #beatContainer; dynamic: true"
+      pool__beat-arrow-red="mixin: arrowRedBeat; size: 50; container: #beatContainer; dynamic: true"
+      pool__beat-dot-blue="mixin: dotBlueBeat; size: 50; container: #beatContainer; dynamic: true"
+      pool__beat-dot-red="mixin: dotRedBeat; size: 50; container: #beatContainer; dynamic: true"
+      pool__beat-mine="mixin: mine; size: 50; container: #beatContainer; dynamic: true"
       pool__beat-glow="mixin: beatGlow; size: 20; container: #glowContainer; dynamic: true"
       pool__wall="mixin: wall; size: 30; container: #beatContainer"
       proxy-event__cleargame="event: gamemenurestart; as: cleargame; to: a-scene"
@@ -491,7 +491,17 @@
       <p id="songName"></p>
     </div>
     <div id="songInfoSelect">
+      <p id="controlsMode">Standard</p>
       <p id="controlsDifficulty"></p>
+      <ul id="controlsModes">
+        <li data-mode="Standard">Standard</li>
+        <!--
+        <li data-mode="NoArrows">NoArrows</li>
+        <li data-mode="OneSaber">OneSaber</li>
+        <li data-mode="Lawless">Lawless</li>
+        <li data-mode="Lightshow">Lightshow</li>
+        -->
+      </ul>
       <ul id="controlsDifficultyOptions">
         <li data-difficulty="Easy">Easy</li>
         <li data-difficulty="Normal">Normal</li>
