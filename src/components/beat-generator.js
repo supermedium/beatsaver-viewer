@@ -4,6 +4,8 @@ import utils from '../utils';
 let skipDebug = AFRAME.utils.getUrlParameter('skip') || 0;
 skipDebug = parseInt(skipDebug, 10);
 
+const RIDICULOUS_MAP_EX_CONSTANT = 4001;
+
 /**
  * Load beat data (all the beats and such).
  */
@@ -208,9 +210,9 @@ AFRAME.registerComponent('beat-generator', {
       beatObj.color = color;
       beatObj.cutDirection = this.orientationsHumanized[note._cutDirection];
       beatObj.speed = this.data.beatSpeed;
+      beatObj.size = 0.4;
       beatObj.type = type;
       beatObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;
-      beatEl.setAttribute('beat', beatObj);
 
       if (this.mappingExtensions) {
         note._lineIndex = note._lineIndex < 0
@@ -219,10 +221,14 @@ AFRAME.registerComponent('beat-generator', {
         note._lineLayer = note._lineLayer < 0
           ? note._lineLayer / 1000 + 1
           : note._lineLayer / 1000 - 1;
+        if (this.mappingExtensions.colWidth) {
+          beatObj.size *= this.mappingExtensions.colWidth;
+        }
       }
       beatObj.horizontalPosition = note._lineIndex;
       beatObj.verticalPosition = note._lineLayer,
 
+      beatEl.setAttribute('beat', beatObj);
       beatEl.play();
       beatEl.components.beat.onGenerate(this.mappingExtensions);
     };
@@ -232,7 +238,7 @@ AFRAME.registerComponent('beat-generator', {
     const wallObj = {};
     const WALL_THICKNESS = 0.5;
 
-    return function (wallInfo) {
+    return function (wall) {
       const el = this.el.sceneEl.components.pool__wall.requestEntity();
 
       if (!el) { return; }
@@ -240,16 +246,29 @@ AFRAME.registerComponent('beat-generator', {
       const data = this.data;
       const speed = this.data.beatSpeed;
 
-      const durationSeconds = 60 * (wallInfo._duration / this.bpm);
+      const durationSeconds = 60 * (wall._duration / this.bpm);
       wallObj.anticipationPosition =
         -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
       wallObj.durationSeconds = durationSeconds;
-      wallObj.horizontalPosition = wallInfo._lineIndex;
-      wallObj.isCeiling = wallInfo._type === 1;
+      wallObj.horizontalPosition = wall._lineIndex;
+      wallObj.isCeiling = wall._type === 1;
       wallObj.speed = speed;
       wallObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;
-      // wallInfo._width can be like 1 or 2. Map that to 0.5 thickness.
-      wallObj.width = wallInfo._width * WALL_THICKNESS;
+      // wall._width can be like 1 or 2. Map that to 0.5 thickness.
+      wallObj.width = wall._width * WALL_THICKNESS;
+
+      if (this.mappingExtensions) {
+        const typeValue = wall._type - RIDICULOUS_MAP_EX_CONSTANT;
+        const height = Math.round(typeValue / 1000);
+        const wallStartHeight = typeValue % 1000;
+        // TODO: Mapping extension wall heights + vertical position.
+
+        wallObj.horizontalPosition = wall._lineIndex < 0
+          ? wall._lineIndex / 1000 + 1
+          : wall._lineIndex / 1000 - 1;
+        wallObj.width = ((wall._width - 1000) / 1000) * WALL_THICKNESS
+      }
+
       el.setAttribute('wall', wallObj);
       el.play();
     };

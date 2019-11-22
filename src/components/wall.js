@@ -7,6 +7,10 @@ const CEILING_THICKNESS = 1.5;
 const CEILING_HEIGHT = 1.4 + CEILING_THICKNESS / 2;
 const CEILING_WIDTH = 4;
 
+function getHorizontalPosition (lineIndex) {
+  return lineIndex / 3 * 1.5 - 0.75
+}
+
 /**
  * Wall to dodge.
  */
@@ -22,13 +26,6 @@ AFRAME.registerComponent('wall', {
     width: {default: 1}
   },
 
-  horizontalPositions: {
-    0: -0.75,  // left
-    1: -0.25,  // middleleft
-    2: 0.25,  // middleright
-    3: 0.75  // right
-  },
-
   init: function () {
     this.maxZ = 10;
   },
@@ -42,7 +39,7 @@ AFRAME.registerComponent('wall', {
 
     if (data.isCeiling) {
       el.object3D.position.set(
-        this.horizontalPositions[data.horizontalPosition] + width / 2  - 0.25,
+        getHorizontalPosition(data.horizontalPosition) + width / 2  - 0.25,
         CEILING_HEIGHT,
         data.anticipationPosition + data.warmupPosition - halfDepth
       );
@@ -57,7 +54,7 @@ AFRAME.registerComponent('wall', {
     // Box geometry is constructed from the local 0,0,0 growing in the positive and negative
     // x and z axis. We have to shift by half width and depth to be positioned correctly.
     el.object3D.position.set(
-      this.horizontalPositions[data.horizontalPosition] + width / 2  - 0.25,
+      getHorizontalPosition(data.horizontalPosition) + width / 2  - 0.25,
       data.height + RAISE_Y_OFFSET,
       data.anticipationPosition + data.warmupPosition - halfDepth
     );
