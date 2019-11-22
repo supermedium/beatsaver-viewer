@@ -64,9 +64,11 @@ AFRAME.registerComponent('song-controls', {
   },
 
   play: function () {
-    this.controls = document.getElementById('controls');
+    const controls = this.controls = document.getElementById('controls');
     this.difficulty = document.getElementById('controlsDifficulty');
     this.difficultyOptions = document.getElementById('controlsDifficultyOptions');
+    this.modeDropdownEl = document.getElementById('controlsMode');
+    this.modeOptionEls = document.getElementById('controlsModes');
     this.playhead = document.getElementById('playhead');
     const timeline = this.timeline = document.getElementById('timeline');
     const timelineHover = this.timelineHover = document.getElementById('timelineHover');
@@ -77,7 +79,7 @@ AFRAME.registerComponent('song-controls', {
       this.customDifficultyLabels = {};
 
       // Show controls on load.
-      this.controls.classList.add('challengeLoaded');
+      controls.classList.add('challengeLoaded');
 
       // Update difficulty list.
       for (let i = 0; i < this.difficultyOptions.children.length; i++) {
@@ -145,10 +147,10 @@ AFRAME.registerComponent('song-controls', {
 
     // Difficulty dropdown.
     this.difficulty.addEventListener('click', () => {
-      this.controls.classList.toggle('difficultyOptionsActive');
+      controls.classList.toggle('difficultyOptionsActive');
     });
     this.el.sceneEl.addEventListener('click', evt => {
-      this.controls.classList.remove('difficultyOptionsActive');
+      controls.classList.remove('difficultyOptionsActive');
     });
 
     // Difficulty select.
@@ -157,7 +159,24 @@ AFRAME.registerComponent('song-controls', {
       this.playhead.style.width = '0%';
       this.el.sceneEl.emit('difficultyselect', evt.target.dataset.difficulty, false);
       this.difficulty.innerHTML = evt.target.innerHTML;
-      this.controls.classList.remove('difficultyOptionsActive');
+      controls.classList.remove('difficultyOptionsActive');
+    });
+
+    // Mode dropdown.
+    this.modeDropdownEl.addEventListener('click', () => {
+      controls.classList.toggle('modeOptionsActive');
+    });
+    this.el.sceneEl.addEventListener('click', evt => {
+      controls.classList.remove('modeOptionsActive');
+    });
+
+    // Mode select.
+    this.modeOptionEls.addEventListener('click', evt => {
+      this.songProgress.innerHTML = formatSeconds(0);
+      this.playhead.style.width = '0%';
+      this.el.sceneEl.emit('modeselect', evt.target.dataset.mode, false);
+      this.modeDropdownEl.innerHTML = evt.target.innerHTML;
+      controls.classList.remove('modeOptionsActive');
     });
 
     // Hide volume if click anywhere.

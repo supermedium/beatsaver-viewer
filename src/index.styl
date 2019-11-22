@@ -20,7 +20,7 @@ html
   padding 10px
   position fixed
   right 0
-  width 675px
+  width 710px
   z-index 99999999
 
   &.challengeLoaded
@@ -94,7 +94,7 @@ html
   color $gray
   font-size 11px
   margin-left 15px
-  margin-right 5px
+  margin-right 0
   width 70px
 
 #songInfoContainer
@@ -124,13 +124,15 @@ html
     align-items center
     display flex
     position absolute
-    right 0
+    right 5px
 
-  #controlsDifficulty
+  #controlsDifficulty,
+  #controlsMode
     border 1px solid $gray
     border-radius 5px
     color $gray
     cursor pointer
+    font-size 11px
     padding 5px 10px
     text-align center
     transition all .1s
@@ -145,6 +147,10 @@ html
       border-color $white
       color $white
 
+  #controlsMode
+    margin-right 5px
+
+#controlsModes,
 #controlsDifficultyOptions
   background #020202
   border 1px solid $gray
@@ -169,6 +175,14 @@ html
     transition all .1s
     &:hover
       color $red
+
+#controlsModes
+  right 120px
+
+.modeOptionsActive
+  #controlsModes
+    display flex
+    opacity 1
 
 .difficultyOptionsActive
   #controlsDifficultyOptions
