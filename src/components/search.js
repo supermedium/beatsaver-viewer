@@ -72,7 +72,11 @@ class Search extends Component {
 
     document.getElementById('searchInput').value = '';
   }
-
+  /*
+    <p
+      id="url"
+      style={{display: this.state.open ? 'none' : 'block'}}>{this.state.url}</p>
+  */
   render () {
     return (
       <div id="search">
@@ -92,9 +96,6 @@ class Search extends Component {
             ))}
           </ul>
         </div>
-        <p
-          id="url"
-          style={{display: this.state.open ? 'none' : 'block'}}>{this.state.url}</p>
         <input
           id="searchInput"
           type="search"
