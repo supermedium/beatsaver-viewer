@@ -32,36 +32,6 @@ AFRAME.registerComponent('beat-generator', {
 
   horizontalPositions: [-0.75, -0.25, 0.25, 0.75],
 
-  horizontalPositionsHumanized: {
-    0: 'left',
-    1: 'middleleft',
-    2: 'middleright',
-    3: 'right'
-  },
-
-  positionHumanized: {
-    topLeft: {layer: 2, index: 0},
-    topCenterLeft: {layer: 2, index: 1},
-    topCenterRight: {layer: 2, index: 2},
-    topRight: {layer: 2, index: 3},
-
-    middleLeft: {layer: 1, index: 0},
-    middleCenterLeft: {layer: 1, index: 1},
-    middleCenterRight: {layer: 1, index: 2},
-    middleRight: {layer: 1, index: 3},
-
-    bottomLeft: {layer: 0, index: 0},
-    bottomCenterLeft: {layer: 0, index: 1},
-    bottomCenterRight: {layer: 0, index: 2},
-    bottomRight: {layer: 0, index: 3},
-  },
-
-  verticalPositionsHumanized: {
-    0: 'bottom',
-    1: 'middle',
-    2: 'top'
-  },
-
   init: function () {
     this.audioAnalyserEl = document.getElementById('audioanalyser');
     this.beatData = null;
@@ -215,15 +185,15 @@ AFRAME.registerComponent('beat-generator', {
   generateBeat: (function () {
     const beatObj = {};
 
-    return function (noteInfo) {
+    return function (note) {
       const data = this.data;
 
-      // if (Math.random() < 0.8) { noteInfo._type = 3; } // To debug mines.
+      // if (Math.random() < 0.8) { note._type = 3; } // To debug mines.
       let color;
-      let type = noteInfo._cutDirection === 8 ? 'dot' : 'arrow';
-      if (noteInfo._type === 0) {
+      let type = note._cutDirection === 8 ? 'dot' : 'arrow';
+      if (note._type === 0) {
         color = 'red';
-      } else if (noteInfo._type === 1) {
+      } else if (note._type === 1) {
         color = 'blue';
       } else {
         type = 'mine';
@@ -236,16 +206,25 @@ AFRAME.registerComponent('beat-generator', {
       // Apply sword offset. Blocks arrive on beat in front of the user.
       beatObj.anticipationPosition = -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
       beatObj.color = color;
-      beatObj.cutDirection = this.orientationsHumanized[noteInfo._cutDirection];
-      beatObj.horizontalPosition = this.horizontalPositionsHumanized[noteInfo._lineIndex];
+      beatObj.cutDirection = this.orientationsHumanized[note._cutDirection];
       beatObj.speed = this.data.beatSpeed;
       beatObj.type = type;
-      beatObj.verticalPosition = this.verticalPositionsHumanized[noteInfo._lineLayer],
       beatObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;
       beatEl.setAttribute('beat', beatObj);
 
+      if (this.mappingExtensions) {
+        note._lineIndex = note._lineIndex < 0
+          ? note._lineIndex / 1000 + 1
+          : note._lineIndex / 1000 - 1;
+        note._lineLayer = note._lineLayer < 0
+          ? note._lineLayer / 1000 + 1
+          : note._lineLayer / 1000 - 1;
+      }
+      beatObj.horizontalPosition = note._lineIndex;
+      beatObj.verticalPosition = note._lineLayer,
+
       beatEl.play();
-      beatEl.components.beat.onGenerate();
+      beatEl.components.beat.onGenerate(this.mappingExtensions);
     };
   })(),
 
@@ -265,7 +244,7 @@ AFRAME.registerComponent('beat-generator', {
       wallObj.anticipationPosition =
         -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
       wallObj.durationSeconds = durationSeconds;
-      wallObj.horizontalPosition = this.horizontalPositionsHumanized[wallInfo._lineIndex];
+      wallObj.horizontalPosition = wallInfo._lineIndex;
       wallObj.isCeiling = wallInfo._type === 1;
       wallObj.speed = speed;
       wallObj.warmupPosition = -data.beatWarmupTime * data.beatWarmupSpeed;

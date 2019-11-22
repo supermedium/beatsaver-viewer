@@ -15,8 +15,7 @@ AFRAME.registerComponent('wall', {
     anticipationPosition: {default: 0},
     durationSeconds: {default: 0},
     height: {default: 1.3},
-    horizontalPosition: {default: 'middleleft',
-                         oneOf: ['left', 'middleleft', 'middleright', 'right']},
+    horizontalPosition: {default: 1},
     isCeiling: {default: false},
     speed: {default: 1.0},
     warmupPosition: {default: 0},
@@ -24,10 +23,10 @@ AFRAME.registerComponent('wall', {
   },
 
   horizontalPositions: {
-    left: -0.75,
-    middleleft: -0.25,
-    middleright: 0.25,
-    right: 0.75
+    0: -0.75,  // left
+    1: -0.25,  // middleleft
+    2: 0.25,  // middleright
+    3: 0.75  // right
   },
 
   init: function () {

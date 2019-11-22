@@ -138,7 +138,8 @@ AFRAME.registerComponent('zip-loader', {
     if (this.data.isSafari) { return; }
 
     // Already fetching.
-    if (this.isFetching === zipUrl || this.fetchedZip === this.data.id) { return; }
+    if (this.isFetching === zipUrl ||
+        (this.data.id && this.fetchedZip & this.fetchedZip === this.data.id)) { return; }
 
     this.el.emit('challengeloadstart', this.data.id, false);
     this.isFetching = zipUrl;

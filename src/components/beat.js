@@ -17,6 +17,14 @@ const SCORE_POOL = {
   SUPER : 'pool__beatscoresuper'
 };
 
+function getHorizontalPosition (lineIndex) {
+  return lineIndex / 3 * 1.5 - 0.75
+}
+
+function getVerticalPosition (lineLayer) {
+  return lineLayer / 2 + 0.7;
+}
+
 /**
  * Bears, beats, Battlestar Galactica.
  * Create beat from pool, collision detection, movement, scoring.
@@ -27,11 +35,11 @@ AFRAME.registerComponent('beat', {
     color: {default: 'red', oneOf: ['red', 'blue']},
     cutDirection: {default: 'down'},
     debug: {default: false},
-    horizontalPosition: {default: 'middleleft', oneOf: ['left', 'middleleft', 'middleright', 'right']},
+    horizontalPosition: {default: 1},
     size: {default: 0.40},
     speed: {default: 8.0},
     type: {default: 'arrow', oneOf: ['arrow', 'dot', 'mine']},
-    verticalPosition: {default: 'middle', oneOf: ['bottom', 'middle', 'top']},
+    verticalPosition: {default: 1},
     warmupPosition: {default: 0},
   },
 
@@ -69,19 +77,6 @@ AFRAME.registerComponent('beat', {
     upright: 135,
     downleft: 315,
     downright: 45
-  },
-
-  horizontalPositions: {
-    left: -0.75,
-    middleleft: -0.25,
-    middleright: 0.25,
-    right: 0.75
-  },
-
-  verticalPositions: {
-    bottom: 0.70,
-    middle: 1.20,
-    top: 1.70
   },
 
   init: function () {
@@ -183,14 +178,14 @@ AFRAME.registerComponent('beat', {
   /**
    * Called when summoned by beat-generator.
    */
-  onGenerate: function () {
+  onGenerate: function (mappingExtensions) {
     const el = this.el;
     const data = this.data;
 
     // Set position.
     el.object3D.position.set(
-      this.horizontalPositions[data.horizontalPosition],
-      this.verticalPositions[data.verticalPosition],
+      getHorizontalPosition(data.horizontalPosition),
+      getVerticalPosition(data.verticalPosition),
       data.anticipationPosition + data.warmupPosition
     );
     el.object3D.rotation.z = THREE.Math.degToRad(this.rotations[data.cutDirection]);
