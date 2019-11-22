@@ -239,6 +239,8 @@
     audio-columns="analyser: #audioAnalyser; height: 28; mirror: 18; scale: 9; thickness: 0.6; separation: 0.55"
     position="0 -19 5"></a-entity>
 
+  <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
+
   <a-entity position="0 -1 0">
     <a-entity id="stageObj" obj-model="obj: #stageNormalObj" materials="name: stageNormal"></a-entity>
 
@@ -263,8 +265,6 @@
   </a-entity>
 
   <a-entity id="beams" bind__beams="isPlaying: isPlaying"></a-entity>
-
-  <a-entity id="twister" position="0 0 -35" rotation="90 0 0" bind__twister="enabled: isPlaying"></a-entity>
 
   <a-entity id="logo" bind__visible="!isPlaying" position="0 4.75 -5" rotation="90 0 0">
     <a-entity id="logoBackObj" obj-model="obj: #logoBackObj" materials="name: logoadditive"></a-entity>
