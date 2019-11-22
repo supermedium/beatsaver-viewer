@@ -20,11 +20,11 @@
   <body id="body">
     <a-scene
       mixin="bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
-      bind__beat-generator="difficulty: challenge.difficulty; isPlaying: isPlaying; beatSpeed: challenge.beatSpeed"
+      bind__beat-generator="difficulty: challenge.difficulty; mode: challenge.mode; isPlaying: isPlaying; beatSpeed: challenge.beatSpeed"
       bind__pauser="enabled: isPlaying"
-      bind__song="audio: challenge.audio; difficulty: challenge.difficulty; isPaused: isPaused; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
-      bind__song-controls="difficulty: challenge.difficulty; isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
-      bind__zip-loader="difficulty: challenge.difficulty; id: challenge.id; isSafari: isSafari"
+      bind__song="audio: challenge.audio; difficulty: challenge.difficulty; mode: challenge.mode; isPaused: isPaused; isPlaying: isPlaying; hasReceivedUserGesture: hasReceivedUserGesture; isBeatsPreloaded: challenge.isBeatsPreloaded"
+      bind__song-controls="difficulty: challenge.difficulty; mode: challenge.mode; isPlaying: isPlaying; songName: challenge.songName; songSubName: challenge.songSubName; songImage: challenge.image"
+      bind__zip-loader="difficulty: challenge.difficulty; id: challenge.id; isSafari: isSafari; mode: challenge.mode"
       console-shortcuts
       debug-controller
       debug-song-time

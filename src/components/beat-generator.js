@@ -75,7 +75,9 @@ AFRAME.registerComponent('beat-generator', {
   },
 
   update: function (oldData) {
-    if (oldData.difficulty && oldData.difficulty !== this.data.difficulty && this.beatmaps) {
+    if (!this.beatmaps) { return; }
+    if ((oldData.difficulty && oldData.difficulty !== this.data.difficulty) ||
+        (oldData.mode && oldData.mode !== this.data.mode)) {
       this.beatData = this.beatmaps[this.data.mode][this.data.difficulty];
       this.processBeats();
     }

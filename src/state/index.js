@@ -26,6 +26,9 @@ const emptyChallenge = {
 const isSafari = navigator.userAgent.toLowerCase().indexOf('safari') !== -1 &&
                  navigator.userAgent.toLowerCase().indexOf('chrome') === -1;
 
+let beatmaps;
+let difficulties;
+
 /**
  * State handler.
  *
@@ -66,12 +69,18 @@ AFRAME.registerState({
     },
 
     challengeloadend: (state, payload) => {
+      beatmaps = payload.beatmaps;
+      difficulties = payload.difficulties;
+
       state.challenge.audio = payload.audio;
       state.challenge.author = payload.info._levelAuthorName;
-      state.challenge.difficulties = payload.difficulties.Standard;
 
-      if (!state.challenge.difficulty ||
-          state.challenge.difficulties.indexOf(state.challenge.difficulty) === -1) {
+      const mode = state.challenge.mode = payload.beatmaps.Standard
+        ? 'Standard'
+        : Object.keys(payload.beatmaps)[0];
+      state.challenge.difficulties = difficulties[mode];
+
+      if (!state.challenge.difficulty || !payload.beatmaps[mode][state.challenge.difficulty]) {
         state.challenge.difficulty = payload.difficulty;
       }
 
@@ -123,6 +132,15 @@ AFRAME.registerState({
       state.challenge.isBeatsPreloaded = false;
       state.isPaused = false;
       state.isSongBufferProcessing = true;
+    },
+
+    modeselect: (state, payload) => {
+      state.challenge.mode = payload;
+      state.challenge.isBeatsPreloaded = false;
+      state.isPaused = false;
+
+      state.challenge.difficulties = difficulties[payload];
+      state.challenge.difficulty = state.challenge.difficulties[0]._difficulty;
     },
 
     pausegame: state => {

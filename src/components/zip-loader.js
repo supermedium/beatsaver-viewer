@@ -26,13 +26,14 @@ AFRAME.registerComponent('zip-loader', {
   },
 
   update: function (oldData) {
+    this.el.sceneEl.emit('cleargame', null, false);
+
     if (!this.data.id) { return; }
 
-    if ((oldData.id !== this.data.id || (oldData.difficulty !== this.data.difficulty))) {
+    if ((oldData.id !== this.data.id)) {
       this.fetchData(this.data.id);
-      this.el.sceneEl.emit('cleargame', null, false);
+      this.el.sceneEl.emit('challengeset', this.data.id);
     }
-    this.el.sceneEl.emit('challengeset', this.data.id);
   },
 
   play: function () {

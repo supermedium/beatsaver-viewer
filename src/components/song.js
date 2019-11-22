@@ -31,7 +31,8 @@ AFRAME.registerComponent('song', {
     hasReceivedUserGesture: {default: false},
     isBeatsPreloaded: {default: false},
     isPaused: {default: false},
-    isPlaying: {default: false}
+    isPlaying: {default: false},
+    mode: {default: 'Standard'}
   },
 
   init: function () {
@@ -73,7 +74,8 @@ AFRAME.registerComponent('song', {
     }
 
     // Difficulty select
-    if (oldData.difficulty && oldData.difficulty !== data.difficulty) {
+    if ((oldData.difficulty && oldData.difficulty !== data.difficulty) ||
+        (oldData.mode && oldData.mode !== data.mode)) {
       this.onRestart();
     }
 

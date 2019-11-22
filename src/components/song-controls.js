@@ -45,23 +45,31 @@ AFRAME.registerComponent('song-controls', {
     this.songProgress = document.getElementById('songProgress');
   },
 
-  update: function () {
+  update: function (oldData) {
+    const data = this.data;
+
     if (!this.controls) { return; }
 
-    if (this.data.isPlaying) {
+    if (data.isPlaying) {
       document.body.classList.add('isPlaying');
     } else {
       document.body.classList.remove('isPlaying');
     }
 
-    document.getElementById('songImage').src = this.data.songImage;
-    document.getElementById('songName').innerHTML = truncate(this.data.songName, 14);
-    document.getElementById('songName').setAttribute('title', this.data.songName);
-    document.getElementById('songSubName').innerHTML = truncate(this.data.songSubName, 15);
-    document.getElementById('songSubName').setAttribute('title', this.data.songSubName);
+    document.getElementById('songImage').src = data.songImage;
+    document.getElementById('songName').innerHTML = truncate(data.songName, 14);
+    document.getElementById('songName').setAttribute('title', data.songName);
+    document.getElementById('songSubName').innerHTML = truncate(data.songSubName, 15);
+    document.getElementById('songSubName').setAttribute('title', data.songSubName);
 
     document.getElementById('controlsDifficulty').innerHTML =
-      this.customDifficultyLabels[this.data.difficulty] || this.data.difficulty;
+      this.customDifficultyLabels[data.difficulty] || data.difficulty;
+    document.getElementById('controlsMode').innerHTML = data.mode;
+
+    if ((oldData.difficulty && oldData.difficulty !== data.difficulty) ||
+        (oldData.mode && oldData.mode !== data.mode)) {
+      removeTimeQueryParam();
+    }
   },
 
   play: function () {
@@ -290,4 +298,12 @@ function formatSeconds (time) {
   ret += '' + mins + ':' + (secs < 10 ? '0' : '');
   ret += '' + secs;
   return ret;
+}
+
+function removeTimeQueryParam () {
+  let search = window.location.search.toString();
+  search = search.replace(timeRe, '');
+  let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+  url += search;
+  window.history.pushState({path: url},'', url);
 }
