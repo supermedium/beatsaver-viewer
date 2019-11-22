@@ -11,6 +11,7 @@ function initSubscribeForm () {
 
   if (localStorage.getItem('subscribeClosed') === 'true') {
     form.parentNode.parentNode.removeChild(form.parentNode);
+    return;
   }
 
   const button = form.querySelector('.submit');
