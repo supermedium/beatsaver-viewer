@@ -188,26 +188,38 @@ AFRAME.registerComponent('beat-generator', {
     this.isSeeking = true;
   },
 
-  generateBeat: (function () {
+  generateBeat: function (note) {
+    const data = this.data;
+
+    // if (Math.random() < 0.8) { note._type = 3; } // To debug mines.
+    let color;
+    let type = note._cutDirection === 8 ? 'dot' : 'arrow';
+    if (note._type === 0) {
+      color = 'red';
+    } else if (note._type === 1) {
+      color = 'blue';
+    } else {
+      type = 'mine';
+      color = undefined;
+    }
+
+    const beatEl = this.requestBeat(type, color);
+    if (!beatEl) { return; }
+
+    if (!beatEl.components.beat || !beatEl.components.beat.data) {
+      beatEl.addEventListener('loaded', () => {
+        this.doGenerateBeat(beatEl, note, type, color);
+      });
+    } else {
+      this.doGenerateBeat(beatEl, note, type, color);
+    }
+  },
+
+  doGenerateBeat: (function () {
     const beatObj = {};
 
-    return function (note) {
+    return function (beatEl, note, type, color) {
       const data = this.data;
-
-      // if (Math.random() < 0.8) { note._type = 3; } // To debug mines.
-      let color;
-      let type = note._cutDirection === 8 ? 'dot' : 'arrow';
-      if (note._type === 0) {
-        color = 'red';
-      } else if (note._type === 1) {
-        color = 'blue';
-      } else {
-        type = 'mine';
-        color = undefined;
-      }
-
-      const beatEl = this.requestBeat(type, color);
-      if (!beatEl) { return; }
 
       // Apply sword offset. Blocks arrive on beat in front of the user.
       beatObj.anticipationPosition = -data.beatAnticipationTime * data.beatSpeed - this.swordOffset;
@@ -233,8 +245,8 @@ AFRAME.registerComponent('beat-generator', {
       beatObj.verticalPosition = note._lineLayer,
 
       beatEl.setAttribute('beat', beatObj);
-      beatEl.play();
       beatEl.components.beat.onGenerate(this.mappingExtensions);
+      beatEl.play();
     };
   })(),
 

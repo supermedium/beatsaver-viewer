@@ -179,8 +179,8 @@ AFRAME.registerComponent('beat', {
    * Called when summoned by beat-generator.
    */
   onGenerate: function (mappingExtensions) {
-    const el = this.el;
     const data = this.data;
+    const el = this.el;
 
     // Set position.
     el.object3D.position.set(
@@ -198,7 +198,7 @@ AFRAME.registerComponent('beat', {
     this.el.object3D.rotation.z -= this.rotationZChange;
     this.rotationZStart = this.el.object3D.rotation.z;
     // Reset mine.
-    if (this.data.type == 'mine') { this.resetMineFragments(); }
+    if (data.type == 'mine') { this.resetMineFragments(); }
 
     this.returnToPoolTimeStart = undefined;
   },
