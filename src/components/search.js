@@ -25,6 +25,7 @@ class Search extends Component {
 
     // Open search.
     document.getElementById('searchToggle').addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('searchOpen'));
       this.setState({open: !this.state.open});
       setTimeout(() => {
         document.getElementById('searchInput').focus();
