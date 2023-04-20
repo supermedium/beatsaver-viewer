@@ -45,7 +45,7 @@
     "html-minifier": "^3.5.11",
     "ip": "1.1.5",
     "json-loader": "^0.5.7",
-    "nunjucks": "3.0.1",
+    "nunjucks": "3.2.4",
     "postcss": "^6.0.23",
     "postcss-loader": "^0.9.1",
     "preact": "^8.4.2",
